@@ -22,6 +22,7 @@ public class GamePanel extends JPanel implements  Runnable{
 
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
+    Player player = new Player(this, keyH);
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -69,23 +70,14 @@ public class GamePanel extends JPanel implements  Runnable{
     }
 
     public void update() {
-        if (keyH.upPressed) {
-            playerY -= playerSpeed;
-        } else if (keyH.downPressed) {
-            playerY += playerSpeed;
-        } else if (keyH.leftPressed) {
-            playerX -= playerSpeed;
-        } else if (keyH.rightPressed) {
-            playerX += playerSpeed;
-        }
+        player.update();
     }
+
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        g2.setColor(Color.WHITE);
-        g2.fillRect(playerX, playerY, tileSize, tileSize);
-        g2.dispose();
+        player.draw(g2);
     }
 }
