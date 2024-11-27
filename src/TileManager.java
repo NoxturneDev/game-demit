@@ -10,7 +10,7 @@ import java.util.Objects;
 public class TileManager {
     GamePanel gp;
     public Tile[] tiles;
-    int mapTileNum[][];
+    public int mapTileNum[][];
 
     public TileManager(GamePanel gp) {
         this.gp = gp;
@@ -60,9 +60,11 @@ public class TileManager {
 
             tiles[1] = new Tile();
             tiles[1].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("stone.png")));
+            tiles[1].collision = true;
 
             tiles[2] = new Tile();
             tiles[2].image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("water.png")));
+            tiles[2].collision = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
