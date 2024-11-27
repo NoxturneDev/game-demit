@@ -9,14 +9,13 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class Player extends Entity {
-    GamePanel gp;
     KeyHandler keyH;
 
     public final int screenX;
     public final int screenY;
 
     public Player(GamePanel gp, KeyHandler keyH) {
-        this.gp = gp;
+        super(gp);
         this.keyH = keyH;
 
         screenX = gp.screenWidth / 2 - gp.tileSize / 2;
@@ -33,22 +32,18 @@ public class Player extends Entity {
     }
 
     public void loadPlayerImage() {
-        try {
-            loadEntityImage(up1, "/tuyul/tuyul_npc_idle_1.png");
-            up2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tuyul/tuyul_npc_idle_2.png")));
-            up3 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tuyul/tuyul_npc_jumpscare.png")));
-            down1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tuyul/tuyul_npc_idle_1.png")));
-            down2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tuyul/tuyul_npc_idle_2.png")));
-            down3 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tuyul/tuyul_npc_idle_3.png")));
-            left1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tuyul/tuyul_npc_idle_1.png")));
-            left2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tuyul/tuyul_npc_idle_2.png")));
-            left3 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tuyul/tuyul_npc_idle_3.png")));
-            right1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tuyul/tuyul_npc_idle_1.png")));
-            right2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tuyul/tuyul_npc_idle_2.png")));
-            right3 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/tuyul/tuyul_npc_idle_3.png")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        up1 = loadImage("/player/mc_walk_down_1.png", gp.tileSize, gp.tileSize);
+        up2 = loadImage("/player/mc_walk_down_2.png", gp.tileSize, gp.tileSize);
+        up3 = loadImage("/player/mc_walk_down_3.png", gp.tileSize, gp.tileSize);
+        down1 = loadImage("/player/mc_walk_down_1.png", gp.tileSize, gp.tileSize);
+        down2 = loadImage("/player/mc_walk_down_2.png", gp.tileSize, gp.tileSize);
+        down3 = loadImage("/player/mc_walk_down_3.png", gp.tileSize, gp.tileSize);
+        left1 = loadImage("/player/mc_walk_right_1.png", gp.tileSize, gp.tileSize);
+        left2 = loadImage("/player/mc_walk_right_2.png", gp.tileSize, gp.tileSize);
+        left3 = loadImage("/player/mc_walk_right_3.png", gp.tileSize, gp.tileSize);
+        right1 = loadImage("/player/mc_walk_left_1.png", gp.tileSize, gp.tileSize);
+        right2 = loadImage("/player/mc_walk_left_2.png", gp.tileSize, gp.tileSize);
+        right3 = loadImage("/player/mc_walk_left_3.png", gp.tileSize, gp.tileSize);
     }
 
     public void setDefaultValues() {
@@ -58,48 +53,61 @@ public class Player extends Entity {
         direction = "down";
     }
 
+    public void interactNPC(int i) {
+        if(i != 999) {
+            gp.gameState = gp.DIALOGUE;
+            gp.ui.currentNPC = gp.npc[i];
+        }
+    }
+
     public void update() {
-        if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
-            if (keyH.upPressed) {
-                direction = "up";
-            } else if (keyH.downPressed) {
-                direction = "down";
-            } else if (keyH.leftPressed) {
-                direction = "left";
-            } else if (keyH.rightPressed) {
-                direction = "right";
-            }
-
-            collision = false;
-            gp.collisionChecker.checkTileCollision(this);
-
-            if (!collision) {
-                switch (direction) {
-                    case "up":
-                        worldY -= speed;
-                        break;
-                    case "down":
-                        worldY += speed;
-                        break;
-                    case "left":
-                        worldX -= speed;
-                        break;
-                    case "right":
-                        worldX += speed;
-                        break;
+        if (gp.gameState == gp.PLAY) {
+            if (keyH.upPressed || keyH.downPressed || keyH.leftPressed || keyH.rightPressed) {
+                if (keyH.upPressed) {
+                    direction = "up";
+                } else if (keyH.downPressed) {
+                    direction = "down";
+                } else if (keyH.leftPressed) {
+                    direction = "left";
+                } else if (keyH.rightPressed) {
+                    direction = "right";
                 }
-            }
 
-            spriteCounter++;
-            if (spriteCounter > 7) {
-                if (spriteNum == 1) {
-                    spriteNum = 2;
-                } else if (spriteNum == 2) {
-                    spriteNum = 3;
-                } else if (spriteNum == 3) {
-                    spriteNum = 1;
+                collision = false;
+                gp.collisionChecker.checkTileCollision(this);
+
+//                player to npc collission
+                int npxIndex = gp.collisionChecker.checkEntity(this, gp.npc);
+                interactNPC(npxIndex);
+
+                if (!collision) {
+                    switch (direction) {
+                        case "up":
+                            worldY -= speed;
+                            break;
+                        case "down":
+                            worldY += speed;
+                            break;
+                        case "left":
+                            worldX -= speed;
+                            break;
+                        case "right":
+                            worldX += speed;
+                            break;
+                    }
                 }
-                spriteCounter = 0;
+
+                spriteCounter++;
+                if (spriteCounter > 7) {
+                    if (spriteNum == 1) {
+                        spriteNum = 2;
+                    } else if (spriteNum == 2) {
+                        spriteNum = 3;
+                    } else if (spriteNum == 3) {
+                        spriteNum = 1;
+                    }
+                    spriteCounter = 0;
+                }
             }
         }
     }

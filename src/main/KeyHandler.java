@@ -2,9 +2,15 @@ package main;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.security.Key;
 
 public class KeyHandler implements KeyListener {
-    public boolean downPressed, leftPressed, rightPressed, upPressed;
+    GamePanel gp;
+    public boolean downPressed, leftPressed, rightPressed, upPressed, enterPressed;
+
+    public KeyHandler(GamePanel gp) {
+        this.gp = gp;
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -26,6 +32,30 @@ public class KeyHandler implements KeyListener {
         if (keyCode == KeyEvent.VK_D) {
             rightPressed = true;
         }
+        if (keyCode == KeyEvent.VK_ENTER) {
+            enterPressed = true;
+        }
+
+        if (keyCode == KeyEvent.VK_P) {
+            if (gp.gameState == gp.PLAY) {
+                gp.gameState = gp.PAUSED;
+                gp.stopMusic();
+            } else {
+                gp.gameState = gp.PLAY;
+                gp.playMusic(0); //0 as a temp value, for demo purpose
+            }
+        }
+        if (gp.gameState == gp.DIALOGUE) {
+            if (keyCode == KeyEvent.VK_ENTER) {
+                enterPressed = true;
+            }
+
+        }
+//        if (keyCode == KeyEvent.VK_ENTER) {
+//            if (gp.gameState == gp.DIALOGUE) {
+//                gp.gameState = gp.PLAY;
+//            }
+//        }
     }
 
     public void keyReleased(KeyEvent e) {
@@ -42,6 +72,9 @@ public class KeyHandler implements KeyListener {
         }
         if (keyCode == KeyEvent.VK_D) {
             rightPressed = false;
+        }
+        if (keyCode == KeyEvent.VK_ENTER) {
+            enterPressed = false;
         }
     }
 }
