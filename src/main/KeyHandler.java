@@ -6,7 +6,7 @@ import java.security.Key;
 
 public class KeyHandler implements KeyListener {
     GamePanel gp;
-    public boolean downPressed, leftPressed, rightPressed, upPressed, enterPressed;
+    public boolean downPressed, leftPressed, rightPressed, upPressed, enterPressed, spacePressed;
 
     public KeyHandler(GamePanel gp) {
         this.gp = gp;
@@ -35,6 +35,10 @@ public class KeyHandler implements KeyListener {
         if (keyCode == KeyEvent.VK_ENTER) {
             enterPressed = true;
         }
+        if (keyCode == KeyEvent.VK_SPACE) {
+            spacePressed = true;
+            gp.player.attacking = true; // temporary fixed bug when stuck on attack animation when space is pressed
+        }
 
         if (keyCode == KeyEvent.VK_P) {
             if (gp.gameState == gp.PLAY) {
@@ -49,7 +53,6 @@ public class KeyHandler implements KeyListener {
             if (keyCode == KeyEvent.VK_ENTER) {
                 enterPressed = true;
             }
-
         }
 //        if (keyCode == KeyEvent.VK_ENTER) {
 //            if (gp.gameState == gp.DIALOGUE) {
@@ -75,6 +78,9 @@ public class KeyHandler implements KeyListener {
         }
         if (keyCode == KeyEvent.VK_ENTER) {
             enterPressed = false;
+        }
+        if (keyCode == KeyEvent.VK_SPACE) {
+            spacePressed = false;
         }
     }
 }

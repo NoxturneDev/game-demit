@@ -10,6 +10,8 @@ public class MON_tuyul extends Entity {
         super(gp);
         direction = "down";
         speed = 2;
+        damage = new Random().nextInt(20)+5;
+        HP = 10;
 
         solidArea = new Rectangle();
         solidArea.x = 8;
@@ -20,23 +22,18 @@ public class MON_tuyul extends Entity {
         defaultSolidAreaX = 8;
         defaultSolidAreaY = 16;
         getImage();
-        setDialogue();
+//        setDialogue();
     }
 
     public void getImage() {
         up1 = loadImage("/tuyul/tuyul_npc_idle_1.png", gp.tileSize, gp.tileSize);
-        up2 = loadImage("/tuyul/tuyul_npc_idle_1.png", gp.tileSize, gp.tileSize);
+        up2 = loadImage("/tuyul/tuyul_npc_idle_2.png", gp.tileSize, gp.tileSize);
         down1 = loadImage("/tuyul/tuyul_npc_idle_1.png", gp.tileSize, gp.tileSize);
-        down2 = loadImage("/tuyul/tuyul_npc_idle_1.png", gp.tileSize, gp.tileSize);
+        down2 = loadImage("/tuyul/tuyul_npc_idle_2.png", gp.tileSize, gp.tileSize);
         left1 = loadImage("/tuyul/tuyul_npc_idle_1.png", gp.tileSize, gp.tileSize);
-        left2 = loadImage("/tuyul/tuyul_npc_idle_1.png", gp.tileSize, gp.tileSize);
+        left2 = loadImage("/tuyul/tuyul_npc_idle_2.png", gp.tileSize, gp.tileSize);
         right1 = loadImage("/tuyul/tuyul_npc_idle_1.png", gp.tileSize, gp.tileSize);
-        right2 = loadImage("/tuyul/tuyul_npc_idle_1.png", gp.tileSize, gp.tileSize);
-    }
-
-    public void setDialogue() {
-        dialogues[0] = "Hi";
-        dialogues[1] = "I'm a dukun";
+        right2 = loadImage("/tuyul/tuyul_npc_idle_2.png", gp.tileSize, gp.tileSize);
     }
 
     public void setAction() {

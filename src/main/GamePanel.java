@@ -33,6 +33,8 @@ public class GamePanel extends JPanel implements Runnable {
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     Sound music = new Sound(); // Created 2 different objects for Sound Effect and Music. If you use 1 object SE or Music stops sometimes.
     public UI ui = new UI(this);
+    public Entity monsters[] = new Entity[10];
+
 
     //    ENTITIES
     public Player player = new Player(this, keyH);
@@ -45,6 +47,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int PLAY = 1;
     public final int PAUSED = 2;
     public final int DIALOGUE = 3;
+    public final int DIED = 4;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -57,6 +60,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void setupGame() {
         aSetter.setItem();
         aSetter.setNPC();
+        aSetter.setMonsters();
 
         gameState = PLAY;
 //        playMusic(0);
@@ -116,6 +120,12 @@ public class GamePanel extends JPanel implements Runnable {
                 npc[i].update();
             }
         }
+
+        for (int i = 0; i < monsters.length; i++) {
+            if (monsters[i] != null) {
+                monsters[i].update();
+            }
+        }
     }
 
 
@@ -137,6 +147,12 @@ public class GamePanel extends JPanel implements Runnable {
         for (int i = 0; i < npc.length; i++) {
             if (npc[i] != null) {
                 npc[i].draw(g2);
+            }
+        }
+
+        for (int i = 0; i < monsters.length; i++) {
+            if (monsters[i] != null) {
+                monsters[i].draw(g2);
             }
         }
 

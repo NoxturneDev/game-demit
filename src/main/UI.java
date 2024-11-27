@@ -100,6 +100,23 @@ public class UI {
 
     }
 
+    public void drawHP () {
+        int x = gp.tileSize / 2;
+        int y = gp.tileSize / 2;
+        x += gp.tileSize / 4;
+        y += gp.tileSize / 4;
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
+        g2.drawString("HP: " + gp.player.HP, x, y);
+    }
+
+    public void drawGameOverScreen() {
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 80F));
+        String text = "GAME OVER";
+        int x = getXforCenteredText(text);
+        int y = gp.screenHeight / 2;
+        g2.drawString(text, x, y);
+    }
+
     public int getXforCenteredText(String text) {
         int textLenght;
         textLenght = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth(); // Gets width of text.
@@ -120,11 +137,17 @@ public class UI {
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);  // Anti Aliasing // Smoothes the text
         g2.setColor(Color.white);
 
+        if (gp.gameState == gp.PLAY) {
+            drawHP();
+        }
         if (gp.gameState == gp.DIALOGUE) {
             drawDialogScreen();
         }
         if (gp.gameState == gp.PAUSED) {
             drawPauseScreen();
+        }
+        if (gp.gameState == gp.DIED) {
+            drawGameOverScreen();
         }
     }
 }
