@@ -1,3 +1,7 @@
+package main;
+
+import entities.Entity;
+
 public class CollisionChecker {
     GamePanel gp;
 

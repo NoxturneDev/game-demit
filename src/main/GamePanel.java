@@ -1,3 +1,5 @@
+package main;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -30,7 +32,7 @@ public class GamePanel extends JPanel implements  Runnable{
 //    ENTITIES
     Player player = new Player(this, keyH);
 
-//    UI
+//    Main.UI
     DialogBox dbox = new DialogBox(this);
 
     public GamePanel() {
