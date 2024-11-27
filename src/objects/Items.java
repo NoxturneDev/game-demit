@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 public class Items extends Entity {
     public String itemName = "Item";
     public String itemDescription = "This is an item";
+    public BufferedImage itemIcon;
     public boolean pickupAble = false;
 
     public Items(GamePanel gp) {

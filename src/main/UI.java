@@ -3,6 +3,7 @@ package main;
 import entities.Entity;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -14,6 +15,9 @@ public class UI {
     public Entity currentNPC;
     public int charIndex = 0;
     public String combinedText = "";
+    public String itemName = "";
+    public BufferedImage itemIcon;
+    public String itemDescription;
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -100,7 +104,7 @@ public class UI {
 
     }
 
-    public void drawHP () {
+    public void drawHP() {
         int x = gp.tileSize / 2;
         int y = gp.tileSize / 2;
         x += gp.tileSize / 4;
@@ -115,6 +119,43 @@ public class UI {
         int x = getXforCenteredText(text);
         int y = gp.screenHeight / 2;
         g2.drawString(text, x, y);
+    }
+
+    public void drawItemDropScreen() {
+        int width = gp.screenWidth - (gp.tileSize * 6);
+        int height = gp.screenHeight - (gp.tileSize * 2);
+        int x = gp.tileSize * 3;
+        int y = gp.tileSize;
+        Color c = new Color(0, 0, 0, 210);  // R,G,B, alfa(opacity)
+        g2.setColor(c);
+        g2.fillRect(x, y, width, height);
+
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
+        String text = itemName + "\n";
+        x = getXforCenteredText(text);
+        y = gp.tileSize * 3;
+        //SHADOW
+        g2.setColor(Color.gray);
+        g2.drawString(text, x + 5, y + 5);
+        //MAIN COLOR
+        g2.setColor(Color.white);
+        g2.drawString(text, x, y);
+
+//        ICON IMAGE
+        x = gp.screenWidth / 2 - (gp.tileSize * 2) / 2;
+        y += gp.tileSize;
+        g2.drawImage(itemIcon, x, y, gp.tileSize * 2, gp.tileSize * 2, null);
+
+//        DESCRIPTION
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
+        x = gp.tileSize * 4;
+        y += gp.tileSize * 3;
+
+        for (String line : itemDescription.split("\n"))   // splits dialogue until "\n" as a line
+        {
+            g2.drawString(line, x, y);
+            y += 40;
+        }
     }
 
     public int getXforCenteredText(String text) {
@@ -148,6 +189,9 @@ public class UI {
         }
         if (gp.gameState == gp.DIED) {
             drawGameOverScreen();
+        }
+        if (gp.gameState == gp.ITEM_DROP) {
+            drawItemDropScreen();
         }
     }
 }

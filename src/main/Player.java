@@ -89,6 +89,11 @@ public class Player extends Entity {
 
     public void pickupItem(int itemIndex) {
         if (itemIndex != 999) {
+            gp.ui.itemName = gp.items[itemIndex].itemName;
+            gp.ui.itemDescription = gp.items[itemIndex].itemDescription;
+            gp.ui.itemIcon = gp.items[itemIndex].itemIcon;
+            gp.gameState = gp.ITEM_DROP;
+
             gp.items[itemIndex] = null;
         }
     }

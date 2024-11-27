@@ -54,6 +54,12 @@ public class KeyHandler implements KeyListener {
                 enterPressed = true;
             }
         }
+
+        if (gp.gameState == gp.ITEM_DROP) {
+            if(keyCode == KeyEvent.VK_ENTER || keyCode == KeyEvent.VK_ESCAPE) {
+                gp.gameState = gp.PLAY;
+            }
+        }
 //        if (keyCode == KeyEvent.VK_ENTER) {
 //            if (gp.gameState == gp.DIALOGUE) {
 //                gp.gameState = gp.PLAY;

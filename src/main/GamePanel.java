@@ -48,6 +48,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int PAUSED = 2;
     public final int DIALOGUE = 3;
     public final int DIED = 4;
+    public final int ITEM_DROP = 5;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
