@@ -4,8 +4,9 @@ import java.awt.*;
 public class GamePanel extends JPanel implements  Runnable{
 
     final int originalTileSize = 32;
-    final int scale = 2;
+    int scale = 2;
 
+//    TILE SETTING
     public final int tileSize = originalTileSize * scale;
     public final int maxScreenCol = 16;
     public final int maxScreenRow = 12;
@@ -13,17 +14,24 @@ public class GamePanel extends JPanel implements  Runnable{
     public final int screenWidth = tileSize * maxScreenCol;
 
 //    WORLD SETTING
+
     public final int maxWorldCol = 20;
     public final int maxWorldRow = 20;
-    public final int worldWidth = tileSize * maxWorldCol;
-    public final int worldHeight = tileSize * maxWorldRow;
 
     final int FPS = 60;
 
+//    SYSTEM
     TileManager tm = new TileManager(this);
     KeyHandler keyH = new KeyHandler();
     Thread gameThread;
+    AssetSetter aSetter = new AssetSetter(this);
+    CollisionChecker collisionChecker = new CollisionChecker(this);
+
+//    ENTITIES
     Player player = new Player(this, keyH);
+
+//    UI
+    DialogBox dbox = new DialogBox(this);
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -31,6 +39,11 @@ public class GamePanel extends JPanel implements  Runnable{
         this.setDoubleBuffered(true);
         this.addKeyListener(keyH);
         this.setFocusable(true);
+    }
+
+    public void setupGame() {
+        aSetter.setItem();
+        aSetter.setNPC();
     }
 
     public void startGameThread() {
@@ -63,7 +76,6 @@ public class GamePanel extends JPanel implements  Runnable{
             }
 
             if (timer >= 1000000000) {
-                System.out.println("FPS: " + drawCount);
                 drawCount = 0;
                 timer = 0;
             }
@@ -81,5 +93,6 @@ public class GamePanel extends JPanel implements  Runnable{
 
         tm.draw(g2);
         player.draw(g2);
+        dbox.drawDialogBox(g2);
     }
 }

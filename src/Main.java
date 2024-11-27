@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
         JFrame window = new JFrame("Game");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(false);
+        window.setResizable(true);
         window.setTitle("DEMIT`S GAME");
 
         GamePanel gamePanel = new GamePanel();
@@ -17,6 +17,7 @@ public class Main {
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
+        gamePanel.setupGame();
         gamePanel.startGameThread();
     }
 }
