@@ -1,5 +1,7 @@
 package main;
 
+import entities.Entity;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -16,24 +18,34 @@ public class GamePanel extends JPanel implements  Runnable{
     public final int screenWidth = tileSize * maxScreenCol;
 
 //    WORLD SETTING
-
     public final int maxWorldCol = 20;
     public final int maxWorldRow = 20;
+    public int maxMap = 99;
 
     final int FPS = 60;
 
 //    SYSTEM
     TileManager tm = new TileManager(this);
-    KeyHandler keyH = new KeyHandler();
+    KeyHandler keyH = new KeyHandler(this);
     Thread gameThread;
     AssetSetter aSetter = new AssetSetter(this);
     CollisionChecker collisionChecker = new CollisionChecker(this);
+    Sound music = new Sound(); // Created 2 different objects for Sound Effect and Music. If you use 1 object SE or Music stops sometimes.
 
 //    ENTITIES
-    Player player = new Player(this, keyH);
+public Player player = new Player(this, keyH);
+    Entity npc[] = new Entity[10];
+    Object item[] = new Object[10];
 
 //    Main.UI
     DialogBox dbox = new DialogBox(this);
+
+//    Game state
+    public int gameState;
+    public final int TITLE = 0;
+    public final int PLAY = 1;
+    public final int PAUSED = 2;
+    public final int DIALOGUE = 3;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -46,6 +58,19 @@ public class GamePanel extends JPanel implements  Runnable{
     public void setupGame() {
         aSetter.setItem();
         aSetter.setNPC();
+
+        gameState = PLAY;
+        playMusic(0);
+    }
+
+    public void playMusic(int i)
+    {
+        music.setFile(i);
+        music.play();
+        music.loop();
+    }
+    public void stopMusic() {
+        music.stop();
     }
 
     public void startGameThread() {
@@ -92,6 +117,12 @@ public class GamePanel extends JPanel implements  Runnable{
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+
+        for (int i = 0; i < npc.length; i++) {
+            if (npc[i] != null) {
+                npc[i].draw(g2);
+            }
+        }
 
         tm.draw(g2);
         player.draw(g2);
