@@ -2,6 +2,7 @@ package main;
 
 import entities.MON_tuyul;
 import entities.NPC_Dukun;
+import objects.I_Bowl;
 
 public class AssetSetter {
    GamePanel gp;
@@ -21,6 +22,11 @@ public class AssetSetter {
    }
 
    public void setItem() {
-
+        int mapNum = 0;
+        int i = 0;
+        gp.items[i] = new I_Bowl(gp);
+        gp.items[i].worldX = gp.tileSize*6;
+        gp.items[i].worldY = gp.tileSize*6;
+        i++;
    }
 }

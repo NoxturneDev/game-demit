@@ -1,6 +1,7 @@
 package main;
 
 import entities.Entity;
+import objects.Items;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,10 +37,7 @@ public class GamePanel extends JPanel implements Runnable {
     //    ENTITIES
     public Player player = new Player(this, keyH);
     Entity npc[] = new Entity[10];
-    Object item[] = new Object[10];
-
-    //    Main.UI
-//    DialogBox dbox = new DialogBox(this);
+    public Items[] items = new Items[10];
 
     //    Game state
     public int gameState;
@@ -128,12 +126,20 @@ public class GamePanel extends JPanel implements Runnable {
 //        tile drawing
         tm.draw(g2);
 
+//        item drawing
+        for (int i = 0; i < items.length; i++) {
+            if (items[i] != null) {
+                items[i].draw(g2);
+            }
+        }
+
 //        npc drawing
         for (int i = 0; i < npc.length; i++) {
             if (npc[i] != null) {
                 npc[i].draw(g2);
             }
         }
+
 
 //        player drawing
         player.draw(g2);

@@ -56,7 +56,13 @@ public class Player extends Entity {
     public void interactNPC(int i) {
         if(i != 999) {
             gp.gameState = gp.DIALOGUE;
-            gp.ui.currentNPC = gp.npc[i];
+            gp.npc[i].speak();
+        }
+    }
+
+    public void pickupItem(int itemIndex){
+        if(itemIndex != 999){
+            gp.items[itemIndex] = null;
         }
     }
 
@@ -79,6 +85,11 @@ public class Player extends Entity {
 //                player to npc collission
                 int npxIndex = gp.collisionChecker.checkEntity(this, gp.npc);
                 interactNPC(npxIndex);
+
+//                player to items collision
+                int objIndex = gp.collisionChecker.checkObjectCollision(this, true);
+                pickupItem(objIndex);
+
 
                 if (!collision) {
                     switch (direction) {

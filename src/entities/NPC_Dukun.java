@@ -20,7 +20,7 @@ public class NPC_Dukun extends Entity{
         defaultSolidAreaX = 8;
         defaultSolidAreaY = 16;
 
-        dialogueSet = 0;
+        dialogueSet = -1;
         getImage();
         setDialogue();
     }
@@ -40,6 +40,10 @@ public class NPC_Dukun extends Entity{
         dialogues[0][0] = "Anak muda...";
         dialogues[0][1] = "Aku adalah Raden Wijaya";
         dialogues[0][2] = "Aku akan membantumu";
+
+        dialogues[1][0] = "Akan ku berikan pertanyaan";
+        dialogues[1][1] = "Siapa aku";
+        dialogues[1][2] = "??";
     }
 
     public void setAction() {
@@ -74,8 +78,8 @@ public class NPC_Dukun extends Entity{
 
     public void speak() {
         startDialogue(this, dialogueSet);
-        dialogueSet++;
 
+        dialogueSet++;
         if (dialogues[dialogueSet][0] == null) {
             dialogueSet = 0;
         }
