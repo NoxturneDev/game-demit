@@ -19,8 +19,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int screenWidth = tileSize * maxScreenCol;
 
     //    WORLD SETTING
-    public final int maxWorldCol = 20;
-    public final int maxWorldRow = 20;
+    public int maxWorldCol = 25;
+    public int maxWorldRow = 25;
     public int maxMap = 99;
 
     final int FPS = 60;
@@ -30,6 +30,7 @@ public class GamePanel extends JPanel implements Runnable {
     KeyHandler keyH = new KeyHandler(this);
     Thread gameThread;
     AssetSetter aSetter = new AssetSetter(this);
+    EventHandler eHandler = new EventHandler(this);
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     Sound music = new Sound(); // Created 2 different objects for Sound Effect and Music. If you use 1 object SE or Music stops sometimes.
     public UI ui = new UI(this);
@@ -49,6 +50,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int DIALOGUE = 3;
     public final int DIED = 4;
     public final int ITEM_DROP = 5;
+    public final int JUMPSCARE_SCREEN = 6;
+    public final int CUTSCENE = 7;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -71,6 +74,11 @@ public class GamePanel extends JPanel implements Runnable {
         music.setFile(i);
         music.play();
         music.loop();
+    }
+
+    public void playSE(int i) {
+        music.setFile(i);
+        music.play();
     }
 
     public void stopMusic() {
@@ -126,6 +134,10 @@ public class GamePanel extends JPanel implements Runnable {
             if (monsters[i] != null) {
                 monsters[i].update();
             }
+        }
+
+        if (gameState == CUTSCENE || gameState == JUMPSCARE_SCREEN) {
+            ui.update();
         }
     }
 
