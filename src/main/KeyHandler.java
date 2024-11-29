@@ -38,6 +38,7 @@ public class KeyHandler implements KeyListener {
         if (keyCode == KeyEvent.VK_SPACE) {
             spacePressed = true;
             gp.player.attacking = true; // temporary fixed bug when stuck on attack animation when space is pressed
+            gp.playSE(1);
         }
 
         if (keyCode == KeyEvent.VK_P) {
@@ -57,6 +58,12 @@ public class KeyHandler implements KeyListener {
 
         if (gp.gameState == gp.ITEM_DROP) {
             if(keyCode == KeyEvent.VK_ENTER || keyCode == KeyEvent.VK_ESCAPE) {
+                gp.gameState = gp.PLAY;
+            }
+        }
+
+        if (gp.gameState == gp.JUMPSCARE_SCREEN) {
+            if (keyCode == KeyEvent.VK_ENTER) {
                 gp.gameState = gp.PLAY;
             }
         }
