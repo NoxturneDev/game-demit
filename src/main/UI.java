@@ -2,6 +2,7 @@ package main;
 
 import entities.Entity;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -18,6 +19,11 @@ public class UI {
     public String itemName = "";
     public BufferedImage itemIcon;
     public String itemDescription;
+    public int jumpscareDuration;
+    public int[] jumpscares = new int[10];
+    public BufferedImage[] cutscenes = new BufferedImage[100];
+    public int cutsceneIndex;
+    public int cutsceneDuration;
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -26,11 +32,27 @@ public class UI {
             maruMonica = Font.createFont(Font.TRUETYPE_FONT, is);
             is = getClass().getResourceAsStream("/font/Purisa Bold.ttf");
             purisaB = Font.createFont(Font.TRUETYPE_FONT, is);
+
+            getCutScenesImage();
         } catch (FontFormatException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void getCutScenesImage() {
+        try {
+            for (int i = 1; i < 3; i++) { // temporary available cutscenes
+                cutscenes[i] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/cutscene_" + i + ".jpg"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showCutScene(int i) {
+        g2.drawImage(cutscenes[i], 0, 0, gp.screenWidth, gp.screenHeight, null);
     }
 
     public void drawPauseScreen() {
@@ -158,6 +180,17 @@ public class UI {
         }
     }
 
+    public void drawFullScreenImage(String imagePath) {
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(getClass().getResourceAsStream(imagePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        g2.drawImage(image, -50, 0, gp.screenWidth, gp.screenHeight, null);
+    }
+
     public int getXforCenteredText(String text) {
         int textLenght;
         textLenght = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth(); // Gets width of text.
@@ -192,6 +225,23 @@ public class UI {
         }
         if (gp.gameState == gp.ITEM_DROP) {
             drawItemDropScreen();
+        }
+        if (gp.gameState == gp.JUMPSCARE_SCREEN) {
+            drawFullScreenImage("/tuyul/tuyul_npc_jumpscare.png");
+        }
+        if (gp.gameState == gp.CUTSCENE) {
+            showCutScene(gp.ui.cutsceneIndex);
+        }
+    }
+
+    public void update() {
+        if (gp.gameState == gp.CUTSCENE) {
+            cutsceneDuration++;
+            if (cutsceneDuration > 360) {
+                gp.gameState = gp.PLAY;
+                cutsceneDuration = 0;
+                cutsceneIndex++;
+            }
         }
     }
 }
