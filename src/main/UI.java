@@ -1,6 +1,7 @@
 package main;
 
 import entities.Entity;
+import main.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -12,6 +13,7 @@ public class UI {
     GamePanel gp;
     Graphics2D g2;
     public Font maruMonica, purisaB;
+    public int commandNum = 0;
     public String currentDialogue = "";
     public Entity currentNPC;
     public int charIndex = 0;
@@ -24,6 +26,9 @@ public class UI {
     public BufferedImage[] cutscenes = new BufferedImage[100];
     public int cutsceneIndex;
     public int cutsceneDuration;
+    public int cutsceneWidth, cutsceneHeight;
+    public int cutsceneCounter;
+    public int cutsceneX, cutsceneY;
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -52,7 +57,77 @@ public class UI {
     }
 
     public void showCutScene(int i) {
-        g2.drawImage(cutscenes[i], 0, 0, gp.screenWidth, gp.screenHeight, null);
+        g2.drawImage(cutscenes[cutsceneIndex], cutsceneX, cutsceneY, cutsceneWidth, cutsceneHeight, null);
+    }
+
+    public void animateCutscene() {
+        cutsceneDuration++;
+        cutsceneWidth = gp.screenWidth;
+        cutsceneHeight = gp.screenHeight;
+
+        for (int j = 0; j < 1000; j++) {
+            cutsceneWidth -= j;
+            cutsceneHeight -= j;
+            g2.drawImage(cutscenes[cutsceneIndex], 0, 0, cutsceneWidth, cutsceneHeight, null);
+        }
+
+        if (cutsceneDuration > 360) {
+            gp.gameState = gp.PLAY;
+            cutsceneDuration = 0;
+        }
+    }
+
+    public void drawTitleScreen() {
+        g2.setColor(new Color(0, 0, 0));             // FILL BACKGROUND BLACK
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        //MAIN MENU
+        //TITLE NAME
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
+        String text = "Demit's\n";
+        int x = getXforCenteredText(text);
+        int y = gp.tileSize * 3;
+        //SHADOW
+        g2.setColor(Color.gray);
+        g2.drawString(text, x + 5, y + 5);
+        //MAIN COLOR
+        g2.setColor(Color.white);
+        g2.drawString(text, x, y);
+
+        //BLUE BOY IMAGE
+        x = gp.screenWidth / 2 - (gp.tileSize * 2) / 2;
+        y += gp.tileSize * 2;
+        g2.drawImage(gp.player.down1, x, y, gp.tileSize * 2, gp.tileSize * 2, null);
+
+        //MENU
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
+
+        text = "NEW ADVENTURE";
+        x = getXforCenteredText(text);
+        y += gp.tileSize * 3.5;
+        g2.drawString(text, x, y);
+        if (commandNum == 0) {
+            g2.drawString(">", x - gp.tileSize, y);
+        }
+
+        text = "LOAD SAVE FILE";
+        x = getXforCenteredText(text);
+        y += gp.tileSize;
+        g2.drawString(text, x, y);
+        if (commandNum == 1) {
+            g2.drawString(">", x - gp.tileSize, y);
+        }
+
+        text = "QUIT!";
+        x = getXforCenteredText(text);
+        y += gp.tileSize;
+        g2.drawString(text, x, y);
+        if (commandNum == 2) {
+            g2.drawString(">", x - gp.tileSize, y);
+        }
+    }
+
+    public void drawQuizScreen() {
+
     }
 
     public void drawPauseScreen() {
@@ -64,9 +139,9 @@ public class UI {
     }
 
     public void drawDialogScreen() {
-        int x = gp.tileSize * 3;
-        int y = gp.tileSize / 2;
-        int width = gp.screenWidth - (gp.tileSize * 6);
+        int x = 0;
+        int y = gp.tileSize * 8;
+        int width = gp.screenWidth;
         int height = gp.tileSize * 4;
 
         drawSubWindow(x, y, width, height);
@@ -211,7 +286,14 @@ public class UI {
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);  // Anti Aliasing // Smoothes the text
         g2.setColor(Color.white);
 
+        drawDebug(g2);
+        if(gp.gameState == gp.TITLE) {
+            drawTitleScreen();
+        }
         if (gp.gameState == gp.PLAY) {
+            Color c = new Color(0, 0, 0, 90);  // R,G,B, alfa(opacity)
+            g2.setColor(c);
+            g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
             drawHP();
         }
         if (gp.gameState == gp.DIALOGUE) {
@@ -230,17 +312,46 @@ public class UI {
             drawFullScreenImage("/tuyul/tuyul_npc_jumpscare.png");
         }
         if (gp.gameState == gp.CUTSCENE) {
-            showCutScene(gp.ui.cutsceneIndex);
+            showCutScene(1);
         }
+    }
+
+    //    DEBUG FUNCTION
+    public void drawDebug(Graphics2D g2) {
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));
+        g2.setColor(Color.white);
+        g2.drawString("X: " + gp.player.worldX + " Y: " + gp.player.worldY, 10, 20);
+        g2.drawString("Screen X: " + gp.player.screenX + "Screen Y: " + gp.player.screenY, 10, 40);
+        g2.drawString("Cutscene width: " + cutsceneWidth + " Cutscene height: " + cutsceneHeight, 10, 60);
     }
 
     public void update() {
         if (gp.gameState == gp.CUTSCENE) {
             cutsceneDuration++;
+            cutsceneCounter++;
+
+            // Calculate progress (0 to 1)
+            double progress = (double) cutsceneCounter / 360;
+            if (progress > 1.0) progress = 1.0; // Clamp to 1.0
+
+            // Apply sinusoidal ease-out curve
+            double curveFactor = Math.sin((progress * Math.PI) / 2);
+
+            // Dynamically adjust size using the curve
+            cutsceneWidth = (int) (gp.screenWidth + 100 - curveFactor * 100);
+            cutsceneHeight = (int) (gp.screenHeight + 100 - curveFactor * 100);
+            // Calculate center position
+            int centerX = gp.screenWidth / 2;
+            int centerY = gp.screenHeight / 2;
+
+            // Calculate top-left corner of the image for centering
+            cutsceneX = centerX - (cutsceneWidth / 2);
+            cutsceneY = centerY - (cutsceneHeight / 2);
+
+
             if (cutsceneDuration > 360) {
                 gp.gameState = gp.PLAY;
                 cutsceneDuration = 0;
-                cutsceneIndex++;
             }
         }
     }
