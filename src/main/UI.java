@@ -24,11 +24,16 @@ public class UI {
     public int jumpscareDuration;
     public int[] jumpscares = new int[10];
     public BufferedImage[] cutscenes = new BufferedImage[100];
+    public int animationCutsceneType;
     public int cutsceneIndex;
     public int cutsceneDuration;
     public int cutsceneWidth, cutsceneHeight;
     public int cutsceneCounter;
     public int cutsceneX, cutsceneY;
+    public int FADE_IN = 0;
+    public int FADE_OUT = 1;
+    public int SLIDE_LEFT = 2;
+    public int SLIDE_RIGHT = 3;
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -48,8 +53,8 @@ public class UI {
 
     public void getCutScenesImage() {
         try {
-            for (int i = 1; i < 3; i++) { // temporary available cutscenes
-                cutscenes[i] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/cutscene_" + i + ".jpg"));
+            for (int i = 1; i <= 3; i++) { // temporary available cutscenes
+                cutscenes[i] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/1_" + i + ".png"));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -65,18 +70,22 @@ public class UI {
 
     float alpha = 0F;
     public void showCutScene(int i) {
-        AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,alpha);
-        g2.setComposite(ac);
+        g2.setColor(Color.white);
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+        if(animationCutsceneType == FADE_IN || animationCutsceneType == FADE_OUT) {
+            AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,alpha);
+            g2.setComposite(ac);
+        }
+
         g2.drawImage(cutscenes[cutsceneIndex], cutsceneX, cutsceneY, cutsceneWidth, cutsceneHeight, null);
-//        g2.setColor(Color.white);
-//        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
     }
 
     public void fadeIn() {
-        cutsceneWidth = gp.screenWidth;
-        cutsceneHeight = gp.screenHeight;
+//        cutsceneWidth = gp.screenWidth;
+//        cutsceneHeight = gp.screenHeight;
 
-        double progress = (double) cutsceneCounter / 360;
+        double progress = (double) cutsceneCounter / 120;
 
 //         Calculate alpha value (0.0 to 1.0)
 //        alpha += (float) cutsceneCounter ;
@@ -84,30 +93,55 @@ public class UI {
         if (alpha < 0.99) {
             alpha += (float) progress / 100;
         }
-        System.out.println("alpha " + alpha);
     }
 
     public void animateCutscene() {
-        cutsceneDuration++;
-        cutsceneCounter++;
-
         if (cutsceneIndex == 1) {
+            cutsceneDuration++;
+            cutsceneCounter++;
+
+            cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
+            cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
+
+            animationCutsceneType = FADE_IN;
             slideRight();
             fadeIn();
         }
 
-// end animation on 3 seconds as default animation
-        if (cutsceneDuration > 420) {
-            gp.gameState = gp.PLAY;
-            cutsceneDuration = 0;
+        if (cutsceneIndex == 2) {
+            cutsceneDuration++;
+            cutsceneCounter++;
+
+            cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
+            cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
+
+            animationCutsceneType = FADE_IN;
+            slideRight();
+            fadeIn();
         }
+        if (cutsceneIndex == 3) {
+            cutsceneDuration++;
+            cutsceneCounter++;
+
+            cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
+            cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
+
+            animationCutsceneType = FADE_IN;
+            slideRight();
+            fadeIn();
+        }
+// end animation on 3 seconds as default animation
+//        if (cutsceneDuration > 420) {
+//            gp.gameState = gp.PLAY;
+//            cutsceneDuration = 0;
+//        }
     }
 
     public void slideRight() {
-        cutsceneWidth = gp.screenWidth;
-        cutsceneHeight = gp.screenHeight;
+//        cutsceneWidth = gp.screenWidth;
+//        cutsceneHeight = gp.screenHeight;
         // Calculate progress (0 to 1)
-        double progress = (double) cutsceneCounter / 360;
+        double progress = (double) cutsceneCounter / 120;
         if (progress > 1.0) progress = 1.0;
 
         // Ease-in-out curve for smoothness
@@ -120,7 +154,6 @@ public class UI {
 
         // Vertically center the image
         cutsceneY = (gp.screenHeight - cutscenes[cutsceneIndex].getHeight()) / 2;
-        System.out.println("Cutscene X" + cutsceneX);
     }
 
     public void zoomIn() {
