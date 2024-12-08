@@ -56,25 +56,113 @@ public class UI {
         }
     }
 
-    public void showCutScene(int i) {
+    public void drawCutsceneImage() {
+        float alpha = 0.5F; //draw half transparent
+        AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,alpha);
+        g2.setComposite(ac);
         g2.drawImage(cutscenes[cutsceneIndex], cutsceneX, cutsceneY, cutsceneWidth, cutsceneHeight, null);
+    }
+
+    float alpha = 0F;
+    public void showCutScene(int i) {
+        AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,alpha);
+        g2.setComposite(ac);
+        g2.drawImage(cutscenes[cutsceneIndex], cutsceneX, cutsceneY, cutsceneWidth, cutsceneHeight, null);
+//        g2.setColor(Color.white);
+//        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+    }
+
+    public void fadeIn() {
+        cutsceneWidth = gp.screenWidth;
+        cutsceneHeight = gp.screenHeight;
+
+        double progress = (double) cutsceneCounter / 360;
+
+//         Calculate alpha value (0.0 to 1.0)
+//        alpha += (float) cutsceneCounter ;
+        if (progress > 1.0) progress = 1.0;
+        if (alpha < 0.99) {
+            alpha += (float) progress / 100;
+        }
+        System.out.println("alpha " + alpha);
     }
 
     public void animateCutscene() {
         cutsceneDuration++;
-        cutsceneWidth = gp.screenWidth;
-        cutsceneHeight = gp.screenHeight;
+        cutsceneCounter++;
 
-        for (int j = 0; j < 1000; j++) {
-            cutsceneWidth -= j;
-            cutsceneHeight -= j;
-            g2.drawImage(cutscenes[cutsceneIndex], 0, 0, cutsceneWidth, cutsceneHeight, null);
+        if (cutsceneIndex == 1) {
+            slideRight();
+            fadeIn();
         }
 
-        if (cutsceneDuration > 360) {
+// end animation on 3 seconds as default animation
+        if (cutsceneDuration > 420) {
             gp.gameState = gp.PLAY;
             cutsceneDuration = 0;
         }
+    }
+
+    public void slideRight() {
+        cutsceneWidth = gp.screenWidth;
+        cutsceneHeight = gp.screenHeight;
+        // Calculate progress (0 to 1)
+        double progress = (double) cutsceneCounter / 360;
+        if (progress > 1.0) progress = 1.0;
+
+        // Ease-in-out curve for smoothness
+        double curveFactor = Math.sin(progress * Math.PI / 2);
+
+        // Calculate the X position
+        int startX = gp.screenWidth; // Start off-screen to the left
+        int endX = (gp.screenWidth - cutscenes[cutsceneIndex].getWidth()) / 2; // Center position
+        cutsceneX = (int) (startX + (endX - startX) * curveFactor);
+
+        // Vertically center the image
+        cutsceneY = (gp.screenHeight - cutscenes[cutsceneIndex].getHeight()) / 2;
+        System.out.println("Cutscene X" + cutsceneX);
+    }
+
+    public void zoomIn() {
+        // Calculate progress (0 to 1)
+        double progress = (double) cutsceneCounter / 360;
+        if (progress > 1.0) progress = 1.0; // Clamp to 1.0
+
+        // Apply sinusoidal ease-out curve
+        double curveFactor = Math.sin((progress * Math.PI) / 2);
+
+        // Dynamically adjust size using the curve
+        cutsceneWidth = (int) (gp.screenWidth + 100 - curveFactor * 100);
+        cutsceneHeight = (int) (gp.screenHeight + 100 - curveFactor * 100);
+        // Calculate center position
+        int centerX = gp.screenWidth / 2;
+        int centerY = gp.screenHeight / 2;
+
+        // Calculate top-left corner of the image for centering
+        cutsceneX = centerX - (cutsceneWidth / 2);
+        cutsceneY = centerY - (cutsceneHeight / 2);
+
+    }
+
+    public void zoomOut() {
+        // Calculate progress (0 to 1)
+        double progress = (double) cutsceneCounter / 360;
+        if (progress > 1.0) progress = 1.0; // Clamp to 1.0
+
+        // Apply sinusoidal ease-out curve
+        double curveFactor = Math.sin((progress * Math.PI) / 2);
+
+        // Dynamically adjust size using the curve
+        cutsceneWidth = (int) (gp.screenWidth + 100 + curveFactor * 100);
+        cutsceneHeight = (int) (gp.screenHeight + 100 + curveFactor * 100);
+        // Calculate center position
+        int centerX = gp.screenWidth / 2;
+        int centerY = gp.screenHeight / 2;
+
+        // Calculate top-left corner of the image for centering
+        cutsceneX = centerX - (cutsceneWidth / 2);
+        cutsceneY = centerY - (cutsceneHeight / 2);
+
     }
 
     public void drawTitleScreen() {
@@ -327,32 +415,7 @@ public class UI {
 
     public void update() {
         if (gp.gameState == gp.CUTSCENE) {
-            cutsceneDuration++;
-            cutsceneCounter++;
-
-            // Calculate progress (0 to 1)
-            double progress = (double) cutsceneCounter / 360;
-            if (progress > 1.0) progress = 1.0; // Clamp to 1.0
-
-            // Apply sinusoidal ease-out curve
-            double curveFactor = Math.sin((progress * Math.PI) / 2);
-
-            // Dynamically adjust size using the curve
-            cutsceneWidth = (int) (gp.screenWidth + 100 - curveFactor * 100);
-            cutsceneHeight = (int) (gp.screenHeight + 100 - curveFactor * 100);
-            // Calculate center position
-            int centerX = gp.screenWidth / 2;
-            int centerY = gp.screenHeight / 2;
-
-            // Calculate top-left corner of the image for centering
-            cutsceneX = centerX - (cutsceneWidth / 2);
-            cutsceneY = centerY - (cutsceneHeight / 2);
-
-
-            if (cutsceneDuration > 360) {
-                gp.gameState = gp.PLAY;
-                cutsceneDuration = 0;
-            }
+            animateCutscene();
         }
     }
 }
