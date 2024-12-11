@@ -19,9 +19,11 @@ public class GamePanel extends JPanel implements Runnable {
     public final int screenWidth = tileSize * maxScreenCol;
 
     //    WORLD SETTING
-    public int maxWorldCol = 25;
-    public int maxWorldRow = 25;
+    public int maxWorldCol = 50;
+    public int maxWorldRow = 50;
     public int maxMap = 99;
+    public int currentMap = 0;
+
 
     final int FPS = 60;
 
@@ -34,13 +36,14 @@ public class GamePanel extends JPanel implements Runnable {
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     Sound music = new Sound(); // Created 2 different objects for Sound Effect and Music. If you use 1 object SE or Music stops sometimes.
     public UI ui = new UI(this);
-    public Entity monsters[] = new Entity[10];
+    Config config = new Config(this);
 
 
     //    ENTITIES
     public Player player = new Player(this, keyH);
-    Entity npc[] = new Entity[10];
-    public Items[] items = new Items[10];
+    public Entity monsters[][] = new Entity[maxMap][10];
+    public Entity npc[][] = new Entity[maxMap][10];
+    public Items[][] items = new Items[maxMap][10];
 
     //    Game state
     public int gameState;
@@ -52,6 +55,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int ITEM_DROP = 5;
     public final int JUMPSCARE_SCREEN = 6;
     public final int CUTSCENE = 7;
+    public final int QUIZ = 8;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -66,7 +70,9 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setNPC();
         aSetter.setMonsters();
 
+//        ui.cutsceneIndex = 1;
         gameState = PLAY;
+        config.saveConfigToMongoDB();
 //        playMusic(0);
     }
 
@@ -124,21 +130,21 @@ public class GamePanel extends JPanel implements Runnable {
     public void update() {
         player.update();
 
-        for (int i = 0; i < npc.length; i++) {
-            if (npc[i] != null) {
-                npc[i].update();
+        for (int i = 0; i < npc[1].length; i++) {
+            if (npc[currentMap][i] != null) {
+                npc[currentMap][i].update();
             }
         }
 
-        for (int i = 0; i < monsters.length; i++) {
-            if (monsters[i] != null) {
-                monsters[i].update();
+        for (int i = 0; i < monsters[1].length; i++) {
+            if (monsters[currentMap][i] != null) {
+                monsters[currentMap][i].update();
             }
         }
 
-        if (gameState == CUTSCENE || gameState == JUMPSCARE_SCREEN) {
-            ui.update();
-        }
+//        if (gameState == CUTSCENE || gameState == JUMPSCARE_SCREEN) {
+        ui.update();
+//        }
     }
 
 
@@ -150,25 +156,24 @@ public class GamePanel extends JPanel implements Runnable {
         tm.draw(g2);
 
 //        item drawing
-        for (int i = 0; i < items.length; i++) {
-            if (items[i] != null) {
-                items[i].draw(g2);
+        for (int i = 0; i < items[1].length; i++) {
+            if (items[currentMap][i] != null) {
+                items[currentMap][i].draw(g2);
             }
         }
 
 //        npc drawing
-        for (int i = 0; i < npc.length; i++) {
-            if (npc[i] != null) {
-                npc[i].draw(g2);
+        for (int i = 0; i < npc[1].length; i++) {
+            if (npc[currentMap][i] != null) {
+                npc[currentMap][i].draw(g2);
             }
         }
 
-        for (int i = 0; i < monsters.length; i++) {
-            if (monsters[i] != null) {
-                monsters[i].draw(g2);
+        for (int i = 0; i < monsters[1].length; i++) {
+            if (monsters[currentMap][i] != null) {
+                monsters[currentMap][i].draw(g2);
             }
         }
-
 
 //        player drawing
         player.draw(g2);

@@ -21,14 +21,17 @@ public class Player extends Entity {
         this.keyH = keyH;
         HP = 100;
 
+//        render character in the middle of the screen view
         screenX = gp.screenWidth / 2 - gp.tileSize / 2;
         screenY = gp.screenHeight / 2 - gp.tileSize / 2;
 
         solidArea = new Rectangle();
-        solidArea.x = 6;
-        solidArea.y = 14;
-        solidArea.width = 32;
-        solidArea.height = 32;
+        solidArea.x = 14;
+        solidArea.y = 24;
+        solidArea.width = 34;
+        solidArea.height = 40;
+        defaultSolidAreaX = 14;
+        defaultSolidAreaY = 24;
 
         attackArea.width = 32;
         attackArea.height = 32;
@@ -65,8 +68,8 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues() {
-        worldX = gp.tileSize * 4;
-        worldY = gp.tileSize * 2;
+        worldX = gp.tileSize * 10;
+        worldY = gp.tileSize * 26;
         speed = 5;
         direction = "down";
     }
@@ -74,14 +77,15 @@ public class Player extends Entity {
     public void interactNPC(int i) {
         if (i != 999) {
             gp.gameState = gp.DIALOGUE;
-            gp.npc[i].speak();
+            gp.npc[gp.currentMap][i].speak();
         }
     }
 
     public void contactMonster(int i) {
         if (i != 999) {
             if (!invincible) {
-                HP -= gp.monsters[i].damage;
+                gp.playSE(1);
+                HP -= gp.monsters[gp.currentMap][i].damage;
                 invincible = true;
             }
         }
@@ -89,12 +93,14 @@ public class Player extends Entity {
 
     public void pickupItem(int itemIndex) {
         if (itemIndex != 999) {
-            gp.ui.itemName = gp.items[itemIndex].itemName;
-            gp.ui.itemDescription = gp.items[itemIndex].itemDescription;
-            gp.ui.itemIcon = gp.items[itemIndex].itemIcon;
+//            set UI attributes for item drop screen
+            gp.ui.itemName = gp.items[gp.currentMap][itemIndex].itemName;
+            gp.ui.itemDescription = gp.items[gp.currentMap][itemIndex].itemDescription;
+            gp.ui.itemIcon = gp.items[gp.currentMap][itemIndex].itemIcon;
             gp.gameState = gp.ITEM_DROP;
 
             gp.items[itemIndex] = null;
+            gp.player.speed = 10;
         }
     }
 
@@ -122,7 +128,7 @@ public class Player extends Entity {
             solidArea.width = attackArea.width;
             solidArea.height = attackArea.height;
 
-            int monsterIndex = gp.collisionChecker.checkEntity(this, gp.monsters);
+            int monsterIndex = gp.collisionChecker.checkEntity(this, gp.monsters[gp.currentMap]);
             attackMonster(monsterIndex);
 
             worldX = currWorldX;
@@ -139,10 +145,12 @@ public class Player extends Entity {
 
     public void attackMonster(int i) {
         if (i != 999) {
-            gp.monsters[i].HP -= 5;
+            gp.monsters[gp.currentMap][i].HP -= 5;
 
-            if (gp.monsters[i].HP <= 0) {
+            if (gp.monsters[gp.currentMap][i].HP <= 0) {
                 gp.monsters[i] = null;
+                gp.playSE(2);
+                gp.gameState = gp.JUMPSCARE_SCREEN;
             }
         }
     }
@@ -170,15 +178,18 @@ public class Player extends Entity {
                 gp.collisionChecker.checkTileCollision(this);
 
 //                player to npc collission
-                int npxIndex = gp.collisionChecker.checkEntity(this, gp.npc);
+                int npxIndex = gp.collisionChecker.checkEntity(this, gp.npc[gp.currentMap]);
                 interactNPC(npxIndex);
 
-                int monsterIndex = gp.collisionChecker.checkEntity(this, gp.monsters);
+                int monsterIndex = gp.collisionChecker.checkEntity(this, gp.monsters[gp.currentMap]);
                 contactMonster(monsterIndex);
 
 //                player to items collision
                 int objIndex = gp.collisionChecker.checkObjectCollision(this, true);
                 pickupItem(objIndex);
+
+//                check event
+                gp.eHandler.checkEvent();
 
 
                 if (!collision) {
@@ -324,5 +335,8 @@ public class Player extends Entity {
         }
 
         g2.drawImage(img, screenX, screenY, gp.tileSize, gp.tileSize, null);
+//        DEBUG
+        g2.setColor(Color.RED);
+        g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
     }
 }
