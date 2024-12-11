@@ -1,0 +1,12 @@
+blankon.png
+false
+dirt.png
+false
+grass.png
+false
+stone.png
+true
+tree.png
+true
+water.png
+true

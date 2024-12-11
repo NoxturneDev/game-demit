@@ -46,8 +46,14 @@ public class EventHandler {
 //            System.out.println("Hit some event");
 //        }
 
-        if (hit(0, 41, 30, "right") == true) {
-            teleport(1, 22, 5);
+        if (hit(0, 41, 30, "any") == true) {
+            teleport(1, 21, 9, 3);
+        }
+        if (hit(1, 21, 11 , "any") == true) {
+            teleport(2, 40, 30, -1);
+        }
+        if ((hit(2, 34, 30 , "any") == true) || (hit(2, 34, 31 , "any") == true)) {
+            teleport(3, 23, 20, 4);
         }
     }
 
@@ -76,11 +82,17 @@ public class EventHandler {
         return hit;
     }
 
-    public void teleport (int map, int worldX, int worldY) {
+    public void teleport (int map, int worldX, int worldY, int sceneIndex) {
         gp.currentMap = map;
         gp.player.worldX = worldX * gp.tileSize;
         gp.player.worldY = worldY * gp.tileSize;
-        gp.gameState = gp.CUTSCENE;
-        gp.ui.cutsceneIndex = 1;
+//        gp.gameState = gp.QUIZ;
+//        gp.ui.currentQuiz = "Pertanyaanya adalah";
+//        gp.ui.currentQuizCorrectAnswer = 1;
+
+//        invoke cutscene number 1
+        if (sceneIndex != -1) {
+            gp.sceneManager.playScene(sceneIndex);
+        }
     }
 }

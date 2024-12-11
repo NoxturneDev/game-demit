@@ -34,12 +34,24 @@ public class KeyHandler implements KeyListener {
         }
         if (keyCode == KeyEvent.VK_ENTER) {
             enterPressed = true;
+            if (gp.gameState == gp.RUNNING_TEXT) {
+                gp.gameState = gp.PLAY;
+            }
         }
-//        if (keyCode == KeyEvent.VK_SPACE) {
-//            spacePressed = true;
-//            gp.player.attacking = true; // temporary fixed bug when stuck on attack animation when space is pressed
-//            gp.playSE(1);
-//        }
+        if (keyCode == KeyEvent.VK_SPACE) {
+            spacePressed = true;
+            if (gp.gameState == gp.PLAY) {
+                gp.player.attacking = true; // temporary fixed bug when stuck on attack animation when space is pressed
+                gp.playSE(1);
+            }
+            if (gp.gameState == gp.CUTSCENE) {
+                gp.ui.cutsceneCounter = 0;
+                gp.ui.cutsceneDuration = 0;
+                gp.ui.alpha = 0;
+                gp.ui.cutsceneSoundPlayed = false;
+                gp.ui.cutsceneIndex++;
+            }
+        }
 
         if (keyCode == KeyEvent.VK_P) {
             if (gp.gameState == gp.PLAY) {
@@ -61,24 +73,14 @@ public class KeyHandler implements KeyListener {
 
             if (keyCode == KeyEvent.VK_ENTER) {
                 if (gp.ui.commandNum == 0) {
-                    gp.gameState = gp.CUTSCENE;
+                    gp.gameState = gp.RUNNING_TEXT;
+                    gp.ui.currentRunningText = "Lanang adalah seorang yang";
+                    gp.stopMusic();
+                    gp.playMusic(2);
                 }
                 if (gp.ui.commandNum == 1) {
                     System.exit(0);
                 }
-            }
-        }
-
-        if (gp.gameState == gp.QUIZ) {
-
-        }
-
-        if(gp.gameState == gp.CUTSCENE) {
-            if (keyCode == KeyEvent.VK_SPACE) {
-                gp.ui.cutsceneCounter = 0;
-                gp.ui.cutsceneDuration = 0;
-                gp.ui.alpha = 0;
-                gp.ui.cutsceneIndex++;
             }
         }
 
@@ -104,6 +106,15 @@ public class KeyHandler implements KeyListener {
 //                gp.gameState = gp.PLAY;
 //            }
 //        }
+
+        if (gp.gameState == gp.QUIZ) {
+            if (keyCode == KeyEvent.VK_1) {
+                gp.gameState = gp.PLAY;
+            }
+            if (keyCode == KeyEvent.VK_2) {
+                gp.gameState = gp.PLAY;
+            }
+        }
     }
 
     public void keyReleased(KeyEvent e) {

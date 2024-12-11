@@ -1,7 +1,6 @@
 package main;
 
 import entities.Entity;
-import main.GamePanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -12,12 +11,17 @@ import java.io.InputStream;
 public class UI {
     GamePanel gp;
     Graphics2D g2;
+    SceneManager cm;
     public Font maruMonica, purisaB;
     public int commandNum = 0;
+    public int quizNum = 0;
     public String currentDialogue = "";
     public Entity currentNPC;
     public int charIndex = 0;
     public String combinedText = "";
+    public String currentRunningText;
+    public String currentQuiz = "";
+    public int currentQuizCorrectAnswer = 0;
     public String itemName = "";
     public BufferedImage itemIcon;
     public String itemDescription;
@@ -53,9 +57,19 @@ public class UI {
 
     public void getCutScenesImage() {
         try {
-            for (int i = 1; i <= 3; i++) { // temporary available cutscenes
-                cutscenes[i] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/1_" + i + ".png"));
-            }
+//            PROLOG 1 - Lanang
+            cutscenes[1] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/1_1.png"));
+            cutscenes[2] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/1_2.png"));
+            cutscenes[3] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/1_3.png"));
+//            PROLOG 2 - Pocong
+            cutscenes[4] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/2_1.png"));
+            cutscenes[5] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/2_2.png"));
+            cutscenes[6] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/2_3.png"));
+//            PROLOG 3 - Keris TEMPORARY
+            cutscenes[7] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/2_3.png"));
+//            PROLOG 4 - Raden
+            cutscenes[8] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/2_3.png"));
+            cutscenes[9] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/2_3.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -81,11 +95,11 @@ public class UI {
         g2.drawImage(cutscenes[cutsceneIndex], cutsceneX, cutsceneY, cutsceneWidth, cutsceneHeight, null);
     }
 
-    public void fadeIn() {
+    public void fadeIn(int duration) {
 //        cutsceneWidth = gp.screenWidth;
 //        cutsceneHeight = gp.screenHeight;
 
-        double progress = (double) cutsceneCounter / 120;
+        double progress = (double) cutsceneCounter / duration;
 
 //         Calculate alpha value (0.0 to 1.0)
 //        alpha += (float) cutsceneCounter ;
@@ -95,30 +109,40 @@ public class UI {
         }
     }
 
+    public boolean cutsceneSoundPlayed = false;
     public void animateCutscene() {
         if (cutsceneIndex == 1) {
             cutsceneDuration++;
             cutsceneCounter++;
 
+            if (!cutsceneSoundPlayed) {
+                gp.playSE(21);
+                cutsceneSoundPlayed = true;
+            }
             cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
             cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
 
             animationCutsceneType = FADE_IN;
-            slideRight();
-            fadeIn();
+            slideRight(100);
+            fadeIn(100);
         }
 
         if (cutsceneIndex == 2) {
             cutsceneDuration++;
             cutsceneCounter++;
 
+            if (!cutsceneSoundPlayed) {
+                gp.playSE(22);
+                cutsceneSoundPlayed = true;
+            }
             cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
             cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
 
             animationCutsceneType = FADE_IN;
-            slideRight();
-            fadeIn();
+            slideRight(100);
+            fadeIn(100);
         }
+
         if (cutsceneIndex == 3) {
             cutsceneDuration++;
             cutsceneCounter++;
@@ -126,22 +150,79 @@ public class UI {
             cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
             cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
 
+            if (!cutsceneSoundPlayed) {
+                gp.playSE(23);
+                cutsceneSoundPlayed = true;
+            }
             animationCutsceneType = FADE_IN;
-            slideRight();
-            fadeIn();
+            zoomIn(80);
+            fadeIn(80);
+        }
+
+// end animation on 3 seconds as default animation
+        if(cutsceneIndex == 3 && cutsceneDuration > 200) {
+            gp.gameState = gp.RUNNING_TEXT;
+            currentRunningText = "TIDAAKKKKKKKK!";
+            cutsceneDuration = 0;
+        }
+
+        if (cutsceneIndex == 4) {
+            cutsceneDuration++;
+            cutsceneCounter++;
+
+            cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
+            cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
+
+            if (!cutsceneSoundPlayed) {
+                gp.playSE(24);
+                cutsceneSoundPlayed = true;
+            }
+            animationCutsceneType = FADE_IN;
+            slideRight(100);
+            fadeIn(100);
+        }
+        if (cutsceneIndex == 5) {
+            cutsceneDuration++;
+            cutsceneCounter++;
+
+            cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
+            cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
+
+            if (!cutsceneSoundPlayed) {
+                gp.playSE(25);
+                cutsceneSoundPlayed = true;
+            }
+            animationCutsceneType = FADE_IN;
+            slideRight(100);
+            fadeIn(100);
+        }
+        if (cutsceneIndex == 6) {
+//            only for this index stop the music
+            gp.stopMusic();
+            cutsceneDuration++;
+            cutsceneCounter++;
+
+            cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
+            cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
+
+            if (!cutsceneSoundPlayed) {
+                gp.playSE(26);
+                cutsceneSoundPlayed = true;
+            }
+            zoomIn(50);
+            fadeIn(50);
         }
 // end animation on 3 seconds as default animation
-//        if (cutsceneDuration > 420) {
-//            gp.gameState = gp.PLAY;
-//            cutsceneDuration = 0;
-//        }
+        if(cutsceneIndex == 6 && cutsceneDuration > 200) {
+            gp.sceneManager.playScene(5);
+        }
     }
 
-    public void slideRight() {
+    public void slideRight(int duration) {
 //        cutsceneWidth = gp.screenWidth;
 //        cutsceneHeight = gp.screenHeight;
         // Calculate progress (0 to 1)
-        double progress = (double) cutsceneCounter / 120;
+        double progress = (double) cutsceneCounter / duration;
         if (progress > 1.0) progress = 1.0;
 
         // Ease-in-out curve for smoothness
@@ -156,9 +237,9 @@ public class UI {
         cutsceneY = (gp.screenHeight - cutscenes[cutsceneIndex].getHeight()) / 2;
     }
 
-    public void zoomIn() {
+    public void zoomIn(int duration) {
         // Calculate progress (0 to 1)
-        double progress = (double) cutsceneCounter / 360;
+        double progress = (double) cutsceneCounter / duration;
         if (progress > 1.0) progress = 1.0; // Clamp to 1.0
 
         // Apply sinusoidal ease-out curve
@@ -257,6 +338,44 @@ public class UI {
         int x = getXforCenteredText(text);
         int y = gp.screenHeight / 2;
         g2.drawString(text, x, y);
+    }
+
+    public void drawInGameTextScreen() {
+        int x = 0;
+        int y = gp.tileSize * 8;
+        int width = gp.screenWidth;
+        int height = gp.tileSize * 4;
+        drawSubWindow(x, y, width, height);
+
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
+        x += gp.tileSize;
+        y += gp.tileSize;
+        g2.drawString(currentRunningText, x, y);
+    }
+
+    public void drawQuiz() {
+        int x = 0;
+        int y = gp.tileSize * 8;
+        int width = gp.screenWidth;
+        int height = gp.tileSize * 4;
+
+        // Draw the quiz box
+        drawSubWindow(x, y, width, height);
+
+        // Set font and starting position for text
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
+        x += gp.tileSize; // Add padding
+        y += gp.tileSize; // Add padding
+
+        // Draw the question
+        g2.drawString(currentQuiz, x, y);
+
+        // Draw the options
+        y += gp.tileSize; // Move to the next line
+        g2.drawString("1. Benar", x, y);
+
+        y += gp.tileSize; // Move to the next line
+        g2.drawString("2. Salah", x, y);
     }
 
     public void drawDialogScreen() {
@@ -435,13 +554,19 @@ public class UI {
         if (gp.gameState == gp.CUTSCENE) {
             showCutScene(1);
         }
+        if (gp.gameState == gp.RUNNING_TEXT) {
+            drawInGameTextScreen();
+        }
+        if (gp.gameState == gp.QUIZ) {
+            drawQuiz();
+        }
     }
 
     //    DEBUG FUNCTION
     public void drawDebug(Graphics2D g2) {
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));
         g2.setColor(Color.white);
-        g2.drawString("X: " + gp.player.worldX + " Y: " + gp.player.worldY, 10, 20);
+        g2.drawString("World X: " + gp.player.worldX + "World Y: " + gp.player.worldY, 10, 20);
         g2.drawString("Screen X: " + gp.player.screenX + "Screen Y: " + gp.player.screenY, 10, 40);
         g2.drawString("Cutscene width: " + cutsceneWidth + " Cutscene height: " + cutsceneHeight, 10, 60);
     }

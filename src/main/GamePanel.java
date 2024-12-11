@@ -37,6 +37,7 @@ public class GamePanel extends JPanel implements Runnable {
     Sound music = new Sound(); // Created 2 different objects for Sound Effect and Music. If you use 1 object SE or Music stops sometimes.
     public UI ui = new UI(this);
     Config config = new Config(this);
+    public SceneManager sceneManager = new SceneManager(this);
 
 
     //    ENTITIES
@@ -44,6 +45,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Entity monsters[][] = new Entity[maxMap][10];
     public Entity npc[][] = new Entity[maxMap][10];
     public Items[][] items = new Items[maxMap][10];
+    Lighting lighting = new Lighting(this);
 
     //    Game state
     public int gameState;
@@ -56,6 +58,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int JUMPSCARE_SCREEN = 6;
     public final int CUTSCENE = 7;
     public final int QUIZ = 8;
+    public final int RUNNING_TEXT = 9;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -69,9 +72,10 @@ public class GamePanel extends JPanel implements Runnable {
         aSetter.setItem();
         aSetter.setNPC();
         aSetter.setMonsters();
+//        eManager.setup();
 
 //        ui.cutsceneIndex = 1;
-        gameState = PLAY;
+        sceneManager.playScene(1);
         config.saveConfigToMongoDB();
 //        playMusic(0);
     }
@@ -177,6 +181,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 //        player drawing
         player.draw(g2);
+        lighting.draw(g2);
         ui.draw(g2);
     }
 }
