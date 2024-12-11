@@ -58,6 +58,7 @@ public class TileManager {
         }
 
         loadMap("/maps/forest_1.txt", 0);
+        loadMap("/maps/house_1.txt", 1);
 //        loadMap("/maps/world_map.txt", 1);
     }
 
