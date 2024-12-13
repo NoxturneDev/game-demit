@@ -7,12 +7,19 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
-public class Config {
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class Config implements Runnable {
     GamePanel gp;
+    GameConfig gc = new GameConfig();
+
+    private static final String filePath = "config.txt";
     private static final String MONGO_URI = "mongodb://localhost:27017"; // MongoDB connection URI
     private static final String DATABASE_NAME = "game_demit"; // MongoDB database
     private static final String COLLECTION_NAME = "config"; // MongoDB collection
     private static final String CONFIG_ID = "gameConfig"; // ID for the configuration document
+    public long interval;
 
     public Config(GamePanel gp) {
         this.gp = gp;
@@ -26,10 +33,10 @@ public class Config {
                     .getCollection(COLLECTION_NAME);
 
             // Create a config object and serialize to JSON
-            GameConfig gameConfig = new GameConfig();
-            gameConfig.currentMap = gp.currentMap;
+            gc.currentMap = gp.currentMap;
+            gc.totalScore = gp.player.totalScore;
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
-            String json = gson.toJson(gameConfig);
+            String json = gson.toJson(gc);
 
             // Convert JSON to BSON (MongoDB document)
             Document doc = Document.parse(json);
@@ -76,8 +83,33 @@ public class Config {
         }
     }
 
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                System.out.println("Autosaving...");
+                Thread.sleep(interval); // Wait for the specified interval
+                saveToLocal();
+            } catch (InterruptedException e) {
+                System.out.println("Autosave thread interrupted.");
+                break;
+            }
+        }
+    }
+
+    private synchronized void saveToLocal() {
+        try (FileWriter writer = new FileWriter(filePath)) {
+            writer.write("currentMap=" + gc.currentMap + "\n");
+            writer.write("currentMap=" + gc.totalScore + "\n");
+            System.out.println("Autosave completed.");
+        } catch (IOException e) {
+            System.out.println("Failed to save config file: " + e.getMessage());
+        }
+    }
+
     // Inner class to represent the configuration format
     static class GameConfig {
         public int currentMap;
+        public int totalScore;
     }
 }

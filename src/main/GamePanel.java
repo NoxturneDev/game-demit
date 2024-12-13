@@ -22,7 +22,7 @@ public class GamePanel extends JPanel implements Runnable {
     public int maxWorldCol = 50;
     public int maxWorldRow = 50;
     public int maxMap = 99;
-    public int currentMap = 0;
+    public int currentMap = 5;
 
 
     final int FPS = 60;
@@ -31,6 +31,7 @@ public class GamePanel extends JPanel implements Runnable {
     TileManager tm = new TileManager(this);
     KeyHandler keyH = new KeyHandler(this);
     Thread gameThread;
+    Thread configThread;
     AssetSetter aSetter = new AssetSetter(this);
     EventHandler eHandler = new EventHandler(this);
     public CollisionChecker collisionChecker = new CollisionChecker(this);
@@ -98,6 +99,12 @@ public class GamePanel extends JPanel implements Runnable {
     public void startGameThread() {
         gameThread = new Thread(this);
         gameThread.start();
+    }
+
+    public void startConfigThread(long interval) {
+        config.interval = interval;
+        configThread = new Thread(config);
+        configThread.start();
     }
 
     @Override
