@@ -115,7 +115,7 @@ public class Player extends Entity {
 
         if (spriteCounter < 5) {
             spriteNum = 1;
-        } else if (spriteCounter > 5 && spriteCounter < 25) {
+        } else if (spriteCounter > 5 && spriteCounter < 20) {
             spriteNum = 2;
 
             int currWorldX = worldX;
@@ -141,8 +141,9 @@ public class Player extends Entity {
             solidArea.width = solidAreaWidth;
             solidArea.height = solidAreaHeight;
 
-        } else if (spriteCounter > 25) {
+        } else if (spriteCounter > 20 && spriteCounter < 30) {
             spriteNum = 3;
+        } else if (spriteCounter > 30) {
             spriteCounter = 0;
             attacking = false;
         }
