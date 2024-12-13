@@ -15,6 +15,7 @@ public class Player extends Entity {
     public final int screenY;
     public boolean invincible = false;
     public int invincibleCounter;
+    public int totalScore;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
@@ -33,8 +34,8 @@ public class Player extends Entity {
         defaultSolidAreaX = 14;
         defaultSolidAreaY = 24;
 
-        attackArea.width = 32;
-        attackArea.height = 32;
+        attackArea.width = 64;
+        attackArea.height = 64;
 
         setDefaultValues();
         loadPlayerImage();
@@ -57,19 +58,23 @@ public class Player extends Entity {
     }
 
     public void loadPlayerAttackImage() {
-        attackUp1 = loadImage("/player/mc_attack_left_1.png", gp.tileSize, gp.tileSize);
-        attackUp2 = loadImage("/player/mc_attack_left_2.png", gp.tileSize, gp.tileSize);
-        attackDown1 = loadImage("/player/mc_attack_right_1.png", gp.tileSize, gp.tileSize);
-        attackDown2 = loadImage("/player/mc_attack_right_2.png", gp.tileSize, gp.tileSize);
-        attackRight1 = loadImage("/player/mc_attack_left_1.png", gp.tileSize, gp.tileSize);
-        attackRight2 = loadImage("/player/mc_attack_left_2.png", gp.tileSize, gp.tileSize);
-        attackLeft1 = loadImage("/player/mc_attack_right_1.png", gp.tileSize, gp.tileSize);
-        attackLeft2 = loadImage("/player/mc_attack_right_2.png", gp.tileSize, gp.tileSize);
+        attackUp1 = loadImage("/player/mc_attack_left_1.png", gp.tileSize * 2, gp.tileSize );
+        attackUp2 = loadImage("/player/mc_attack_left_2.png", gp.tileSize * 2, gp.tileSize);
+        attackUp3 = loadImage("/player/mc_attack_left_3.png", gp.tileSize * 2, gp.tileSize);
+        attackDown1 = loadImage("/player/mc_attack_right_1.png", gp.tileSize * 2, gp.tileSize);
+        attackDown2 = loadImage("/player/mc_attack_right_2.png", gp.tileSize * 2, gp.tileSize);
+        attackDown3 = loadImage("/player/mc_attack_right_3.png", gp.tileSize * 2, gp.tileSize);
+        attackRight1 = loadImage("/player/mc_attack_right_1.png", gp.tileSize * 2, gp.tileSize);
+        attackRight2 = loadImage("/player/mc_attack_right_2.png", gp.tileSize * 2, gp.tileSize);
+        attackRight3 = loadImage("/player/mc_attack_right_3.png", gp.tileSize * 2, gp.tileSize);
+        attackLeft1 = loadImage("/player/mc_attack_left_1.png", gp.tileSize * 2, gp.tileSize);
+        attackLeft2 = loadImage("/player/mc_attack_left_2.png", gp.tileSize * 2, gp.tileSize);
+        attackLeft3 = loadImage("/player/mc_attack_left_3.png", gp.tileSize * 2, gp.tileSize);
     }
 
     public void setDefaultValues() {
-        worldX = gp.tileSize * 10;
-        worldY = gp.tileSize * 26;
+        worldX = gp.tileSize * 23;
+        worldY = gp.tileSize * 16;
         speed = 5;
         direction = "down";
     }
@@ -137,7 +142,7 @@ public class Player extends Entity {
             solidArea.height = solidAreaHeight;
 
         } else if (spriteCounter > 25) {
-            spriteNum = 2;
+            spriteNum = 3;
             spriteCounter = 0;
             attacking = false;
         }
@@ -148,9 +153,13 @@ public class Player extends Entity {
             gp.monsters[gp.currentMap][i].HP -= 5;
 
             if (gp.monsters[gp.currentMap][i].HP <= 0) {
-                gp.monsters[i] = null;
-                gp.playSE(2);
-                gp.gameState = gp.JUMPSCARE_SCREEN;
+                gp.monsters[gp.currentMap][i] = null;
+                gp.aSetter.totalMonsterMap7--;
+                totalScore += 10;
+
+                if (gp.aSetter.totalMonsterMap7 < 0) {
+                    gp.sceneManager.playScene(10);
+                }
             }
         }
     }
@@ -234,6 +243,8 @@ public class Player extends Entity {
 
     public void draw(Graphics2D g2) {
         BufferedImage img = null;
+        int tempScreenX = screenX;
+        int tempScreenY = screenY;
 
         switch (direction) {
             case "up":
@@ -249,6 +260,7 @@ public class Player extends Entity {
                     }
                 }
                 if (attacking) {
+                    tempScreenY = screenY - gp.tileSize;
                     if (spriteNum == 1) {
                         img = attackUp1;
                     }
@@ -256,7 +268,7 @@ public class Player extends Entity {
                         img = attackUp2;
                     }
                     if (spriteNum == 3) {
-                        img = attackUp1;
+                        img = attackUp3;
                     }
                 }
                 break;
@@ -280,7 +292,7 @@ public class Player extends Entity {
                         img = attackDown2;
                     }
                     if (spriteNum == 3) {
-                        img = attackDown1;
+                        img = attackDown3;
                     }
                 }
                 break;
@@ -297,6 +309,7 @@ public class Player extends Entity {
                     }
                 }
                 if (attacking) {
+                    tempScreenX = screenX - gp.tileSize;
                     if (spriteNum == 1) {
                         img = attackLeft1;
                     }
@@ -304,7 +317,7 @@ public class Player extends Entity {
                         img = attackLeft2;
                     }
                     if (spriteNum == 3) {
-                        img = attackLeft1;
+                        img = attackLeft3;
                     }
                 }
                 break;
@@ -328,13 +341,13 @@ public class Player extends Entity {
                         img = attackRight2;
                     }
                     if (spriteNum == 3) {
-                        img = attackRight1;
+                        img = attackRight3;
                     }
                 }
                 break;
         }
 
-        g2.drawImage(img, screenX, screenY, gp.tileSize, gp.tileSize, null);
+        g2.drawImage(img, tempScreenX, tempScreenY, null);
 //        DEBUG
         g2.setColor(Color.RED);
         g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
