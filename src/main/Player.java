@@ -16,6 +16,12 @@ public class Player extends Entity {
     public boolean invincible = false;
     public int invincibleCounter;
     public int totalScore;
+    public boolean dashing = false; // Is the player currently dashing
+    public int dashCounter = 0; // Counter for dash duration
+    public int dashCooldown = 0; // Cooldown timer for next dash
+    public final int dashSpeed = 30; // Speed during dash
+    public final int dashDuration = 5; // Number of frames the dash lasts
+    public final int dashCooldownMax = 30; // Frames required before next dash
 
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
@@ -75,7 +81,7 @@ public class Player extends Entity {
     public void setDefaultValues() {
         worldX = gp.tileSize * 23;
         worldY = gp.tileSize * 16;
-        speed = 5;
+        speed = 10;
         direction = "down";
     }
 
@@ -115,7 +121,7 @@ public class Player extends Entity {
 
         if (spriteCounter < 5) {
             spriteNum = 1;
-        } else if (spriteCounter > 5 && spriteCounter < 20) {
+        } else if (spriteCounter > 5 && spriteCounter < 15) {
             spriteNum = 2;
 
             int currWorldX = worldX;
@@ -140,11 +146,10 @@ public class Player extends Entity {
             worldY = currWorldY;
             solidArea.width = solidAreaWidth;
             solidArea.height = solidAreaHeight;
-
-        } else if (spriteCounter > 20 && spriteCounter < 30) {
+        } else if (spriteCounter > 15 && spriteCounter < 20) {
             spriteNum = 3;
-        } else if (spriteCounter > 30) {
-            spriteCounter = 0;
+        } else if (spriteCounter > 20) {
+            spriteCounter = 1;
             attacking = false;
         }
     }
@@ -161,6 +166,7 @@ public class Player extends Entity {
                 if (gp.aSetter.totalMonsterMap7 < 0) {
                     gp.sceneManager.playScene(10);
                 }
+                gp.sceneManager.playScene(11);
             }
         }
     }
@@ -169,6 +175,39 @@ public class Player extends Entity {
         if (gp.gameState == gp.PLAY) {
             if (HP <= 0) {
                 gp.gameState = gp.DIED;
+            }
+
+            if (dashing) {
+                // Dash logic
+                dashCounter++;
+                if (dashCounter <= dashDuration) {
+                    switch (direction) {
+                        case "up":
+                            worldY -= dashSpeed;
+                            break;
+                        case "down":
+                            worldY += dashSpeed;
+                            break;
+                        case "left":
+                            worldX -= dashSpeed;
+                            break;
+                        case "right":
+                            worldX += dashSpeed;
+                            break;
+                    }
+                } else {
+                    // End dash
+                    dashing = false;
+                    dashCounter = 0;
+                    dashCooldown = dashCooldownMax;
+                }
+            } else if (dashCooldown > 0) {
+                // Reduce cooldown
+                dashCooldown--;
+            } else if (keyH.ctrlPressed && !dashing && dashCooldown == 0) {
+                // Start dash
+                dashing = true;
+                dashCounter = 0;
             }
 
             if (attacking) {
@@ -263,13 +302,13 @@ public class Player extends Entity {
                 if (attacking) {
                     tempScreenY = screenY - gp.tileSize;
                     if (spriteNum == 1) {
-                        img = attackUp1;
+                        img = attackRight1;
                     }
                     if (spriteNum == 2) {
-                        img = attackUp2;
+                        img = attackRight2;
                     }
                     if (spriteNum == 3) {
-                        img = attackUp3;
+                        img = attackRight3;
                     }
                 }
                 break;
@@ -310,7 +349,11 @@ public class Player extends Entity {
                     }
                 }
                 if (attacking) {
-                    tempScreenX = screenX - gp.tileSize;
+                    if (keyH.shiftPressed) {
+                        tempScreenX = screenX - gp.tileSize * 2;
+                    } else {
+                        tempScreenX = screenX - gp.tileSize;
+                    }
                     if (spriteNum == 1) {
                         img = attackLeft1;
                     }
@@ -351,6 +394,6 @@ public class Player extends Entity {
         g2.drawImage(img, tempScreenX, tempScreenY, null);
 //        DEBUG
         g2.setColor(Color.RED);
-        g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
+        g2.drawRect(tempScreenX + solidArea.x, tempScreenY + solidArea.y, solidArea.width, solidArea.height);
     }
 }
