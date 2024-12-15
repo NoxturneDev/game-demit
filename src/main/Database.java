@@ -12,7 +12,7 @@ import org.bson.Document;
 
 public class Database {
     public void connect() {
-        String connectionString = "mongodb+srv://noxturne:<wvpaK8elR2rOpg9x>@gamedemit.13oib.mongodb.net/?retryWrites=true&w=majority&appName=gameDemit";
+        String connectionString = "mongodb://localhost:27017";
 
         ServerApi serverApi = ServerApi.builder()
                 .version(ServerApiVersion.V1)
@@ -27,7 +27,7 @@ public class Database {
         try (MongoClient mongoClient = MongoClients.create(settings)) {
             try {
                 // Send a ping to confirm a successful connection
-                MongoDatabase database = mongoClient.getDatabase("admin");
+                MongoDatabase database = mongoClient.getDatabase("demit");
                 database.runCommand(new Document("ping", 1));
                 System.out.println("Pinged your deployment. You successfully connected to MongoDB!");
             } catch (MongoException e) {

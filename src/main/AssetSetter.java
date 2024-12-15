@@ -1,5 +1,6 @@
 package main;
 
+import entities.MON_Pocong;
 import entities.MON_tuyul;
 import entities.NPC_Dukun;
 import objects.I_Bowl;
@@ -22,7 +23,7 @@ public class AssetSetter {
     }
 
     public void setItem() {
-        int mapNum = 0;
+       int mapNum = 0;
         int i = 0;
 //        gp.items[mapNum][i] = new I_Bowl(gp);
 //        gp.items[mapNum][i].worldX = gp.tileSize * 23;
@@ -37,18 +38,29 @@ public class AssetSetter {
 //        gp.monsters[mapNum][i] = new MON_tuyul(gp);
 //        gp.monsters[mapNum][i].worldX = gp.tileSize * 16;
 //        gp.monsters[mapNum][i].worldY = gp.tileSize * 10;
-        i++;
+//        i++;
 
 //        gp.monsters[mapNum][i] = new MON_tuyul(gp);
 //        gp.monsters[mapNum][i].direction = "up";
 //        gp.monsters[mapNum][i].worldX = gp.tileSize * 16;
 //        gp.monsters[mapNum][i].worldY = gp.tileSize * 10;
-        i++;
+//        i++;
 
 //        gp.monsters[mapNum][i] = new MON_tuyul(gp);
 //        gp.monsters[mapNum][i].direction = "left";
 //        gp.monsters[mapNum][i].worldX = gp.tileSize * 16;
 //        gp.monsters[mapNum][i].worldY = gp.tileSize * 10;
+//        i++;
+
+        mapNum = 3;
+        gp.monsters[mapNum][i] = new MON_Pocong(gp);
+        gp.monsters[mapNum][i].direction = "up";
+        gp.monsters[mapNum][i].worldX = gp.tileSize * 23;
+        gp.monsters[mapNum][i].worldY = gp.tileSize * 21;
         i++;
+        gp.monsters[mapNum][i] = new MON_Pocong(gp);
+        gp.monsters[mapNum][i].direction = "up";
+        gp.monsters[mapNum][i].worldX = gp.tileSize * 23;
+        gp.monsters[mapNum][i].worldY = gp.tileSize * 20;
     }
 }

@@ -12,6 +12,9 @@ public class Main {
         window.setTitle("DEMIT`S GAME");
 
         GamePanel gamePanel = new GamePanel();
+//        Database db = new Database();
+//        db.connect();
+
         window.add(gamePanel);
 
         window.pack();
@@ -20,6 +23,7 @@ public class Main {
         window.setVisible(true);
 
         gamePanel.setupGame();
+        gamePanel.startConfigThread(3000);
         gamePanel.startGameThread();
     }
 }
