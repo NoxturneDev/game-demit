@@ -66,10 +66,10 @@ public class UI {
             cutscenes[5] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/2_2.png"));
             cutscenes[6] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/2_3.png"));
 //            PROLOG 3 - Keris TEMPORARY
-            cutscenes[7] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/2_3.png"));
+            cutscenes[7] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/3_1.png"));
 //            PROLOG 4 - Raden
-            cutscenes[8] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/2_3.png"));
-            cutscenes[9] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/2_3.png"));
+            cutscenes[8] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/5_1.png"));
+            cutscenes[9] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/5_2.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -197,8 +197,26 @@ public class UI {
             fadeIn(100);
         }
         if (cutsceneIndex == 6) {
-//            only for this index stop the music
-            gp.stopMusic();
+            cutsceneDuration++;
+            cutsceneCounter++;
+
+            cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
+            cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
+
+            animationCutsceneType = 3;
+            if (!cutsceneSoundPlayed) {
+                gp.playSE(26);
+                cutsceneSoundPlayed = true;
+            }
+            zoomIn(100);
+        }
+// end animation on 3 seconds as default animation
+        if(cutsceneIndex == 6 && cutsceneDuration > 200) {
+            gp.sceneManager.playScene(5);
+        }
+
+//        KERIS CUTSCENE (PROLOG 4)
+        if (cutsceneIndex == 7) {
             cutsceneDuration++;
             cutsceneCounter++;
 
@@ -206,15 +224,53 @@ public class UI {
             cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
 
             if (!cutsceneSoundPlayed) {
-                gp.playSE(26);
+                gp.playSE(30);
                 cutsceneSoundPlayed = true;
             }
-            zoomIn(50);
-            fadeIn(50);
+            animationCutsceneType = FADE_IN;
+            zoomIn(100);
+            fadeIn(100);
         }
-// end animation on 3 seconds as default animation
-        if(cutsceneIndex == 6 && cutsceneDuration > 200) {
-            gp.sceneManager.playScene(5);
+
+        if(cutsceneIndex == 7 && cutsceneDuration > 200) {
+            gp.sceneManager.playScene(8);
+        }
+
+//        RADEN WIJAYA CUTSCENE
+        if (cutsceneIndex == 8) {
+            cutsceneDuration++;
+            cutsceneCounter++;
+
+            cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
+            cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
+
+            if (!cutsceneSoundPlayed) {
+//                gp.playSE(30);
+                cutsceneSoundPlayed = true;
+            }
+            animationCutsceneType = FADE_IN;
+            slideRight(100);
+            fadeIn(100);
+        }
+
+        if (cutsceneIndex == 9) {
+            cutsceneDuration++;
+            cutsceneCounter++;
+
+            cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
+            cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
+
+            if (!cutsceneSoundPlayed) {
+//                gp.playSE(30);
+                cutsceneSoundPlayed = true;
+            }
+            animationCutsceneType = FADE_IN;
+            slideRight(200);
+            fadeIn(200);
+        }
+
+        if(cutsceneIndex == 9 && cutsceneDuration > 300) {
+            gp.sceneManager.playScene(12);
         }
     }
 
@@ -566,9 +622,12 @@ public class UI {
     public void drawDebug(Graphics2D g2) {
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));
         g2.setColor(Color.white);
-        g2.drawString("World X: " + gp.player.worldX + "World Y: " + gp.player.worldY, 10, 20);
-        g2.drawString("Screen X: " + gp.player.screenX + "Screen Y: " + gp.player.screenY, 10, 40);
-        g2.drawString("Cutscene width: " + cutsceneWidth + " Cutscene height: " + cutsceneHeight, 10, 60);
+        g2.drawString("World X: " + gp.player.worldX + " World Y: " + gp.player.worldY, 10, 20);
+        g2.drawString("Screen X: " + gp.player.screenX + " Screen Y: " + gp.player.screenY, 10, 40);
+        g2.drawString("Current map: " + gp.currentMap, 10, 60);
+        g2.drawString("totalScore: " + gp.player.totalScore, 10, 80);
+        g2.drawString("current Monster left: " + gp.aSetter.totalMonsterMap7, 10, 100);
+        g2.drawString("Col: " + gp.player.getCol() + " Row: " + gp.player.getRow(), 10, 120);
     }
 
     public void update() {
