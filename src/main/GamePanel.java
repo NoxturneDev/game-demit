@@ -24,6 +24,7 @@ public class GamePanel extends JPanel implements Runnable {
     public int maxWorldRow = 50;
     public int maxMap = 99;
     public int currentMap = 5;
+    public int currentLevel = 0;
     final int FPS = 60;
 
     //    SYSTEM
@@ -34,13 +35,13 @@ public class GamePanel extends JPanel implements Runnable {
     Thread configThread;
     AssetSetter aSetter = new AssetSetter(this);
     EventHandler eHandler = new EventHandler(this);
+    public Leaderboard leaderboardHandler = new Leaderboard(this);
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     public PathFinder pathFinder = new PathFinder(this);
     Sound music = new Sound(); // Created 2 different objects for Sound Effect and Music. If you use 1 object SE or Music stops sometimes.
     public UI ui = new UI(this);
     Config config = new Config(this);
     public SceneManager sceneManager = new SceneManager(this);
-
 
     //    ENTITIES
     public Player player = new Player(this, keyH);
@@ -61,6 +62,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int CUTSCENE = 7;
     public final int QUIZ = 8;
     public final int RUNNING_TEXT = 9;
+    public final int LEADERBOARD_SCREEN = 10;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
