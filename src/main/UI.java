@@ -12,7 +12,9 @@ public class UI {
     GamePanel gp;
     Graphics2D g2;
     SceneManager cm;
-    public Font maruMonica, purisaB;
+    public Font maruMonica, purisaB, alucrads;
+    public Color red = new Color(176, 4, 12);
+    public Color shadowRed = new Color(94, 3, 7);
     public int commandNum = 0;
     public int quizNum = 0;
     public String currentDialogue = "";
@@ -46,6 +48,8 @@ public class UI {
             maruMonica = Font.createFont(Font.TRUETYPE_FONT, is);
             is = getClass().getResourceAsStream("/font/Purisa Bold.ttf");
             purisaB = Font.createFont(Font.TRUETYPE_FONT, is);
+            is = getClass().getResourceAsStream("/font/Alucrads-aYVK5.ttf");
+            alucrads = Font.createFont(Font.TRUETYPE_FONT, is);
 
             getCutScenesImage();
         } catch (FontFormatException e) {
@@ -77,18 +81,19 @@ public class UI {
 
     public void drawCutsceneImage() {
         float alpha = 0.5F; //draw half transparent
-        AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,alpha);
+        AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
         g2.setComposite(ac);
         g2.drawImage(cutscenes[cutsceneIndex], cutsceneX, cutsceneY, cutsceneWidth, cutsceneHeight, null);
     }
 
     float alpha = 0F;
+
     public void showCutScene(int i) {
         g2.setColor(Color.white);
         g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
 
-        if(animationCutsceneType == FADE_IN || animationCutsceneType == FADE_OUT) {
-            AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER,alpha);
+        if (animationCutsceneType == FADE_IN || animationCutsceneType == FADE_OUT) {
+            AlphaComposite ac = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha);
             g2.setComposite(ac);
         }
 
@@ -110,6 +115,7 @@ public class UI {
     }
 
     public boolean cutsceneSoundPlayed = false;
+
     public void animateCutscene() {
         if (cutsceneIndex == 1) {
             cutsceneDuration++;
@@ -160,7 +166,7 @@ public class UI {
         }
 
 // end animation on 3 seconds as default animation
-        if(cutsceneIndex == 3 && cutsceneDuration > 200) {
+        if (cutsceneIndex == 3 && cutsceneDuration > 200) {
             gp.gameState = gp.RUNNING_TEXT;
             currentRunningText = "TIDAAKKKKKKKK!";
             cutsceneDuration = 0;
@@ -211,7 +217,7 @@ public class UI {
             zoomIn(100);
         }
 // end animation on 3 seconds as default animation
-        if(cutsceneIndex == 6 && cutsceneDuration > 200) {
+        if (cutsceneIndex == 6 && cutsceneDuration > 200) {
             gp.sceneManager.playScene(5);
         }
 
@@ -232,7 +238,7 @@ public class UI {
             fadeIn(100);
         }
 
-        if(cutsceneIndex == 7 && cutsceneDuration > 200) {
+        if (cutsceneIndex == 7 && cutsceneDuration > 200) {
             gp.sceneManager.playScene(8);
         }
 
@@ -269,7 +275,7 @@ public class UI {
             fadeIn(200);
         }
 
-        if(cutsceneIndex == 9 && cutsceneDuration > 300) {
+        if (cutsceneIndex == 9 && cutsceneDuration > 300) {
             gp.sceneManager.playScene(12);
         }
     }
@@ -345,10 +351,10 @@ public class UI {
         int x = getXforCenteredText(text);
         int y = gp.tileSize * 3;
         //SHADOW
-        g2.setColor(Color.gray);
+        g2.setColor(shadowRed);
         g2.drawString(text, x + 5, y + 5);
         //MAIN COLOR
-        g2.setColor(Color.white);
+        g2.setColor(red);
         g2.drawString(text, x, y);
 
         //BLUE BOY IMAGE
@@ -375,14 +381,91 @@ public class UI {
             g2.drawString(">", x - gp.tileSize, y);
         }
 
-        text = "QUIT!";
+        text = "LEADERBOARD";
         x = getXforCenteredText(text);
         y += gp.tileSize;
         g2.drawString(text, x, y);
         if (commandNum == 2) {
             g2.drawString(">", x - gp.tileSize, y);
         }
+
+        text = "QUIT!";
+        x = getXforCenteredText(text);
+        y += gp.tileSize;
+        g2.drawString(text, x, y);
+        if (commandNum == 3) {
+            g2.drawString(">", x - gp.tileSize, y);
+        }
     }
+
+    public void drawLeaderboardScreen() {
+        g2.setColor(new Color(0, 0, 0));
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 25F));
+        g2.setColor(red);
+        g2.drawString("ESC to back", 20, 40);
+
+        // TITLE
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
+        String title = "LEADERBOARD";
+        int x = getXforCenteredText(title);
+        int y = gp.tileSize * 2;
+        // SHADOW
+        g2.setColor(shadowRed);
+        g2.drawString(title, x + 5, y + 5);
+        // MAIN COLOR
+        g2.setColor(red);
+        g2.drawString(title, x, y);
+
+        // LEADERBOARD HEADER
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
+        String headerPlayer = "PLAYER NAME";
+        String headerLevel = "LEVEL";
+        String headerScore = "TOTAL SCORE";
+
+        y += gp.tileSize * 2; // Space below the title
+
+        int column1X = gp.tileSize * 2; // Left padding for Player Name
+        int column2X = gp.screenWidth / 2 - gp.tileSize; // Center for Level
+        int column3X = gp.screenWidth - gp.tileSize * 5; // Right padding for Total Score
+
+        g2.drawString(headerPlayer, column1X, y);
+        g2.drawString(headerLevel, column2X, y);
+        g2.drawString(headerScore, column3X, y);
+
+        // DRAW LEADERBOARD LIST
+        Player firstPlace = gp.leaderboardHandler.FIRST_PLACE;
+        Player secondPlace = gp.leaderboardHandler.SECOND_PLACE;
+        Player thirdPlace = gp.leaderboardHandler.THIRD_PLACE;
+        Player fourthPlace = gp.leaderboardHandler.FOURTH_PLACE;
+        Player fifthPlace = gp.leaderboardHandler.FIFTH_PLACE;
+        String[][] leaderboard = {
+                {"alice", "1", "100"},
+                {"bob", "2", "200"},
+                {"charlie", "3", "300"},
+                {"david", "4", "400"},
+                {"eve", "5", "500"},
+        };
+//        String[][] leaderboard = {
+//                {firstPlace.name, String.valueOf(firstPlace.level), String.valueOf(firstPlace.totalScore)},
+//                {secondPlace.name, String.valueOf(secondPlace.level), String.valueOf(secondPlace.totalScore)},
+//                {thirdPlace.name, String.valueOf(thirdPlace.level), String.valueOf(thirdPlace.totalScore)},
+//                {fourthPlace.name, String.valueOf(fourthPlace.level), String.valueOf(fourthPlace.totalScore)},
+//                {fifthPlace.name, String.valueOf(fifthPlace.level), String.valueOf(fifthPlace.totalScore)},
+//        };
+//
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 36F)); // Smaller font for list
+        for (int i = 0; i < leaderboard.length; i++) {
+            y += gp.tileSize; // Space between rows
+
+            // Draw each column
+            g2.drawString(leaderboard[i][0], column1X, y); // Player Name
+            g2.drawString(leaderboard[i][1], column2X, y); // Level
+            g2.drawString(leaderboard[i][2], column3X, y); // Total Score
+        }
+    }
+
 
     public void drawQuizScreen() {
 
@@ -531,7 +614,7 @@ public class UI {
         g2.setColor(Color.gray);
         g2.drawString(text, x + 5, y + 5);
         //MAIN COLOR
-        g2.setColor(Color.white);
+        g2.setColor(Color.RED);
         g2.drawString(text, x, y);
 
 //        ICON IMAGE
@@ -578,13 +661,16 @@ public class UI {
 
     public void draw(Graphics2D g2) {
         this.g2 = g2;
-        g2.setFont(maruMonica);
+        g2.setFont(alucrads);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);  // Anti Aliasing // Smoothes the text
-        g2.setColor(Color.white);
+        g2.setColor(Color.RED);
 
         drawDebug(g2);
-        if(gp.gameState == gp.TITLE) {
+        if (gp.gameState == gp.TITLE) {
             drawTitleScreen();
+        }
+        if (gp.gameState == gp.LEADERBOARD_SCREEN) {
+            drawLeaderboardScreen();
         }
         if (gp.gameState == gp.PLAY) {
             Color c = new Color(0, 0, 0, 90);  // R,G,B, alfa(opacity)
