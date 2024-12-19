@@ -8,6 +8,13 @@ public class EventHandler {
     EventRect eventRect[][][];
 
     int eventRectDefaultX, eventRectDefaultY;
+    public int MAP_FOREST_1 = 1;
+    public int MAP_HOUSE_1 = 2;
+    public int MAP_FOREST_2 = 3;
+    public int MAP_FOREST_3 = 4;
+    public int MAP_FOREST_4 = 5;
+    public int MAP_FOREST_5 = 6;
+    public int MAP_HOUSE_2 = 7;
 
     public EventHandler(GamePanel gp) {
         this.gp = gp;
@@ -18,7 +25,7 @@ public class EventHandler {
         int col = 0;
         int row = 0;
 
-        while(map < gp.maxMap && col < gp.maxWorldCol && row < gp.maxWorldRow) {
+        while (map < gp.maxMap && col < gp.maxWorldCol && row < gp.maxWorldRow) {
             eventRect[map][col][row] = new EventRect();
             eventRect[map][col][row].x = 20;
             eventRect[map][col][row].y = 20;
@@ -46,14 +53,48 @@ public class EventHandler {
 //            System.out.println("Hit some event");
 //        }
 
+//        forest 1
         if (hit(0, 41, 30, "any") == true) {
             teleport(1, 21, 9, 3);
         }
-        if (hit(1, 21, 11 , "any") == true) {
+//      house 1
+        if (hit(1, 21, 11, "any") == true) {
             teleport(2, 40, 30, -1);
         }
-        if ((hit(2, 34, 30 , "any") == true) || (hit(2, 34, 31 , "any") == true)) {
+//        forest 2
+        if ((hit(2, 34, 30, "any") == true) || (hit(2, 34, 31, "any") == true)) {
             teleport(3, 23, 20, 4);
+        }
+//        forest 3
+        if ((hit(3, 39, 10, "any") == true) || (hit(2, 39, 31, "any") == true)) {
+            teleport(4, 23, 20, -1);
+        }
+
+//        forest 4
+        if ((hit(4, 23, 28, "any") == true) || (hit(4, 24, 28, "any") == true)) {
+            gp.sceneManager.playScene(6);
+        }
+        if ((hit(4, 23, 28, "any") == true) || (hit(4, 24, 28, "any") == true)) {
+            teleport(5, 23, 16, -1);
+        }
+
+//        forest 5
+        if ((hit(5, 41, 30, "any") == true) || (hit(5, 41, 31, "any") == true)) {
+            teleport(6, 24, 38, -1);
+        }
+
+//        house 2
+        if ((hit(5, 34, 30, "any") == true)) {
+            teleport(6, 24, 38, -1);
+        }
+
+        if (hit(6, 20, 43, "any") == true) {
+           gp.sceneManager.playScene(7);
+        }
+
+//        house 3
+        if (hit(7, 24, 38, "any") == true) {
+            gp.sceneManager.playScene(11);
         }
     }
 
@@ -82,7 +123,7 @@ public class EventHandler {
         return hit;
     }
 
-    public void teleport (int map, int worldX, int worldY, int sceneIndex) {
+    public void teleport(int map, int worldX, int worldY, int sceneIndex) {
         gp.currentMap = map;
         gp.player.worldX = worldX * gp.tileSize;
         gp.player.worldY = worldY * gp.tileSize;
