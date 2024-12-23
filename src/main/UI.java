@@ -12,7 +12,7 @@ public class UI {
     GamePanel gp;
     Graphics2D g2;
     SceneManager cm;
-    public Font maruMonica, purisaB, alucrads;
+    public Font maruMonica, purisaB, alucrads, pixeloid, castlefavor;
     public Color red = new Color(176, 4, 12);
     public Color shadowRed = new Color(94, 3, 7);
     public int commandNum = 0;
@@ -27,8 +27,7 @@ public class UI {
     public String itemName = "";
     public BufferedImage itemIcon;
     public String itemDescription;
-    public int jumpscareDuration;
-    public int[] jumpscares = new int[10];
+    public String currentJumpscarePath;
     public BufferedImage[] cutscenes = new BufferedImage[100];
     public int animationCutsceneType;
     public int cutsceneIndex;
@@ -50,6 +49,10 @@ public class UI {
             purisaB = Font.createFont(Font.TRUETYPE_FONT, is);
             is = getClass().getResourceAsStream("/font/Alucrads-aYVK5.ttf");
             alucrads = Font.createFont(Font.TRUETYPE_FONT, is);
+            is = getClass().getResourceAsStream("/font/Castlefavor-OGLWP.ttf");
+            castlefavor = Font.createFont(Font.TRUETYPE_FONT, is);
+            is = getClass().getResourceAsStream("/font/PixeloidMono-d94EV.ttf");
+            pixeloid =  Font.createFont(Font.TRUETYPE_FONT, is);
 
             getCutScenesImage();
         } catch (FontFormatException e) {
@@ -275,7 +278,7 @@ public class UI {
             fadeIn(200);
         }
 
-        if (cutsceneIndex == 9 && cutsceneDuration > 300) {
+        if (cutsceneIndex == 9 && cutsceneDuration > 200) {
             gp.sceneManager.playScene(12);
         }
     }
@@ -441,11 +444,11 @@ public class UI {
         Player fourthPlace = gp.leaderboardHandler.FOURTH_PLACE;
         Player fifthPlace = gp.leaderboardHandler.FIFTH_PLACE;
         String[][] leaderboard = {
-                {"alice", "1", "100"},
-                {"bob", "2", "200"},
-                {"charlie", "3", "300"},
-                {"david", "4", "400"},
-                {"eve", "5", "500"},
+                {"Dila", "6", "1530"},
+                {"Firschanya", "6", "1410"},
+                {"Galih", "5", "1300"},
+                {"Rehan", "4", "1150"},
+                {"Fahmi", "2", "400"},
         };
 //        String[][] leaderboard = {
 //                {firstPlace.name, String.valueOf(firstPlace.level), String.valueOf(firstPlace.totalScore)},
@@ -464,6 +467,66 @@ public class UI {
             g2.drawString(leaderboard[i][1], column2X, y); // Level
             g2.drawString(leaderboard[i][2], column3X, y); // Total Score
         }
+    }
+
+    private void drawLevelScreen() {
+        // Background overlay
+        Color background = new Color(0, 0, 0, 200);  // Semi-transparent black
+        g2.setColor(background);
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+        // Title text
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
+        g2.setColor(Color.WHITE);
+        String title = "Levels";
+        int titleX = getXforCenteredText(title);
+        int titleY = gp.tileSize * 2;
+        g2.drawString(title, titleX, titleY);
+
+        // Level list
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 36F));
+        int startX = gp.tileSize * 4;
+        int startY = gp.tileSize * 3;
+        int lineHeight = gp.tileSize * 1;
+
+        // Render each level
+        for (int i = 1; i <= 7; i++) {
+            boolean isLocked = false;
+
+            // Check the lock status for each level
+            switch (i) {
+                case 1 -> isLocked = gp.player.LEVEL_1_LOCKED;
+                case 2 -> isLocked = gp.player.LEVEL_2_LOCKED;
+                case 3 -> isLocked = gp.player.LEVEL_3_LOCKED;
+                case 4 -> isLocked = gp.player.LEVEL_4_LOCKED;
+                case 5 -> isLocked = gp.player.LEVEL_5_LOCKED;
+                case 6 -> isLocked = gp.player.LEVEL_6_LOCKED;
+                case 7 -> isLocked = gp.player.LEVEL_7_LOCKED;
+            }
+
+            // Display level and status
+            String levelText = "LEVEL " + i;
+            String statusText = isLocked ? "LOCKED" : "UNLOCKED";
+            int levelX = startX;
+            int statusX = gp.screenWidth - gp.tileSize * 6; // Adjust for alignment to the right
+            int y = startY + (lineHeight * (i - 1));
+
+            // Draw level name
+            g2.setColor(Color.WHITE);
+            g2.drawString(levelText, levelX, y);
+
+            // Draw status with appropriate color
+            g2.setColor(isLocked ? Color.RED : Color.GREEN);
+            g2.drawString(statusText, statusX, y);
+        }
+
+        // Instructions
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 24F));
+        g2.setColor(Color.WHITE);
+        String instructions = "Press ESC to return";
+        int instructionsX = getXforCenteredText(instructions);
+        int instructionsY = gp.screenHeight - gp.tileSize;
+        g2.drawString(instructions, instructionsX, instructionsY);
     }
 
 
@@ -490,6 +553,12 @@ public class UI {
         x += gp.tileSize;
         y += gp.tileSize;
         g2.drawString(currentRunningText, x, y);
+
+        for (String line : currentRunningText.split("\n"))   // splits dialogue until "\n" as a line
+        {
+            g2.drawString(line, x, y);
+            y += 40;
+        }
     }
 
     public void drawQuiz() {
@@ -515,6 +584,30 @@ public class UI {
 
         y += gp.tileSize; // Move to the next line
         g2.drawString("2. Salah", x, y);
+
+        if (gp.keyH.onePressed == true) {
+            gp.gameState = gp.RUNNING_TEXT;
+
+            if (currentQuizCorrectAnswer == 1) {
+                currentRunningText = "Benar sekali anak muda!";
+                gp.player.totalScore += 100;
+            } else {
+                currentRunningText = "Kamu salah! Perbaiki lagi";
+            }
+            gp.keyH.onePressed = false;
+        }
+
+        if (gp.keyH.twoPressed == true) {
+            gp.gameState = gp.RUNNING_TEXT;
+
+            if (currentQuizCorrectAnswer == 2) {
+                currentRunningText = "Benar sekali anak muda!";
+                gp.player.totalScore += 100;
+            } else {
+                currentRunningText = "Kamu salah, perbanyak lagi ilmu mu!";
+            }
+            gp.keyH.twoPressed = false;
+        }
     }
 
     public void drawDialogScreen() {
@@ -614,7 +707,7 @@ public class UI {
         g2.setColor(Color.gray);
         g2.drawString(text, x + 5, y + 5);
         //MAIN COLOR
-        g2.setColor(Color.RED);
+        g2.setColor(Color.WHITE);
         g2.drawString(text, x, y);
 
 //        ICON IMAGE
@@ -661,16 +754,21 @@ public class UI {
 
     public void draw(Graphics2D g2) {
         this.g2 = g2;
-        g2.setFont(alucrads);
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);  // Anti Aliasing // Smoothes the text
         g2.setColor(Color.RED);
 
+        g2.setFont(pixeloid);
         drawDebug(g2);
+        drawStatus(g2);
+        g2.setFont(castlefavor);
         if (gp.gameState == gp.TITLE) {
             drawTitleScreen();
         }
         if (gp.gameState == gp.LEADERBOARD_SCREEN) {
             drawLeaderboardScreen();
+        }
+        if (gp.gameState == gp.LEVEL_SCREEN) {
+            drawLevelScreen();
         }
         if (gp.gameState == gp.PLAY) {
             Color c = new Color(0, 0, 0, 90);  // R,G,B, alfa(opacity)
@@ -679,6 +777,7 @@ public class UI {
             drawHP();
         }
         if (gp.gameState == gp.DIALOGUE) {
+            g2.setFont(pixeloid);
             drawDialogScreen();
         }
         if (gp.gameState == gp.PAUSED) {
@@ -688,32 +787,43 @@ public class UI {
             drawGameOverScreen();
         }
         if (gp.gameState == gp.ITEM_DROP) {
+            g2.setFont(pixeloid);
             drawItemDropScreen();
         }
         if (gp.gameState == gp.JUMPSCARE_SCREEN) {
-            drawFullScreenImage("/tuyul/tuyul_npc_jumpscare.png");
+            drawFullScreenImage(currentJumpscarePath);
         }
         if (gp.gameState == gp.CUTSCENE) {
             showCutScene(1);
         }
         if (gp.gameState == gp.RUNNING_TEXT) {
+            g2.setFont(pixeloid);
             drawInGameTextScreen();
         }
         if (gp.gameState == gp.QUIZ) {
+            g2.setFont(pixeloid);
             drawQuiz();
         }
+    }
+
+    public void drawStatus (Graphics2D g2) {
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));
+        g2.setColor(Color.white);
+        g2.drawString("HP: " + gp.player.HP, 20, 20);
+        g2.drawString("Level: " + gp.player.level, 20, 40);
+        g2.drawString("Total Score: " + gp.player.totalScore, 20, 70);
     }
 
     //    DEBUG FUNCTION
     public void drawDebug(Graphics2D g2) {
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));
         g2.setColor(Color.white);
-        g2.drawString("World X: " + gp.player.worldX + " World Y: " + gp.player.worldY, 10, 20);
-        g2.drawString("Screen X: " + gp.player.screenX + " Screen Y: " + gp.player.screenY, 10, 40);
-        g2.drawString("Current map: " + gp.currentMap, 10, 60);
-        g2.drawString("totalScore: " + gp.player.totalScore, 10, 80);
-        g2.drawString("current Monster left: " + gp.aSetter.totalMonsterMap7, 10, 100);
-        g2.drawString("Col: " + gp.player.getCol() + " Row: " + gp.player.getRow(), 10, 120);
+        g2.drawString("World X: " + gp.player.worldX + " World Y: " + gp.player.worldY, 600, 20);
+        g2.drawString("Screen X: " + gp.player.screenX + " Screen Y: " + gp.player.screenY, 600, 40);
+        g2.drawString("Current map: " + gp.currentMap, 600, 60);
+        g2.drawString("totalScore: " + gp.player.totalScore, 600, 80);
+        g2.drawString("current Monster left: " + gp.aSetter.totalMonsterMap7, 600, 100);
+        g2.drawString("Col: " + gp.player.getCol() + " Row: " + gp.player.getRow(), 600, 120);
     }
 
     public void update() {
