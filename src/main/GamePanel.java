@@ -23,9 +23,12 @@ public class GamePanel extends JPanel implements Runnable {
     public int maxWorldCol = 50;
     public int maxWorldRow = 50;
     public int maxMap = 99;
-    public int currentMap = 5;
+    public int currentMap = 0;
     public int currentLevel = 0;
     final int FPS = 60;
+
+//    GAME STATE
+    public boolean bossBattle = false;
 
     //    SYSTEM
     public TileManager tm = new TileManager(this);
@@ -63,6 +66,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int QUIZ = 8;
     public final int RUNNING_TEXT = 9;
     public final int LEADERBOARD_SCREEN = 10;
+    public final int LEVEL_SCREEN = 11;
+    public final int SPLASH_SCREEN = 99;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
@@ -83,7 +88,7 @@ public class GamePanel extends JPanel implements Runnable {
 //        eManager.setup();
 
 //        ui.cutsceneIndex = 1;
-        sceneManager.playScene(sceneManager.SCENE_TITLE);
+        sceneManager.playScene(sceneManager.SPLASH_SCREEN);
         config.saveConfigToMongoDB();
 //        playMusic(0);
     }

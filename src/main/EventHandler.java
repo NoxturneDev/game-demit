@@ -55,47 +55,49 @@ public class EventHandler {
 
 //        forest 1
         if (hit(0, 41, 30, "any") == true) {
-            teleport(1, 21, 9, 3);
+            gp.sceneManager.playScene(gp.sceneManager.BOSS_BATTLE_NYIBLORONG);
+            teleport(95, 18, 24, -1);
         }
-//      house 1
-        if (hit(1, 21, 11, "any") == true) {
-            teleport(2, 40, 30, -1);
-        }
-//        forest 2
-        if ((hit(2, 34, 30, "any") == true) || (hit(2, 34, 31, "any") == true)) {
-            teleport(3, 23, 20, 4);
-        }
-//        forest 3
-        if ((hit(3, 39, 10, "any") == true) || (hit(2, 39, 31, "any") == true)) {
-            teleport(4, 23, 20, -1);
-        }
-
-//        forest 4
-        if ((hit(4, 23, 28, "any") == true) || (hit(4, 24, 28, "any") == true)) {
-            gp.sceneManager.playScene(6);
-        }
-        if ((hit(4, 23, 28, "any") == true) || (hit(4, 24, 28, "any") == true)) {
-            teleport(5, 23, 16, -1);
-        }
-
-//        forest 5
-        if ((hit(5, 41, 30, "any") == true) || (hit(5, 41, 31, "any") == true)) {
-            teleport(6, 24, 38, -1);
-        }
-
-//        house 2
-        if ((hit(5, 34, 30, "any") == true)) {
-            teleport(6, 24, 38, -1);
-        }
-
-        if (hit(6, 20, 43, "any") == true) {
-           gp.sceneManager.playScene(7);
-        }
-
-//        house 3
-        if (hit(7, 24, 38, "any") == true) {
-            gp.sceneManager.playScene(11);
-        }
+////      house 1
+//        if (hit(1, 21, 11, "any") == true) {
+//            teleport(2, 40, 30, -1);
+//        }
+////        forest 2
+//        if ((hit(2, 34, 30, "any") == true) || (hit(2, 34, 31, "any") == true)) {
+//            teleport(3, 23, 20, 4);
+//        }
+////        forest 3
+//        if ((hit(3, 39, 10, "any") == true) || (hit(2, 39, 31, "any") == true)) {
+//            teleport(4, 23, 20, -1);
+//        }
+//
+////        forest 4
+//        if ((hit(4, 23, 28, "any") == true) || (hit(4, 24, 28, "any") == true)) {
+//            gp.sceneManager.playScene(6);
+//        }
+//        if ((hit(4, 23, 28, "any") == true) || (hit(4, 24, 28, "any") == true)) {
+//            teleport(5, 23, 16, -1);
+//        }
+//
+////        forest 5
+//        if ((hit(5, 41, 30, "any") == true) || (hit(5, 41, 31, "any") == true)) {
+//            teleport(6, 24, 38, -1);
+////            gp.sceneManager.playScene(gp.sceneManager.JUMPSCARE_POCONG);
+//        }
+//
+////        house 2
+//        if ((hit(5, 34, 30, "any") == true)) {
+//            teleport(6, 24, 38, -1);
+//        }
+//
+//        if (hit(6, 20, 43, "any") == true) {
+//            gp.sceneManager.playScene(7);
+//        }
+//
+////        house 3
+//        if (hit(7, 24, 38, "any") == true) {
+//            gp.sceneManager.playScene(11);
+//        }
     }
 
     public boolean hit(int map, int col, int row, String reqDirection) {
@@ -108,7 +110,7 @@ public class EventHandler {
             eventRect[map][col][row].x = col * gp.tileSize + eventRect[map][col][row].x;
             eventRect[map][col][row].y = row * gp.tileSize + eventRect[map][col][row].y;
 
-            if (gp.player.solidArea.intersects(eventRect[map][col][row])) {
+            if (gp.player.solidArea.intersects(eventRect[map][col][row]) && !eventRect[map][col][row].eventDone) {
                 if (gp.player.direction.contentEquals(reqDirection) || reqDirection.contentEquals("any")) {
                     hit = true;
                 }

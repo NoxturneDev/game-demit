@@ -14,6 +14,10 @@ public class Leaderboard {
     }
 
     public void addRecord(Player player) {
+        if (FIRST_PLACE == null) {
+            FIRST_PLACE = player;
+            return;
+        }
         // Update leaderboard
         if (player.totalScore < FIFTH_PLACE.totalScore) {
             return;

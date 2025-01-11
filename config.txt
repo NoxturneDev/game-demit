@@ -1,3 +1,2 @@
-test
-
-
+currentMap=0
+totalScore=0

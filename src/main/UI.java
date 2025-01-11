@@ -29,6 +29,9 @@ public class UI {
     public String itemDescription;
     public String currentJumpscarePath;
     public BufferedImage[] cutscenes = new BufferedImage[100];
+    public String currentBossName = "Kuntilanak";
+
+
     public int animationCutsceneType;
     public int cutsceneIndex;
     public int cutsceneDuration;
@@ -529,6 +532,27 @@ public class UI {
         g2.drawString(instructions, instructionsX, instructionsY);
     }
 
+    public void drawSplahScreen() {
+//        draw big title in the middle
+        g2.setColor(new Color(0, 0, 0));
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
+        String text = "Demit's";
+        int x = getXforCenteredText(text);
+        int y = gp.tileSize * 5;
+        g2.setColor(red);
+        g2.drawString(text, x, y);
+
+
+        // Instructions
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 24F));
+        g2.setColor(Color.WHITE);
+        String instructions = "Press Enter to return";
+        int instructionsX = getXforCenteredText(instructions);
+        int instructionsY = gp.screenHeight - gp.tileSize;
+        g2.drawString(instructions, instructionsX, instructionsY);
+    }
+
 
     public void drawQuizScreen() {
 
@@ -758,11 +782,23 @@ public class UI {
         g2.setColor(Color.RED);
 
         g2.setFont(pixeloid);
-        drawDebug(g2);
+//        drawDebug(g2);
+        if (gp.bossBattle) {
+            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
+            String text = currentBossName;
+            int x = getXforCenteredText(text);
+            int y = gp.tileSize * 2;
+            g2.setColor(red);
+            g2.drawString(text, x, y);
+        }
+
         drawStatus(g2);
         g2.setFont(castlefavor);
         if (gp.gameState == gp.TITLE) {
             drawTitleScreen();
+        }
+        if (gp.gameState == gp.SPLASH_SCREEN) {
+            drawSplahScreen();
         }
         if (gp.gameState == gp.LEADERBOARD_SCREEN) {
             drawLeaderboardScreen();

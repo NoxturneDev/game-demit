@@ -10,6 +10,9 @@ public class NPC_Dukun extends Entity{
         super(gp);
         direction = "up";
         speed = 1;
+        hasQuiz = true;
+        quizQuestion = "Keris merupakan sebuah Senjata Tradisional asal Papua?";
+        quizCorrectAnswer = 1;
 
         solidArea = new Rectangle();
         solidArea.x = 8;
