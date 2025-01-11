@@ -33,8 +33,16 @@ public class Config implements Runnable {
                     .getCollection(COLLECTION_NAME);
 
             // Create a config object and serialize to JSON
-            gc.currentMap = gp.currentMap;
-            gc.totalScore = gp.player.totalScore;
+            gc.currentMap = gp.getCurrentStats().currentMap;
+            gc.totalScore = gp.getCurrentStats().player.totalScore;
+            gc.username = "Galih";
+            gc.currentHealth = gp.getCurrentStats().player.HP;
+            gc.currentLevel = gp.getCurrentStats().currentLevel;
+            gc.lastPositionX = gp.getCurrentStats().player.worldX;
+            gc.lastPositionY = gp.getCurrentStats().player.worldY;
+            gc.itemsCollected = new int[]{1, 2, 3, 4, 5};
+            gc.characterStats = gp.getCurrentStats().player.level;
+
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             String json = gson.toJson(gc);
 
@@ -72,6 +80,7 @@ public class Config implements Runnable {
                 // Set game panel properties from the config
                 if (gameConfig != null) {
                     gp.currentMap = gameConfig.currentMap;
+                    gp.player.totalScore = gameConfig.totalScore;
                 }
 
                 System.out.println("Config loaded from MongoDB successfully.");
@@ -99,8 +108,10 @@ public class Config implements Runnable {
 
     private synchronized void saveToLocal() {
         try (FileWriter writer = new FileWriter(filePath)) {
+            gc.currentMap = gp.getCurrentStats().currentMap;
+            gc.totalScore = gp.getCurrentStats().player.totalScore;
             writer.write("currentMap=" + gc.currentMap + "\n");
-            writer.write("currentMap=" + gc.totalScore + "\n");
+            writer.write("totalScore=" + gc.totalScore + "\n");
             System.out.println("Autosave completed.");
         } catch (IOException e) {
             System.out.println("Failed to save config file: " + e.getMessage());
@@ -111,5 +122,12 @@ public class Config implements Runnable {
     static class GameConfig {
         public int currentMap;
         public int totalScore;
+        public String username;
+        public int currentHealth;
+        public int currentLevel;
+        public int lastPositionX;
+        public int lastPositionY;
+        public int[] itemsCollected;
+        public int characterStats;
     }
 }

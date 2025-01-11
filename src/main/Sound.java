@@ -55,8 +55,8 @@ public class Sound {
         soundURL[31] = getClass().getResource("/sounds/cutscenes/prolog4_keris/cs-panel2-keris.wav");
         soundURL[32] = getClass().getResource("/sounds/cutscenes/prolog4_keris/cs-panel3-keris.wav");
 //        prolog 5
-        soundURL[33] = getClass().getResource("/sounds/cutscenes/prolog5_raden-wijaya/cs-panel2-radenwijaya.wav");
-        soundURL[34] = getClass().getResource("/sounds/cutscenes/prolog5_raden-wijaya/cs-panel3-radenwijaya.wav");
+        soundURL[33] = getClass().getResource("/sounds/cutscenes/prolog5_raden-wijaya/cs-panel1-radenwijaya.wav");
+        soundURL[34] = getClass().getResource("/sounds/cutscenes/prolog5_raden-wijaya/cs-panel2-radenwijaya.wav");
 //        GAME SOUNDS
 
     }

@@ -20,6 +20,10 @@ public class Entity {
     public String[][] dialogues = new String[20][20];
     public int dialogueSet;
     public int dialogueIndex = 0;
+    public String quizQuestion = "";
+    public boolean hasQuiz = false;
+    public int quizCorrectAnswer = 0;
+
     public int damage;
     public int HP;
 
@@ -458,9 +462,9 @@ public class Entity {
                     break;
             }
             g2.drawImage(img, screenX, screenY, gp.tileSize, gp.tileSize, null);
-//            DEBUG
-            g2.setColor(Color.RED);
-            g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
+////            DEBUG
+//            g2.setColor(Color.RED);
+//            g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
         }
     }
 

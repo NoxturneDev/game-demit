@@ -6,7 +6,7 @@ import java.security.Key;
 
 public class KeyHandler implements KeyListener {
     GamePanel gp;
-    public boolean downPressed, leftPressed, rightPressed, upPressed, enterPressed, spacePressed, shiftPressed, ctrlPressed;
+    public boolean downPressed, leftPressed, rightPressed, upPressed, enterPressed, spacePressed, shiftPressed, ctrlPressed, onePressed, twoPressed;
 
     public KeyHandler(GamePanel gp) {
         this.gp = gp;
@@ -50,8 +50,10 @@ public class KeyHandler implements KeyListener {
             }
             if (gp.sceneManager.currentScene == 8) {
                 gp.eHandler.teleport(7, 20, 43, 9);
-                gp.sceneManager.currentScene = 9;
                 gp.sceneManager.playScene(9);
+            }
+            if (gp.gameState == gp.SPLASH_SCREEN) {
+                gp.sceneManager.playScene(gp.sceneManager.SCENE_TITLE);
             }
         }
         if (keyCode == KeyEvent.VK_SPACE) {
@@ -67,7 +69,7 @@ public class KeyHandler implements KeyListener {
                 gp.ui.cutsceneDuration = 0;
                 gp.ui.alpha = 0;
                 gp.ui.cutsceneSoundPlayed = false;
-                if (gp.ui.cutsceneIndex != 3 || gp.ui.cutsceneIndex != 6 || gp.ui.cutsceneIndex != 7) {
+                if (gp.ui.cutsceneIndex != 3 || gp.ui.cutsceneIndex != 6 || gp.ui.cutsceneIndex != 7 || gp.ui.cutsceneIndex != 9) {
                     gp.ui.cutsceneIndex++;
                 }
             }
@@ -83,6 +85,7 @@ public class KeyHandler implements KeyListener {
             }
         }
 
+//            MENU HANDLER
         if (gp.gameState == gp.TITLE) {
             if (keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_UP) {
                 gp.ui.commandNum--;
@@ -102,6 +105,9 @@ public class KeyHandler implements KeyListener {
                     gp.config.loadConfigFromMongoDB();
                 }
                 if (gp.ui.commandNum == 2) {
+                    gp.gameState = gp.LEADERBOARD_SCREEN;
+                }
+                if (gp.ui.commandNum == 3) {
                     System.exit(0);
                 }
             }
@@ -128,9 +134,33 @@ public class KeyHandler implements KeyListener {
 //        SAVE OPTION
         if (gp.gameState == gp.PLAY) {
             if (keyCode == KeyEvent.VK_ESCAPE) {
-                gp.config.saveConfigToMongoDB();
+                gp.gameState = gp.LEVEL_SCREEN;
             }
         }
+
+        if (gp.gameState == gp.PLAY) {
+            if (keyCode == KeyEvent.VK_F1) {
+                gp.gameState = gp.LEADERBOARD_SCREEN;
+            }
+        }
+
+        if (gp.gameState == gp.LEADERBOARD_SCREEN) {
+            if (keyCode == KeyEvent.VK_ESCAPE) {
+                gp.gameState = gp.TITLE;
+            }
+        }
+
+        if (gp.gameState == gp.LEVEL_SCREEN) {
+            if (keyCode == KeyEvent.VK_ENTER) {
+                gp.gameState = gp.PLAY;
+            }
+        }
+
+//        if (gp.gameState == gp.LEVEL_SCREEN) {
+//            if (keyCode == KeyEvent.VK_ESCAPE) {
+//                gp.gameState = gp.PLAY;
+//            }
+//        }
 //        if (keyCode == KeyEvent.VK_ENTER) {
 //            if (gp.gameState == gp.DIALOGUE) {
 //                gp.gameState = gp.PLAY;
@@ -139,10 +169,10 @@ public class KeyHandler implements KeyListener {
 
         if (gp.gameState == gp.QUIZ) {
             if (keyCode == KeyEvent.VK_1) {
-                gp.gameState = gp.PLAY;
+                onePressed = true;
             }
             if (keyCode == KeyEvent.VK_2) {
-                gp.gameState = gp.PLAY;
+                twoPressed = true;
             }
         }
     }

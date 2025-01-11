@@ -15,13 +15,25 @@ public class Player extends Entity {
     public final int screenY;
     public boolean invincible = false;
     public int invincibleCounter;
-    public int totalScore;
     public boolean dashing = false; // Is the player currently dashing
     public int dashCounter = 0; // Counter for dash duration
     public int dashCooldown = 0; // Cooldown timer for next dash
     public final int dashSpeed = 30; // Speed during dash
     public final int dashDuration = 5; // Number of frames the dash lasts
     public final int dashCooldownMax = 30; // Frames required before next dash
+    public String username;
+    public boolean LEVEL_1_LOCKED = true;
+    public boolean LEVEL_2_LOCKED = true;
+    public boolean LEVEL_3_LOCKED = true;
+    public boolean LEVEL_4_LOCKED = true;
+    public boolean LEVEL_5_LOCKED = true;
+    public boolean LEVEL_6_LOCKED = true;
+    public boolean LEVEL_7_LOCKED = true;
+
+
+//    in game progess
+    public int totalScore;
+    public int level;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
@@ -79,16 +91,22 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues() {
-        worldX = gp.tileSize * 23;
-        worldY = gp.tileSize * 16;
-        speed = 10;
+        worldX = gp.tileSize * 17;
+        worldY = gp.tileSize * 23;
+        speed = 5;
         direction = "down";
     }
 
     public void interactNPC(int i) {
         if (i != 999) {
-            gp.gameState = gp.DIALOGUE;
-            gp.npc[gp.currentMap][i].speak();
+            if (gp.npc[gp.currentMap][i].hasQuiz) {
+                gp.gameState = gp.QUIZ;
+                gp.ui.currentQuiz = gp.npc[gp.currentMap][i].quizQuestion;
+                gp.ui.currentQuizCorrectAnswer = gp.npc[gp.currentMap][i].quizCorrectAnswer;
+            } else {
+                gp.gameState = gp.DIALOGUE;
+                gp.npc[gp.currentMap][i].speak();
+            }
         }
     }
 
@@ -166,7 +184,10 @@ public class Player extends Entity {
                 if (gp.aSetter.totalMonsterMap7 < 0) {
                     gp.sceneManager.playScene(10);
                 }
-                gp.sceneManager.playScene(11);
+//                if (gp.aSetter.totalMonsterMap7 < 0) {
+//                    gp.sceneManager.playScene(10);
+//                }
+//                gp.sceneManager.playScene(11);
             }
         }
     }
@@ -393,7 +414,7 @@ public class Player extends Entity {
 
         g2.drawImage(img, tempScreenX, tempScreenY, null);
 //        DEBUG
-        g2.setColor(Color.RED);
-        g2.drawRect(tempScreenX + solidArea.x, tempScreenY + solidArea.y, solidArea.width, solidArea.height);
+//        g2.setColor(Color.RED);
+//        g2.drawRect(tempScreenX + solidArea.x, tempScreenY + solidArea.y, solidArea.width, solidArea.height);
     }
 }
