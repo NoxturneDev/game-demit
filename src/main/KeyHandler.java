@@ -95,14 +95,22 @@ public class KeyHandler implements KeyListener {
             }
 
             if (keyCode == KeyEvent.VK_ENTER) {
+//                NEW ADVENTURE OPTOIN SELECTED
                 if (gp.ui.commandNum == 0) {
-                    gp.gameState = gp.RUNNING_TEXT;
-                    gp.ui.currentRunningText = "Lanang adalah seorang yang";
-                    gp.stopMusic();
-                    gp.playMusic(2);
+//                    SHOW USERNAME INPUT
+                    gp.gameState = gp.ENTER_USERNAME; // Add a new game state for the input box
+                    gp.gameInputBox.setBounds(0, 0, gp.getWidth(), gp.getHeight()); // Ensure full coverage
+                    gp.setLayout(null); // Use absolute layout
+                    gp.add(gp.gameInputBox); // Add the input box
+                    gp.gameInputBox.setFocusable(true);
+                    gp.gameInputBox.requestFocusInWindow(); // Ensure it gets keyboard focus
+                    gp.revalidate();
+                    gp.repaint();
                 }
+//                LOAD ADVENTURE OPTION SELECTED
                 if (gp.ui.commandNum == 1) {
-                    gp.config.loadConfigFromMongoDB();
+                    gp.config.listProfile();
+                    gp.gameState = gp.PROFILE_SCREEN;
                 }
                 if (gp.ui.commandNum == 2) {
                     gp.gameState = gp.LEADERBOARD_SCREEN;
@@ -110,6 +118,21 @@ public class KeyHandler implements KeyListener {
                 if (gp.ui.commandNum == 3) {
                     System.exit(0);
                 }
+            }
+        }
+
+        if (gp.gameState == gp.PROFILE_SCREEN) {
+            if (keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_UP) {
+                gp.ui.commandNum--;
+            }
+            if (keyCode == KeyEvent.VK_S || keyCode == KeyEvent.VK_DOWN) {
+                gp.ui.commandNum++;
+            }
+
+            if (keyCode == KeyEvent.VK_SPACE) {
+                gp.config.loadConfigFromMongoDB(gp.ui.commandNum);
+                gp.gameState = gp.PLAY;
+                gp.startConfigThread();
             }
         }
 

@@ -44,7 +44,9 @@ public class GamePanel extends JPanel implements Runnable {
     Sound music = new Sound(); // Created 2 different objects for Sound Effect and Music. If you use 1 object SE or Music stops sometimes.
     public UI ui = new UI(this);
     Config config = new Config(this);
+    long interval = 3000; // autosave interval
     public SceneManager sceneManager = new SceneManager(this);
+    public GameInputBox gameInputBox = new GameInputBox(this);
 
     //    ENTITIES
     public Player player = new Player(this, keyH);
@@ -67,6 +69,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int RUNNING_TEXT = 9;
     public final int LEADERBOARD_SCREEN = 10;
     public final int LEVEL_SCREEN = 11;
+    public final int ENTER_USERNAME = 12;
+    public final int PROFILE_SCREEN = 13;
     public final int SPLASH_SCREEN = 99;
 
     public GamePanel() {
@@ -113,10 +117,12 @@ public class GamePanel extends JPanel implements Runnable {
         gameThread.start();
     }
 
-    public void startConfigThread(long interval) {
-        config.interval = interval;
-        configThread = new Thread(config);
-        configThread.start();
+    public void startConfigThread() {
+        if(gameState == PLAY) {
+            config.interval = interval;
+            configThread = new Thread(config);
+            configThread.start();
+        }
     }
 
     @Override
