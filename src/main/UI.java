@@ -55,7 +55,7 @@ public class UI {
             is = getClass().getResourceAsStream("/font/Castlefavor-OGLWP.ttf");
             castlefavor = Font.createFont(Font.TRUETYPE_FONT, is);
             is = getClass().getResourceAsStream("/font/PixeloidMono-d94EV.ttf");
-            pixeloid =  Font.createFont(Font.TRUETYPE_FONT, is);
+            pixeloid = Font.createFont(Font.TRUETYPE_FONT, is);
 
             getCutScenesImage();
         } catch (FontFormatException e) {
@@ -685,6 +685,48 @@ public class UI {
 
     }
 
+    public void drawRunningTextScreen() {
+        int x = 0;
+        int y = 0;
+        g2.setColor(new Color(0, 0, 0));             // FILL BACKGROUND BLACK
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
+        x += gp.tileSize;
+        y += gp.tileSize;
+        g2.drawString(currentDialogue, x, y);
+
+        if (currentRunningText != null) {
+            //currentDialogue = currentNPC.dialogues[npc.dialogueSet][npc.dialogueIndex];//For display text once, enable this and disable letter by letter.(Letter by letter: The if statement below there)
+
+            char characters[] = currentRunningText.toCharArray();
+
+            if (charIndex < characters.length) {
+//                gp.playSE(17);//Speak sound
+                String s = String.valueOf(characters[charIndex]);
+                combinedText = combinedText + s; //every loop add one character to combinedText
+                currentDialogue = combinedText;
+
+                charIndex++;
+            }
+//            if (gp.keyH.enterPressed == true) {
+//                charIndex = 0;
+//                combinedText = "";
+//                if (gp.gameState == gp.DIALOGUE /* || gp.gameState == gp.CUTSCENE*/) {
+//                    currentNPC.dialogueIndex++;
+//                    gp.keyH.enterPressed = false;
+//                }
+//            }
+        }
+
+
+        for (String line : currentDialogue.split("\n"))   // splits dialogue until "\n" as a line
+        {
+            g2.drawString(line, x, y);
+            y += 40;
+        }
+    }
+
     public void drawSubWindow(int x, int y, int width, int height) {
         Color c = new Color(0, 0, 0, 210);  // R,G,B, alfa(opacity)
         g2.setColor(c);
@@ -842,7 +884,7 @@ public class UI {
         }
     }
 
-    public void drawStatus (Graphics2D g2) {
+    public void drawStatus(Graphics2D g2) {
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));
         g2.setColor(Color.white);
         g2.drawString("HP: " + gp.player.HP, 20, 20);
