@@ -33,6 +33,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     //    GAME STATE
     public boolean bossBattle = false;
+    public Entity currentActiveNPC;
 
     //    SYSTEM
     public TileManager tm = new TileManager(this);

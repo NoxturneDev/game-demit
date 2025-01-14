@@ -730,6 +730,7 @@ public class UI {
             if (currentQuizCorrectAnswer == 1) {
                 currentRunningText = "Benar sekali anak muda!";
                 gp.player.totalScore += 100;
+                gp.currentActiveNPC.quizHasDone = true;
             } else {
                 currentRunningText = "Kamu salah! Perbaiki lagi";
             }
@@ -1000,7 +1001,6 @@ public class UI {
 //            g2.drawString(text, x, y);
 //        }
 
-        drawStatus(g2);
         g2.setFont(castlefavor);
         if (gp.gameState == gp.ENTER_USERNAME) {
             return;
@@ -1025,6 +1025,7 @@ public class UI {
             g2.setColor(c);
             g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
             drawMonsterLife();
+            drawStatus(g2);
         }
         if (gp.gameState == gp.DIALOGUE) {
             g2.setFont(pixeloid);

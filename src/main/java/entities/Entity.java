@@ -29,6 +29,7 @@ public class Entity {
     public int dialogueIndex = 0;
     public String quizQuestion = "";
     public boolean hasQuiz = false;
+    public boolean quizHasDone = false;
     public int quizCorrectAnswer = 0;
     public int damage;
 

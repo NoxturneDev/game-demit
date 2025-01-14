@@ -104,10 +104,13 @@ public class Player extends Entity {
 
     public void interactNPC(int i) {
         if (i != 999) {
+            gp.currentActiveNPC = gp.npc[gp.currentMap][i];
             if (gp.npc[gp.currentMap][i].hasQuiz) {
-                gp.gameState = gp.QUIZ;
-                gp.ui.currentQuiz = gp.npc[gp.currentMap][i].quizQuestion;
-                gp.ui.currentQuizCorrectAnswer = gp.npc[gp.currentMap][i].quizCorrectAnswer;
+                if (!gp.npc[gp.currentMap][i].quizHasDone) {
+                    gp.gameState = gp.QUIZ;
+                    gp.ui.currentQuiz = gp.npc[gp.currentMap][i].quizQuestion;
+                    gp.ui.currentQuizCorrectAnswer = gp.npc[gp.currentMap][i].quizCorrectAnswer;
+                }
             } else {
                 gp.gameState = gp.DIALOGUE;
                 gp.npc[gp.currentMap][i].speak();
