@@ -55,8 +55,8 @@ public class EventHandler {
 
 //        forest 1
         if (hit(0, 41, 30, "any") == true) {
-            gp.sceneManager.playScene(gp.sceneManager.BOSS_BATTLE_NYIBLORONG);
-            teleport(95, 18, 24, -1);
+//            gp.sceneManager.playScene(gp.sceneManager.BOSS_BATTLE_BUTOIJO);
+            teleport(93, 18, 24, -1);
         }
 ////      house 1
 //        if (hit(1, 21, 11, "any") == true) {

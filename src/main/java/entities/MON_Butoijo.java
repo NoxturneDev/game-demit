@@ -21,27 +21,28 @@ public class MON_Butoijo extends Entity {
 
         defaultSolidAreaX = 8;
         defaultSolidAreaY = 16;
+        projectile = new OBJ_Fireball(gp);
         getImage();
 //        setDialogue();
     }
 
     public void getImage() {
-        up1 = loadImage("/monster/butoijo/butoijo_idle_1.png", gp.tileSize, gp.tileSize);
-        up2 = loadImage("/monster/butoijo/butoijo_idle_2.png", gp.tileSize, gp.tileSize);
-        up3 = loadImage("/monster/butoijo/butoijo_idle_3.png", gp.tileSize, gp.tileSize);
-        up4 = loadImage("/monster/butoijo/butoijo_idle_4.png", gp.tileSize, gp.tileSize);
-        down1 = loadImage("/monster/butoijo/butoijo_idle_1.png", gp.tileSize, gp.tileSize);
-        down2 = loadImage("/monster/butoijo/butoijo_idle_2.png", gp.tileSize, gp.tileSize);
-        down3 = loadImage("/monster/butoijo/butoijo_idle_3.png", gp.tileSize, gp.tileSize);
-        down4 = loadImage("/monster/butoijo/butoijo_idle_4.png", gp.tileSize, gp.tileSize);
-        left1 = loadImage("/monster/butoijo/butoijo_idle_1.png", gp.tileSize, gp.tileSize);
-        left2 = loadImage("/monster/butoijo/butoijo_idle_2.png", gp.tileSize, gp.tileSize);
-        left3 = loadImage("/monster/butoijo/butoijo_idle_3.png", gp.tileSize, gp.tileSize);
-        left4 = loadImage("/monster/butoijo/butoijo_idle_4.png", gp.tileSize, gp.tileSize);
-        right1 = loadImage("/monster/butoijo/butoijo_idle_1.png", gp.tileSize, gp.tileSize);
-        right2 = loadImage("/monster/butoijo/butoijo_idle_2.png", gp.tileSize, gp.tileSize);
-        right3 = loadImage("/monster/butoijo/butoijo_idle_3.png", gp.tileSize, gp.tileSize);
-        right4 = loadImage("/monster/butoijo/butoijo_idle_4.png", gp.tileSize, gp.tileSize);
+        up1 = loadImage("/monster/butoijo/butoijo_idle_1.png", gp.tileSize * 3, gp.tileSize * 3);
+        up2 = loadImage("/monster/butoijo/butoijo_idle_2.png", gp.tileSize * 3, gp.tileSize * 3);
+        up3 = loadImage("/monster/butoijo/butoijo_idle_3.png", gp.tileSize * 3, gp.tileSize * 3);
+        up4 = loadImage("/monster/butoijo/butoijo_idle_4.png", gp.tileSize * 3, gp.tileSize * 3);
+        down1 = loadImage("/monster/butoijo/butoijo_idle_1.png", gp.tileSize * 3, gp.tileSize * 3);
+        down2 = loadImage("/monster/butoijo/butoijo_idle_2.png", gp.tileSize * 3, gp.tileSize * 3);
+        down3 = loadImage("/monster/butoijo/butoijo_idle_3.png", gp.tileSize * 3, gp.tileSize * 3);
+        down4 = loadImage("/monster/butoijo/butoijo_idle_4.png", gp.tileSize * 3, gp.tileSize * 3);
+        left1 = loadImage("/monster/butoijo/butoijo_idle_1.png", gp.tileSize * 3, gp.tileSize * 3);
+        left2 = loadImage("/monster/butoijo/butoijo_idle_2.png", gp.tileSize * 3, gp.tileSize * 3);
+        left3 = loadImage("/monster/butoijo/butoijo_idle_3.png", gp.tileSize * 3, gp.tileSize * 3);
+        left4 = loadImage("/monster/butoijo/butoijo_idle_4.png", gp.tileSize * 3, gp.tileSize * 3);
+        right1 = loadImage("/monster/butoijo/butoijo_idle_1.png", gp.tileSize * 3, gp.tileSize * 3);
+        right2 = loadImage("/monster/butoijo/butoijo_idle_2.png", gp.tileSize * 3, gp.tileSize * 3);
+        right3 = loadImage("/monster/butoijo/butoijo_idle_3.png", gp.tileSize * 3, gp.tileSize * 3);
+        right4 = loadImage("/monster/butoijo/butoijo_idle_4.png", gp.tileSize * 3, gp.tileSize * 3);
     }
 
 
@@ -53,25 +54,49 @@ public class MON_Butoijo extends Entity {
 //        }
 //        else
 //        {
-        actionLockCounter++;
+        if(onPath == true)
+        {
 
-        if (actionLockCounter == 120) {
-            Random random = new Random();
-            int i = random.nextInt(100) + 1;  // pick up  a number from 1 to 100
-            if (i <= 25) {
-                direction = "up";
-            }
-            if (i > 25 && i <= 50) {
-                direction = "down";
-            }
-            if (i > 50 && i <= 75) {
-                direction = "left";
-            }
-            if (i > 75 && i <= 100) {
-                direction = "right";
-            }
-            actionLockCounter = 0; // reset
+            //Check if it stops chasing
+            checkStopChasingOrNot(gp.player,15,100);
+
+            //Search the direction to go
+            searchPath(getGoalCol(gp.player), getGoalRow(gp.player));
+
+            //Check if it shoots a projectile
+            checkShootOrNot(200, 30); //Just added to red slimes
         }
+        else
+        {
+            //Check if it starts chasing
+            checkStartChasingOrNot(gp.player, 5, 100);
+
+            //Get a random direction
+            getRandomDirection(120);
+        }
+        int i = new Random().nextInt(60)*1;
+        if (i < 50) {
+            checkShootOrNot(10, 5);
+        }
+//        actionLockCounter++;
+//
+//        if (actionLockCounter == 120) {
+//            Random random = new Random();
+//            int i = random.nextInt(100) + 1;  // pick up  a number from 1 to 100
+//            if (i <= 25) {
+//                direction = "up";
+//            }
+//            if (i > 25 && i <= 50) {
+//                direction = "down";
+//            }
+//            if (i > 50 && i <= 75) {
+//                direction = "left";
+//            }
+//            if (i > 75 && i <= 100) {
+//                direction = "right";
+//            }
+//            actionLockCounter = 0; // reset
+//        }
 //        }
     }
 }

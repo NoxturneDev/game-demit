@@ -13,35 +13,38 @@ public class MON_Blorong extends Entity {
         damage = new Random().nextInt(20) + 5;
         HP = 20;
 
+        int size = gp.tileSize * 3;
         solidArea = new Rectangle();
-        solidArea.x = 8;
-        solidArea.y = 16;
-        solidArea.width = 32;
-        solidArea.height = 32;
+        solidArea.x = 64;
+        solidArea.y = 64;
+        solidArea.width = size - 64;
+        solidArea.height = size - 64;
 
-        defaultSolidAreaX = 8;
-        defaultSolidAreaY = 16;
+        defaultSolidAreaX = 64;
+        defaultSolidAreaY = 64;
+//        projectile = new OBJ_Fireball(gp);
         getImage();
 //        setDialogue();
     }
 
     public void getImage() {
-        up1 = loadImage("/monster/blorong/blorong_idle_1.png", gp.tileSize, gp.tileSize);
-        up2 = loadImage("/monster/blorong/blorong_idle_2.png", gp.tileSize, gp.tileSize);
-        up3 = loadImage("/monster/blorong/blorong_idle_3.png", gp.tileSize, gp.tileSize);
-        up4 = loadImage("/monster/blorong/blorong_idle_4.png", gp.tileSize, gp.tileSize);
-        down1 = loadImage("/monster/blorong/blorong_idle_1.png", gp.tileSize, gp.tileSize);
-        down2 = loadImage("/monster/blorong/blorong_idle_2.png", gp.tileSize, gp.tileSize);
-        down3 = loadImage("/monster/blorong/blorong_idle_3.png", gp.tileSize, gp.tileSize);
-        down4 = loadImage("/monster/blorong/blorong_idle_4.png", gp.tileSize, gp.tileSize);
-        left1 = loadImage("/monster/blorong/blorong_idle_1.png", gp.tileSize, gp.tileSize);
-        left2 = loadImage("/monster/blorong/blorong_idle_2.png", gp.tileSize, gp.tileSize);
-        left3 = loadImage("/monster/blorong/blorong_idle_3.png", gp.tileSize, gp.tileSize);
-        left4 = loadImage("/monster/blorong/blorong_idle_4.png", gp.tileSize, gp.tileSize);
-        right1 = loadImage("/monster/blorong/blorong_idle_1.png", gp.tileSize, gp.tileSize);
-        right2 = loadImage("/monster/blorong/blorong_idle_2.png", gp.tileSize, gp.tileSize);
-        right3 = loadImage("/monster/blorong/blorong_idle_3.png", gp.tileSize, gp.tileSize);
-        right4 = loadImage("/monster/blorong/blorong_idle_4.png", gp.tileSize, gp.tileSize);
+        int i = 3;
+        up1 = loadImage("/monster/blorong/blorong_idle_1.png", gp.tileSize * i, gp.tileSize * i);
+        up2 = loadImage("/monster/blorong/blorong_idle_2.png", gp.tileSize * i, gp.tileSize * i);
+        up3 = loadImage("/monster/blorong/blorong_idle_3.png", gp.tileSize * i, gp.tileSize * i);
+        up4 = loadImage("/monster/blorong/blorong_idle_4.png", gp.tileSize * i, gp.tileSize * i);
+        down1 = loadImage("/monster/blorong/blorong_idle_1.png", gp.tileSize * i, gp.tileSize * i);
+        down2 = loadImage("/monster/blorong/blorong_idle_2.png", gp.tileSize * i, gp.tileSize * i);
+        down3 = loadImage("/monster/blorong/blorong_idle_3.png", gp.tileSize * i, gp.tileSize * i);
+        down4 = loadImage("/monster/blorong/blorong_idle_4.png", gp.tileSize * i, gp.tileSize * i);
+        left1 = loadImage("/monster/blorong/blorong_idle_1.png", gp.tileSize * i, gp.tileSize * i);
+        left2 = loadImage("/monster/blorong/blorong_idle_2.png", gp.tileSize * i, gp.tileSize * i);
+        left3 = loadImage("/monster/blorong/blorong_idle_3.png", gp.tileSize * i, gp.tileSize * i);
+        left4 = loadImage("/monster/blorong/blorong_idle_4.png", gp.tileSize * i, gp.tileSize * i);
+        right1 = loadImage("/monster/blorong/blorong_idle_1.png", gp.tileSize * i, gp.tileSize * i);
+        right2 = loadImage("/monster/blorong/blorong_idle_2.png", gp.tileSize * i, gp.tileSize * i);
+        right3 = loadImage("/monster/blorong/blorong_idle_3.png", gp.tileSize * i, gp.tileSize * i);
+        right4 = loadImage("/monster/blorong/blorong_idle_4.png", gp.tileSize * i, gp.tileSize * i);
     }
 
     public void setAction() {
@@ -71,6 +74,11 @@ public class MON_Blorong extends Entity {
             }
             actionLockCounter = 0; // reset
         }
+//        }
+
+//        int i = new Random().nextInt(100)*1;
+//        if (i < 50) {
+//            checkAttackOrNot(30, gp.tileSize * 4, gp.tileSize);
 //        }
     }
 }

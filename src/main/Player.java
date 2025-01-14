@@ -1,6 +1,7 @@
 package main;
 
 import entities.Entity;
+import entities.OBJ_Fireball;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -14,6 +15,7 @@ public class Player extends Entity {
     public final int screenX;
     public final int screenY;
     public boolean invincible = false;
+    public boolean transparent = false;
     public int invincibleCounter;
     public boolean dashing = false; // Is the player currently dashing
     public int dashCounter = 0; // Counter for dash duration
@@ -31,7 +33,7 @@ public class Player extends Entity {
     public boolean LEVEL_7_LOCKED = true;
 
 
-//    in game progess
+    //    in game progess
     public int totalScore;
     public int level;
 
@@ -55,6 +57,8 @@ public class Player extends Entity {
         attackArea.width = 64;
         attackArea.height = 64;
 
+        projectile = new OBJ_Fireball(gp);
+
         setDefaultValues();
         loadPlayerImage();
         loadPlayerAttackImage();
@@ -76,7 +80,7 @@ public class Player extends Entity {
     }
 
     public void loadPlayerAttackImage() {
-        attackUp1 = loadImage("/player/mc_attack_left_1.png", gp.tileSize * 2, gp.tileSize );
+        attackUp1 = loadImage("/player/mc_attack_left_1.png", gp.tileSize * 2, gp.tileSize);
         attackUp2 = loadImage("/player/mc_attack_left_2.png", gp.tileSize * 2, gp.tileSize);
         attackUp3 = loadImage("/player/mc_attack_left_3.png", gp.tileSize * 2, gp.tileSize);
         attackDown1 = loadImage("/player/mc_attack_right_1.png", gp.tileSize * 2, gp.tileSize);
@@ -113,7 +117,7 @@ public class Player extends Entity {
     public void contactMonster(int i) {
         if (i != 999) {
             if (!invincible) {
-                gp.playSE(1);
+//                gp.playSE(1);
                 HP -= gp.monsters[gp.currentMap][i].damage;
                 invincible = true;
             }
@@ -148,16 +152,24 @@ public class Player extends Entity {
             int solidAreaHeight = solidArea.height;
 
             switch (direction) {
-                case"up": worldY -= attackArea.height; break;
-                case"down": worldY += attackArea.height; break;
-                case"right": worldX += attackArea.width; break;
-                case"left": worldX -= attackArea.width; break;
+                case "up":
+                    worldY -= attackArea.height;
+                    break;
+                case "down":
+                    worldY += attackArea.height;
+                    break;
+                case "right":
+                    worldX += attackArea.width;
+                    break;
+                case "left":
+                    worldX -= attackArea.width;
+                    break;
             }
 
             solidArea.width = attackArea.width;
             solidArea.height = attackArea.height;
 
-            int monsterIndex = gp.collisionChecker.checkEntity(this, gp.monsters[gp.currentMap]);
+            int monsterIndex = gp.collisionChecker.checkEntity(this, gp.monsters);
             attackMonster(monsterIndex);
 
             worldX = currWorldX;
@@ -191,6 +203,64 @@ public class Player extends Entity {
             }
         }
     }
+
+//    public void shootProjectile() {
+//        if (gp.keyH.shotPressed == true && projectile.alive == false && shotAvailableCounter == 30 && projectile.haveResource(this) == true)   //2nd Condition : You can shoot it only one at a time
+//        {                                                                                               //3rd Condition : If you close shot monster, projectile.alive will be false. So if you still pressing F key, immediately shoot another fireball.
+//            // SET DEFAULT COORDINATES, DIRECTION AND USER
+//            projectile.set(worldX, worldY, direction, true, this);
+//
+//            // SUBTRACT THE COST(MANA,AMMO ETC.)
+//            projectile.subtractResource(this);
+//
+//            // ADD IT TO THE LIST
+//            //gp.projectileList.add(projectile);
+//
+//            //CHECK VACANCY
+//            for (int i = 0; i < gp.projectile[1].length; i++) {
+//                if (gp.projectile[gp.currentMap][i] == null) {
+//                    gp.projectile[gp.currentMap][i] = projectile;
+//                    break;
+//                }
+//            }
+//
+//            shotAvailableCounter = 0; //reset
+//
+//            gp.playSE(10);
+//        }
+//
+//        //This needs to be outside of key if statement! // If player receive damage from monster, player's gonna be invincible for a second
+//        if (invincible == true) {
+//            invincibleCounter++;
+//            if (invincibleCounter > 60) {
+//                invincible = false;
+//                transparent = false;
+//                invincibleCounter = 0;
+//            }
+//        }
+//
+//        if (shotAvailableCounter < 30) {
+//            shotAvailableCounter++;
+//        }
+//        if (life > maxLife) //for using potion, heal etc.
+//        {
+//            life = maxLife;
+//        }
+////        if(mana > maxMana) //for using potion, heal etc.
+////        {
+////            mana = maxMana;
+////        }
+////        if(keyH.godModeOn == false)
+////        {
+////            if(life <= 0)
+////            {
+////                gp.gameState = gp.gameOverState;
+////                gp.ui.commandNum =- 1; //for if you die while pressing enter
+////                gp.stopMusic();
+////                gp.playSE(12);
+////            }
+////        }
+//    }
 
     public void update() {
         if (gp.gameState == gp.PLAY) {
@@ -248,10 +318,10 @@ public class Player extends Entity {
                 gp.collisionChecker.checkTileCollision(this);
 
 //                player to npc collission
-                int npxIndex = gp.collisionChecker.checkEntity(this, gp.npc[gp.currentMap]);
+                int npxIndex = gp.collisionChecker.checkEntity(this, gp.npc);
                 interactNPC(npxIndex);
 
-                int monsterIndex = gp.collisionChecker.checkEntity(this, gp.monsters[gp.currentMap]);
+                int monsterIndex = gp.collisionChecker.checkEntity(this, gp.monsters);
                 contactMonster(monsterIndex);
 
 //                player to items collision
@@ -300,6 +370,66 @@ public class Player extends Entity {
                 }
             }
         }
+
+        System.out.println(projectile.haveResource(this));
+        System.out.println("shotAvailableCounter: " + shotAvailableCounter);
+        System.out.println("projectile.alive: " + projectile.alive);
+        System.out.println("gp.keyH.shotPressed: " + gp.keyH.shotPressed);
+        System.out.println("-------------------------------");
+        if (gp.keyH.shotPressed == true && projectile.alive == false && shotAvailableCounter == 30 )   //2nd Condition : You can shoot it only one at a time
+        {                                                                                               //3rd Condition : If you close shot monster, projectile.alive will be false. So if you still pressing F key, immediately shoot another fireball.
+            System.out.println("Player.java: shootProjectile()");
+            // SET DEFAULT COORDINATES, DIRECTION AND USER
+            projectile.set(worldX, worldY, direction, true, this);
+
+//
+            // ADD IT TO THE LIST
+            gp.projectileList.add(projectile);
+
+            //CHECK VACANCY
+            for (int i = 0; i < gp.projectile[1].length; i++) {
+                if (gp.projectile[gp.currentMap][i] == null) {
+                    gp.projectile[gp.currentMap][i] = projectile;
+                    break;
+                }
+            }
+
+            shotAvailableCounter = 0; //reset
+
+            gp.playSE(10);
+        }
+
+        //This needs to be outside of key if statement! // If player receive damage from monster, player's gonna be invincible for a second
+        if (invincible == true) {
+            invincibleCounter++;
+            if (invincibleCounter > 60) {
+                invincible = false;
+                transparent = false;
+                invincibleCounter = 0;
+            }
+        }
+
+        if (shotAvailableCounter < 30) {
+            shotAvailableCounter++;
+        }
+        if (life > maxLife) //for using potion, heal etc.
+        {
+            life = maxLife;
+        }
+//        if(mana > maxMana) //for using potion, heal etc.
+//        {
+//            mana = maxMana;
+//        }
+//        if(keyH.godModeOn == false)
+//        {
+//            if(life <= 0)
+//            {
+//                gp.gameState = gp.gameOverState;
+//                gp.ui.commandNum =- 1; //for if you die while pressing enter
+//                gp.stopMusic();
+//                gp.playSE(12);
+//            }
+//        }
     }
 
     public void draw(Graphics2D g2) {

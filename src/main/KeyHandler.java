@@ -6,7 +6,7 @@ import java.security.Key;
 
 public class KeyHandler implements KeyListener {
     GamePanel gp;
-    public boolean downPressed, leftPressed, rightPressed, upPressed, enterPressed, spacePressed, shiftPressed, ctrlPressed, onePressed, twoPressed;
+    public boolean downPressed, leftPressed, rightPressed, upPressed, enterPressed, spacePressed, shiftPressed, ctrlPressed, onePressed, twoPressed, shotPressed;
 
     public KeyHandler(GamePanel gp) {
         this.gp = gp;
@@ -41,6 +41,9 @@ public class KeyHandler implements KeyListener {
                     ctrlPressed = true;
                 }
             }
+        }
+        if (keyCode == KeyEvent.VK_F) {
+            shotPressed = true;
         }
 
         if (keyCode == KeyEvent.VK_ENTER) {
@@ -226,6 +229,9 @@ public class KeyHandler implements KeyListener {
         }
         if (keyCode == KeyEvent.VK_CONTROL) {
             ctrlPressed = false;
+        }
+        if (keyCode == KeyEvent.VK_F) {
+            shotPressed = false;
         }
     }
 }

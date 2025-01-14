@@ -47,7 +47,7 @@ public class MON_tuyul extends Entity {
             searchPath(getGoalCol(gp.player), getGoalRow(gp.player));
 
             //Check if it shoots a projectile
-            //checkShootOrNot(200, 30); //Just added to red slimes
+//            checkShootOrNot(200, 30); //Just added to red slimes
         }
         else
         {

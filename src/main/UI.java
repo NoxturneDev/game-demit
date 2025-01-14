@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UI {
     GamePanel gp;
@@ -371,7 +373,7 @@ public class UI {
         //MENU
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
 
-        text = "NEW ADVENTURE";
+        text = "NEW ADVENTURE PROFILE";
         x = getXforCenteredText(text);
         y += gp.tileSize * 3.5;
         g2.drawString(text, x, y);
@@ -531,6 +533,64 @@ public class UI {
         int instructionsY = gp.screenHeight - gp.tileSize;
         g2.drawString(instructions, instructionsX, instructionsY);
     }
+
+    private void drawProfileScreen() {
+        // Background overlay
+        Color background = new Color(0, 0, 0, 200); // Semi-transparent black
+        g2.setColor(background);
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+        // Title text
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
+        g2.setColor(Color.WHITE);
+        String title = "Profiles";
+        int titleX = getXforCenteredText(title);
+        int titleY = gp.tileSize * 2;
+        g2.drawString(title, titleX, titleY);
+
+        // Profile list
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 36F));
+        int startX = gp.tileSize * 4;
+        int startY = gp.tileSize * 3;
+        int lineHeight = gp.tileSize * 1;
+
+        // Mocked profiles for illustration (Replace with dynamic data from MongoDB)
+        // Render each profile
+        for (int i = 0; i < gp.config.profiles.size(); i++) {
+            ProfileData profile = gp.config.profiles.get(i);
+
+            // Display profile and status
+            String username = profile.username;
+            String details = "Score: " + profile.totalScore + " | Level: " + profile.level;
+            int profileX = startX;
+            int detailsX = gp.screenWidth - gp.tileSize * 8; // Adjust alignment to the right
+            int y = startY + (lineHeight * i);
+
+
+            // Draw profile name
+            g2.setColor(Color.WHITE);
+            g2.drawString(username, profileX, y);
+
+            // Draw details
+            g2.setColor(Color.YELLOW);
+            g2.drawString(details, detailsX, y);
+
+            if (commandNum == i) {
+                g2.drawString(">", profileX - gp.tileSize, y);
+            }
+            // Draw status with appropriate color
+//            g2.setColor(isCurrent ? Color.BLUE : Color.GREEN);
+        }
+
+        // Instructions
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 24F));
+        g2.setColor(Color.WHITE);
+        String instructions = "Use UP/DOWN to navigate, ENTER to select, ESC to return";
+        int instructionsX = getXforCenteredText(instructions);
+        int instructionsY = gp.screenHeight - gp.tileSize;
+        g2.drawString(instructions, instructionsX, instructionsY);
+    }
+
 
     public void drawSplahScreen() {
 //        draw big title in the middle
@@ -836,6 +896,9 @@ public class UI {
 
         drawStatus(g2);
         g2.setFont(castlefavor);
+        if (gp.gameState == gp.ENTER_USERNAME) {
+            return;
+        }
         if (gp.gameState == gp.TITLE) {
             drawTitleScreen();
         }
@@ -847,6 +910,9 @@ public class UI {
         }
         if (gp.gameState == gp.LEVEL_SCREEN) {
             drawLevelScreen();
+        }
+        if (gp.gameState == gp.PROFILE_SCREEN) {
+            drawProfileScreen();
         }
         if (gp.gameState == gp.PLAY) {
             Color c = new Color(0, 0, 0, 90);  // R,G,B, alfa(opacity)
@@ -887,9 +953,10 @@ public class UI {
     public void drawStatus(Graphics2D g2) {
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));
         g2.setColor(Color.white);
-        g2.drawString("HP: " + gp.player.HP, 20, 20);
-        g2.drawString("Level: " + gp.player.level, 20, 40);
-        g2.drawString("Total Score: " + gp.player.totalScore, 20, 70);
+        g2.drawString("Username: " + gp.player.username, 20, 20);
+        g2.drawString("HP: " + gp.player.HP, 20, 40);
+        g2.drawString("Level: " + gp.player.level, 20, 60);
+        g2.drawString("Total Score: " + gp.player.totalScore, 20, 80);
     }
 
     //    DEBUG FUNCTION
