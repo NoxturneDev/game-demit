@@ -13,6 +13,8 @@ public class SceneManager {
     public int SCENE_DIALOG_AFTER_TUYUL = 10;
     public int JUMPSCARE_POCONG = 50;
 
+    public int PROLOGUE = 20;
+
     public int BOSS_BATTLE_KUNTI = 91;
     public int BOSS_BATTLE_POCONG = 92;
     public int BOSS_BATTLE_BUTOIJO = 93;
@@ -32,7 +34,12 @@ public class SceneManager {
         }
 
         if(i == SCENE_TITLE) {
-            gp.gameState = gp.LEADERBOARD_SCREEN;
+            gp.gameState = gp.TITLE;
+        }
+
+        if (i == PROLOGUE) {
+            gp.ui.textOverlay = "Lanang adalah seorang anak yang sedang \nbermain di luar rumahnya. \nTiba-tiba, ia melihat sesosok pocong \nberjalan menuju rumahnya.";
+            gp.gameState = gp.OVERLAY_TEXT;
         }
 
         if (i == 2) {

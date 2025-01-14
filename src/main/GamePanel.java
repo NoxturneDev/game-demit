@@ -79,6 +79,7 @@ public class GamePanel extends JPanel implements Runnable {
     public final int LEVEL_SCREEN = 11;
     public final int ENTER_USERNAME = 12;
     public final int PROFILE_SCREEN = 13;
+    public final int OVERLAY_TEXT = 14;
     public final int SPLASH_SCREEN = 99;
 
     public GamePanel() {

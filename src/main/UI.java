@@ -31,6 +31,8 @@ public class UI {
     public String itemDescription;
     public String currentJumpscarePath;
     public BufferedImage[] cutscenes = new BufferedImage[100];
+    public String textOverlay;
+    public String[] textOverlayList = new String[100];
 
 
     public int animationCutsceneType;
@@ -644,6 +646,60 @@ public class UI {
         }
     }
 
+//    public void drawOverlayText() {
+////        black background
+//        g2.setColor(new Color(0, 0, 0, 200));
+//        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+//
+//        int x = 0;
+//        int y = 0;
+//
+//        g2.setColor(Color.WHITE);
+//        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
+//        x += gp.tileSize;
+//        y += gp.tileSize;
+//        for (String line : textOverlay.split("\n"))   // splits dialogue until "\n" as a line
+//        {
+//            g2.drawString(line, x, y);
+//            y += gp.tileSize;
+//        }
+//    }
+
+    // Add this variable to track the scrolling offset
+    private int scrollOffset = 0;
+
+    public void drawOverlayText() {
+        // Semi-transparent black background
+        if (scrollOffset == 0 && gp != null) { // Initialize only if gp is available
+            scrollOffset = -gp.screenHeight / 2;
+        }
+
+        g2.setColor(new Color(0, 0, 0, 150)); // 150 is the alpha value for transparency
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+        int x = gp.tileSize;
+        int y = gp.tileSize - scrollOffset; // Start position adjusted by scroll offset
+
+        // White text
+        g2.setColor(Color.WHITE);
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
+
+        // Draw each line of text
+        for (String line : textOverlay.split("\n")) { // Splits dialogue until "\n" as a line
+            g2.drawString(line, x, y);
+            y += gp.tileSize;
+        }
+
+        // Update the scrolling offset
+        scrollOffset += 1; // Adjust this value to control the scrolling speed
+
+        // Reset the scrolling when all text is off-screen
+        if (y - gp.tileSize >= gp.screenHeight) {
+            scrollOffset = -gp.screenHeight / 2; // Start halfway down the screen
+        }
+    }
+
+
     public void drawQuiz() {
         int x = 0;
         int y = gp.tileSize * 8;
@@ -993,6 +1049,10 @@ public class UI {
         if (gp.gameState == gp.RUNNING_TEXT) {
             g2.setFont(pixeloid);
             drawInGameTextScreen();
+        }
+        if (gp.gameState == gp.OVERLAY_TEXT) {
+            g2.setFont(pixeloid);
+            drawOverlayText();
         }
         if (gp.gameState == gp.QUIZ) {
             g2.setFont(pixeloid);

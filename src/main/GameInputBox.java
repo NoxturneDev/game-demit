@@ -62,7 +62,9 @@ public class GameInputBox extends JPanel implements KeyListener {
             isInputActive = false; // Disable input after submission
 
             // Return to the previous game state
-            gp.gameState = gp.PLAY;
+//            gp.ui.textOverlay = "Aku harus segera pulang ke rumah!";
+//            gp.gameState = gp.OVERLAY_TEXT;
+            gp.sceneManager.playScene(gp.sceneManager.PROLOGUE);
             gp.startConfigThread();
             gp.remove(this); // Remove the input box panel
             gp.requestFocus(); // Refocus on the main game panel
