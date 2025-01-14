@@ -11,7 +11,8 @@ public class MON_Blorong extends Entity {
         direction = "down";
         speed = 2;
         damage = new Random().nextInt(20) + 5;
-        HP = 20;
+        life = 100;
+        boss = true;
 
         int size = gp.tileSize * 3;
         solidArea = new Rectangle();

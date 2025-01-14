@@ -24,6 +24,7 @@ public class Player extends Entity {
     public final int dashDuration = 5; // Number of frames the dash lasts
     public final int dashCooldownMax = 30; // Frames required before next dash
     public String username;
+
     public boolean LEVEL_1_LOCKED = true;
     public boolean LEVEL_2_LOCKED = true;
     public boolean LEVEL_3_LOCKED = true;
@@ -117,8 +118,7 @@ public class Player extends Entity {
     public void contactMonster(int i) {
         if (i != 999) {
             if (!invincible) {
-//                gp.playSE(1);
-                HP -= gp.monsters[gp.currentMap][i].damage;
+                life -= gp.monsters[gp.currentMap][i].damage;
                 invincible = true;
             }
         }
@@ -185,6 +185,7 @@ public class Player extends Entity {
     }
 
     public void attackMonster(int i) {
+        System.out.println("attackMonster");
         if (i != 999) {
             gp.monsters[gp.currentMap][i].life -= 5;
 
@@ -264,8 +265,9 @@ public class Player extends Entity {
 
     public void update() {
         if (gp.gameState == gp.PLAY) {
-            if (HP <= 0) {
-                gp.gameState = gp.DIED;
+            if (life <= 0) {
+//                gp.gameState = gp.DIED;
+                System.out.println("You died");
             }
 
             if (dashing) {
@@ -406,24 +408,12 @@ public class Player extends Entity {
         if (shotAvailableCounter < 30) {
             shotAvailableCounter++;
         }
-        if (life > maxLife) //for using potion, heal etc.
-        {
-            life = maxLife;
-        }
 //        if(mana > maxMana) //for using potion, heal etc.
 //        {
 //            mana = maxMana;
 //        }
 //        if(keyH.godModeOn == false)
 //        {
-        if (gp.gameState == gp.PLAY) {
-            if (life <= 0) {
-                gp.gameState = gp.DIED;
-                gp.ui.commandNum = -1; //for if you die while pressing enter
-                gp.stopMusic();
-//                gp.playSE(12);
-            }
-        }
 //        }
     }
 

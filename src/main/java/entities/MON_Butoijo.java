@@ -11,7 +11,8 @@ public class MON_Butoijo extends Entity {
         direction = "down";
         speed = 2;
         damage = new Random().nextInt(20) + 5;
-        HP = 20;
+        boss = true;
+        life = 100;
 
         solidArea = new Rectangle();
         solidArea.x = 8;

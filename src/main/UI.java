@@ -805,7 +805,58 @@ public class UI {
         x += gp.tileSize / 4;
         y += gp.tileSize / 4;
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
-        g2.drawString("HP: " + gp.player.life, x, y);
+    }
+
+    public void drawMonsterLife() {
+        //Monster HP Bar
+        for (int i = 0; i < gp.monsters[1].length; i++) {
+            Entity monster = gp.monsters[gp.currentMap][i];
+
+            if (monster != null && monster.inCamera() == true) {
+                if (monster.hpBarOn == true && monster.boss == false) {
+                    double oneScale = (double) gp.tileSize / monster.maxLife; // (bar lenght / maxlife) Ex: if monster hp = 2, tilesize = 48px. So, 1 hp = 24px
+                    double hpBarValue = oneScale * monster.life;
+
+                    if (hpBarValue < 0) //Ex: You attack 5 hp to monster which has 3 hp. Monster's hp will be -2 and bar will ofset to left. To avoid that check if hpBarValue less than 0.
+                    {
+                        hpBarValue = 0;
+                    }
+
+                    g2.setColor(new Color(35, 35, 35));
+                    g2.fillRect(monster.getScreenX() - 1, monster.getScreenY() - 16, gp.tileSize + 2, 12);
+
+                    g2.setColor(new Color(255, 0, 30));
+                    g2.fillRect(monster.getScreenX(), monster.getScreenY() - 15, (int) hpBarValue, 10);
+
+                    monster.hpBarCounter++;
+                    if (monster.hpBarCounter > 600)  // 10
+                    {
+                        monster.hpBarCounter = 0;
+                        monster.hpBarOn = false;
+                    }
+                } else if (monster.boss == true) {
+                    double oneScale = (double) gp.tileSize * 8 / monster.maxLife; // (bar lenght / maxlife) Ex: if monster hp = 2, tilesize = 48px. So, 1 hp = 24px
+                    double hpBarValue = oneScale * monster.life;
+                    int x = gp.screenWidth / 2 - gp.tileSize * 4;
+                    int y = gp.tileSize * 10;
+
+                    if (hpBarValue < 0)  //Ex: You attack 5 hp to monster which has 3 hp. Monster's hp will be -2 and bar will ofset to left. To avoid that check if hpBarValue less than 0.
+                    {
+                        hpBarValue = 0;
+                    }
+
+                    g2.setColor(new Color(35, 35, 35));
+                    g2.fillRect(x - 1, y - 1, gp.tileSize * 8 + 2, 22);
+
+                    g2.setColor(new Color(255, 0, 30));
+                    g2.fillRect(x, y, (int) hpBarValue, 20);
+
+                    g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
+                    g2.setColor(Color.white);
+                    g2.drawString(monster.name, x + 4, y - 10);
+                }
+            }
+        }
     }
 
     public void drawGameOverScreen() {
@@ -918,7 +969,6 @@ public class UI {
             Color c = new Color(0, 0, 0, 90);  // R,G,B, alfa(opacity)
             g2.setColor(c);
             g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
-            drawHP();
         }
         if (gp.gameState == gp.DIALOGUE) {
             g2.setFont(pixeloid);

@@ -19,20 +19,24 @@ public class Entity {
     public int life;
     public int maxLife;
     public int attack;
-    public boolean alive;
-    public int shotAvailableCounter = 0;
+    public boolean collision = false;
+    public boolean alive = true;
+    public boolean hpBarOn = false;
+    public boolean onPath = false;
+    public boolean boss = false;
     public String[][] dialogues = new String[20][20];
     public int dialogueSet;
     public int dialogueIndex = 0;
     public String quizQuestion = "";
     public boolean hasQuiz = false;
     public int quizCorrectAnswer = 0;
+    public int damage;
+
     public Projectile projectile;
 
-    public int damage;
-    public int HP;
+    public int hpBarCounter = 0;
+    public int shotAvailableCounter = 0;
 
-    public boolean onPath = false;
 
     //    entitty assets attributes
     public BufferedImage up1, up2, up3, up4, down1, down2, down3, down4, left1, left2, left3, left4, right1, right2, right3, right4;
@@ -42,7 +46,6 @@ public class Entity {
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48); // default value
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0); // default value
     public int defaultSolidAreaX, defaultSolidAreaY;
-    public boolean collision = false;
 
     //    entity state
     public String direction;
@@ -124,6 +127,19 @@ public class Entity {
     public int getTileDistance(Entity target) {
         int tileDistance = (getXdistance(target) + getYdistance(target)) / gp.tileSize;
         return tileDistance;
+    }
+
+    public boolean inCamera()
+    {
+        boolean inCamera = false;
+        if(     worldX + gp.tileSize*5 > gp.player.worldX - gp.player.screenX && //*5 because skeleton lord disappears when the top left corner isn't on the screen
+                worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
+                worldY + gp.tileSize*5 > gp.player.worldY - gp.player.screenY &&
+                worldY - gp.tileSize < gp.player.worldY + gp.player.screenY)
+        {
+            inCamera = true;
+        }
+        return inCamera;
     }
 
     public void checkAttackOrNot(int rate, int straight, int horizontal) {
