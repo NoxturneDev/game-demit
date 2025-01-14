@@ -186,11 +186,16 @@ public class Entity {
 
     public void checkShootOrNot(int rate, int shotInterval) {
         int i = new Random().nextInt(rate);
+        System.out.println("i: " + i);
+        System.out.println("shotAvailableCounter: " + shotAvailableCounter);
+        System.out.println("shotInterval: " + shotInterval);
+        System.out.println("projectile.alive: " + projectile.alive);
         if (i == 0 && projectile.alive == false && shotAvailableCounter == shotInterval) {
             projectile.set(getCenterX(), getCenterY(), direction, true, this);
             gp.projectileList.add(projectile);
 //            gp.projectile[gp.currentMap][i] = projectile;
             //CHECK VACANCY
+            System.out.println("Projectile shot");
             for (int ii = 0; ii < gp.projectile[1].length; ii++) {
                 if (gp.projectile[gp.currentMap][ii] == null) {
                     gp.projectile[gp.currentMap][ii] = projectile;
@@ -562,7 +567,7 @@ public class Entity {
             g2.drawImage(img, screenX, screenY, null);
 ////            DEBUG
             g2.setColor(Color.RED);
-            g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, img.getWidth(), img.getHeight());
+            g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
         }
     }
 

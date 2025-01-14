@@ -31,7 +31,6 @@ public class UI {
     public String itemDescription;
     public String currentJumpscarePath;
     public BufferedImage[] cutscenes = new BufferedImage[100];
-    public String currentBossName = "Kuntilanak";
 
 
     public int animationCutsceneType;
@@ -936,14 +935,14 @@ public class UI {
 
         g2.setFont(pixeloid);
 //        drawDebug(g2);
-        if (gp.bossBattle) {
-            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
-            String text = currentBossName;
-            int x = getXforCenteredText(text);
-            int y = gp.tileSize * 2;
-            g2.setColor(red);
-            g2.drawString(text, x, y);
-        }
+//        if (gp.bossBattle) {
+//            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
+//            String text = ;
+//            int x = getXforCenteredText(text);
+//            int y = gp.tileSize * 2;
+//            g2.setColor(red);
+//            g2.drawString(text, x, y);
+//        }
 
         drawStatus(g2);
         g2.setFont(castlefavor);
@@ -969,6 +968,7 @@ public class UI {
             Color c = new Color(0, 0, 0, 90);  // R,G,B, alfa(opacity)
             g2.setColor(c);
             g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+            drawMonsterLife();
         }
         if (gp.gameState == gp.DIALOGUE) {
             g2.setFont(pixeloid);

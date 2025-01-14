@@ -111,23 +111,18 @@ public class SceneManager {
         }
 
         if (i == BOSS_BATTLE_KUNTI) {
-            gp.ui.currentBossName = "Kunti";
             gp.bossBattle = true;
         }
         if (i == BOSS_BATTLE_POCONG) {
-            gp.ui.currentBossName = "Pocong";
             gp.bossBattle = true;
         }
         if (i == BOSS_BATTLE_BUTOIJO) {
-            gp.ui.currentBossName = "Buto Ijo";
             gp.bossBattle = true;
         }
         if (i == BOSS_BATTLE_KUYANG) {
-            gp.ui.currentBossName = "Kuyang";
             gp.bossBattle = true;
         }
         if (i == BOSS_BATTLE_NYIBLORONG) {
-            gp.ui.currentBossName = "Nyi Blorong";
             gp.bossBattle = true;
         }
     }
