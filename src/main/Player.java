@@ -40,7 +40,7 @@ public class Player extends Entity {
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
         this.keyH = keyH;
-        HP = 100;
+        life = 100;
 
 //        render character in the middle of the screen view
         screenX = gp.screenWidth / 2 - gp.tileSize / 2;
@@ -186,9 +186,9 @@ public class Player extends Entity {
 
     public void attackMonster(int i) {
         if (i != 999) {
-            gp.monsters[gp.currentMap][i].HP -= 5;
+            gp.monsters[gp.currentMap][i].life -= 5;
 
-            if (gp.monsters[gp.currentMap][i].HP <= 0) {
+            if (gp.monsters[gp.currentMap][i].life <= 0) {
                 gp.monsters[gp.currentMap][i] = null;
                 gp.aSetter.totalMonsterMap7--;
                 totalScore += 10;
@@ -371,14 +371,8 @@ public class Player extends Entity {
             }
         }
 
-        System.out.println(projectile.haveResource(this));
-        System.out.println("shotAvailableCounter: " + shotAvailableCounter);
-        System.out.println("projectile.alive: " + projectile.alive);
-        System.out.println("gp.keyH.shotPressed: " + gp.keyH.shotPressed);
-        System.out.println("-------------------------------");
-        if (gp.keyH.shotPressed == true && projectile.alive == false && shotAvailableCounter == 30 )   //2nd Condition : You can shoot it only one at a time
+        if (gp.keyH.shotPressed == true && projectile.alive == false && shotAvailableCounter == 30)   //2nd Condition : You can shoot it only one at a time
         {                                                                                               //3rd Condition : If you close shot monster, projectile.alive will be false. So if you still pressing F key, immediately shoot another fireball.
-            System.out.println("Player.java: shootProjectile()");
             // SET DEFAULT COORDINATES, DIRECTION AND USER
             projectile.set(worldX, worldY, direction, true, this);
 
@@ -422,13 +416,14 @@ public class Player extends Entity {
 //        }
 //        if(keyH.godModeOn == false)
 //        {
-//            if(life <= 0)
-//            {
-//                gp.gameState = gp.gameOverState;
-//                gp.ui.commandNum =- 1; //for if you die while pressing enter
-//                gp.stopMusic();
+        if (gp.gameState == gp.PLAY) {
+            if (life <= 0) {
+                gp.gameState = gp.DIED;
+                gp.ui.commandNum = -1; //for if you die while pressing enter
+                gp.stopMusic();
 //                gp.playSE(12);
-//            }
+            }
+        }
 //        }
     }
 

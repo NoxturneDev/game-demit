@@ -39,6 +39,7 @@ public class Projectile extends Entity {
             boolean contactPlayer = gp.collisionChecker.checkEntityToPlayerCollision(this);
             if(gp.player.invincible == false && contactPlayer == true)
             {
+                System.out.println("Projectile hit player");
                 damagePlayer(attack);
 //                if(gp.player.guarding == true)
 //                {

@@ -805,7 +805,7 @@ public class UI {
         x += gp.tileSize / 4;
         y += gp.tileSize / 4;
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
-        g2.drawString("HP: " + gp.player.HP, x, y);
+        g2.drawString("HP: " + gp.player.life, x, y);
     }
 
     public void drawGameOverScreen() {
@@ -954,7 +954,7 @@ public class UI {
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));
         g2.setColor(Color.white);
         g2.drawString("Username: " + gp.player.username, 20, 20);
-        g2.drawString("HP: " + gp.player.HP, 20, 40);
+        g2.drawString("Health: " + gp.player.life, 20, 40);
         g2.drawString("Level: " + gp.player.level, 20, 60);
         g2.drawString("Total Score: " + gp.player.totalScore, 20, 80);
     }

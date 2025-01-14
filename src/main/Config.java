@@ -48,7 +48,7 @@ public class Config implements Runnable {
             gc.currentMap = gp.getCurrentStats().currentMap;
             gc.totalScore = gp.getCurrentStats().player.totalScore;
             gc.username = gp.player.username;
-            gc.currentHealth = gp.getCurrentStats().player.HP;
+            gc.currentHealth = gp.getCurrentStats().player.life;
             gc.currentLevel = gp.getCurrentStats().currentLevel;
             gc.lastPositionX = gp.getCurrentStats().player.worldX;
             gc.lastPositionY = gp.getCurrentStats().player.worldY;
@@ -111,7 +111,7 @@ public class Config implements Runnable {
                     gp.currentMap = gc.currentMap;
                     gp.player.totalScore = gc.totalScore;
                     gp.player.username = gc.username;
-                    gp.player.HP = gc.currentHealth;
+                    gp.player.life = gc.currentHealth;
                     gp.currentLevel = gc.currentLevel;
                     gp.player.worldX = gc.lastPositionX;
                     gp.player.worldY = gc.lastPositionY;

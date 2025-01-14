@@ -171,7 +171,7 @@ public class Entity {
     public void checkShootOrNot(int rate, int shotInterval) {
         int i = new Random().nextInt(rate);
         if (i == 0 && projectile.alive == false && shotAvailableCounter == shotInterval) {
-            projectile.set(worldX, worldY, direction, true, this);
+            projectile.set(getCenterX(), getCenterY(), direction, true, this);
             gp.projectileList.add(projectile);
 //            gp.projectile[gp.currentMap][i] = projectile;
             //CHECK VACANCY
@@ -226,6 +226,8 @@ public class Entity {
             //We can give damage
             gp.player.life -= damage;
             gp.player.invincible = true;
+            System.out.println("Attacked");
+            System.out.println("Player life: " + gp.player.life);
         }
     }
 
