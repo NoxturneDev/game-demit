@@ -44,13 +44,9 @@ public class NPC_Dukun extends Entity{
         dialogues[0][1] = "Aku adalah Raden Wijaya";
         dialogues[0][2] = "Aku akan membantumu";
 
-        dialogues[1][0] = "Rehan ganteng";
         dialogues[1][1] = "Tahukan kamu apa itu Blankon?";
-        dialogues[1][2] = "Jawaban bagus!";
         dialogues[1][3] = "Kau bisa mencari blankon itu  di sekitar sini";
         dialogues[1][3] = "Namun berhati-hati lah..";
-
-        dialogues[2][0] = "Bagus, sekarang kau sudahk menemukanya!!";
     }
 
     public void setAction() {

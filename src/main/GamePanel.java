@@ -103,7 +103,7 @@ public class GamePanel extends JPanel implements Runnable {
 //        eManager.setup();
 
 //        ui.cutsceneIndex = 1;
-        sceneManager.playScene(sceneManager.SPLASH_SCREEN);
+        sceneManager.playScene(SceneManager.SceneIndex.SPLASH_SCREEN.ordinal());
 //        config.saveConfigToMongoDB();
 //        playMusic(0);
     }

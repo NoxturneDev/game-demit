@@ -196,13 +196,12 @@ public class Player extends Entity {
                     gp.sceneManager.playScene(gp.sceneManager.BOSS_BATTLE_BUTOIJO_FINISHED);
                 }
                 gp.monsters[gp.currentMap][i] = null;
-                gp.aSetter.totalMonsterMap7--;
                 totalScore += 10;
 
-                if (gp.aSetter.totalMonsterMap7 < 0) {
-                    gp.sceneManager.playScene(10);
-                    gp.eHandler.teleport(gp.tm.MAP_HOUSE_PROLOG_3, gp.player.worldX / gp.tileSize, gp.player.worldY / gp.tileSize, -1);
-                }
+//                if (gp.aSetter.totalMonsterMap7 < 0) {
+//                    gp.sceneManager.playScene(10);
+//                    gp.eHandler.teleport(gp.tm.MAP_HOUSE_PROLOG_3, gp.player.worldX / gp.tileSize, gp.player.worldY / gp.tileSize, -1);
+//                }
 //                if (gp.aSetter.totalMonsterMap7 < 0) {
 //                    gp.sceneManager.playScene(10);
 //                }
@@ -278,7 +277,7 @@ public class Player extends Entity {
     public void update() {
         if (gp.gameState == gp.PLAY) {
             if (life <= 0) {
-//                gp.gameState = gp.DIED;
+                gp.gameState = gp.DIED;
                 System.out.println("You died");
             }
 

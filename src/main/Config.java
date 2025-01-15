@@ -16,6 +16,7 @@ public class Config implements Runnable {
     GamePanel gp;
     GameConfig gc = new GameConfig();
     List<ProfileData> profiles = new ArrayList<>();
+    List<String[]> leaderboard = new ArrayList<>();
 
 
     private static final String filePath = "config.txt";
@@ -49,10 +50,12 @@ public class Config implements Runnable {
 
             System.out.println("New profile '" + username + "' created successfully.");
             setCurrentProfile(username);
+            saveConfigToMongoDB();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     // Save configuration for the current profile
     public void saveConfigToMongoDB() {
         if (currentProfile == null || currentProfile.isEmpty()) {
@@ -87,7 +90,65 @@ public class Config implements Runnable {
             // Replace existing document or insert if not exists
             collection.replaceOne(new Document("_id", currentProfile), doc, new com.mongodb.client.model.ReplaceOptions().upsert(true));
 
+            syncProfileWithLeaderboard();
             System.out.println("Config for profile '" + currentProfile + "' saved to MongoDB successfully.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void syncProfileWithLeaderboard() {
+        try (MongoClient mongoClient = MongoClients.create(MONGO_URI)) {
+            MongoCollection<Document> leaderboardCollection = mongoClient
+                    .getDatabase(DATABASE_NAME)
+                    .getCollection("leaderboard");
+
+            // Fetch the profile data
+            Document profile = new Document("_id", currentProfile);
+            Document doc = mongoClient.getDatabase(DATABASE_NAME)
+                    .getCollection(COLLECTION_NAME)
+                    .find(profile)
+                    .first();
+
+            if (doc != null) {
+                // Create or update leaderboard entry
+                Document leaderboardDoc = new Document("username", doc.getString("username"))
+                        .append("level", doc.getInteger("currentLevel", 0))
+                        .append("totalScore", doc.getInteger("totalScore", 0));
+
+                leaderboardCollection.replaceOne(
+                        new Document("username", doc.getString("username")),
+                        leaderboardDoc,
+                        new com.mongodb.client.model.ReplaceOptions().upsert(true)
+                );
+
+                System.out.println("Profile synced to leaderboard.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void fetchLeaderboardData() {
+        try (MongoClient mongoClient = MongoClients.create(MONGO_URI)) {
+            MongoCollection<Document> leaderboardCollection = mongoClient
+                    .getDatabase(DATABASE_NAME)
+                    .getCollection("leaderboard");
+
+            // Sort by totalScore in descending order and limit to 5 results
+            List<Document> topPlayers = leaderboardCollection.find()
+                    .sort(new Document("totalScore", -1))
+                    .limit(5)
+                    .into(new ArrayList<>());
+
+            for (Document doc : topPlayers) {
+                String[] playerData = new String[3];
+                playerData[0] = doc.getString("username");
+                playerData[1] = String.valueOf(doc.getInteger("level", 0));
+                playerData[2] = String.valueOf(doc.getInteger("totalScore", 0));
+                leaderboard.add(playerData);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

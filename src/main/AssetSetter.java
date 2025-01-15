@@ -35,6 +35,17 @@ public class AssetSetter {
         int mapNum = 0;
         int i = 0;
 
+        mapNum = gp.tm.MAP_FOREST_PROLOG_4;
+        i = 0;
+        gp.monsters[mapNum][i] = new MON_Pocong(gp);
+        gp.monsters[mapNum][i].worldX = gp.tileSize * 15;
+        gp.monsters[mapNum][i].worldY = gp.tileSize * 30;
+        i++;
+        gp.monsters[mapNum][i] = new MON_Pocong(gp);
+        gp.monsters[mapNum][i].worldX = gp.tileSize * 15;
+        gp.monsters[mapNum][i].worldY = gp.tileSize * 29;
+
+
 //        PROLOG MONSTER
         mapNum = gp.tm.MAP_HOUSE_PROLOG_2;
         i = 0;
@@ -55,35 +66,37 @@ public class AssetSetter {
         gp.monsters[mapNum][i].worldY = gp.tileSize * 15;
         i++;
 
-        mapNum = 3;
-        i = 0;
-        gp.monsters[mapNum][i] = new MON_Pocong(gp);
-        gp.monsters[mapNum][i].direction = "up";
-        gp.monsters[mapNum][i].worldX = gp.tileSize * 23;
-        gp.monsters[mapNum][i].worldY = gp.tileSize * 21;
-        i++;
-        gp.monsters[mapNum][i] = new MON_Pocong(gp);
-        gp.monsters[mapNum][i].direction = "up";
-        gp.monsters[mapNum][i].worldX = gp.tileSize * 23;
-        gp.monsters[mapNum][i].worldY = gp.tileSize * 20;
 
-        mapNum = 7;
-        i = 0;
-        gp.monsters[mapNum][i] = new MON_tuyul(gp);
-        gp.monsters[mapNum][i].direction = "up";
-        gp.monsters[mapNum][i].worldX = gp.tileSize * 22;
-        gp.monsters[mapNum][i].worldY = gp.tileSize * 39;
-        i++;
-        gp.monsters[mapNum][i] = new MON_tuyul(gp);
-        gp.monsters[mapNum][i].direction = "up";
-        gp.monsters[mapNum][i].worldX = gp.tileSize * 23;
-        gp.monsters[mapNum][i].worldY = gp.tileSize * 39;
-        i++;
-        gp.monsters[mapNum][i] = new MON_tuyul(gp);
-        gp.monsters[mapNum][i].direction = "down";
-        gp.monsters[mapNum][i].worldX = gp.tileSize * 23;
-        gp.monsters[mapNum][i].worldY = gp.tileSize * 39;
-        totalMonsterMap7 = i;
+
+//        mapNum = 3;
+//        i = 0;
+//        gp.monsters[mapNum][i] = new MON_Pocong(gp);
+//        gp.monsters[mapNum][i].direction = "up";
+//        gp.monsters[mapNum][i].worldX = gp.tileSize * 23;
+//        gp.monsters[mapNum][i].worldY = gp.tileSize * 21;
+//        i++;
+//        gp.monsters[mapNum][i] = new MON_Pocong(gp);
+//        gp.monsters[mapNum][i].direction = "up";
+//        gp.monsters[mapNum][i].worldX = gp.tileSize * 23;
+//        gp.monsters[mapNum][i].worldY = gp.tileSize * 20;
+//
+//        mapNum = 7;
+//        i = 0;
+//        gp.monsters[mapNum][i] = new MON_tuyul(gp);
+//        gp.monsters[mapNum][i].direction = "up";
+//        gp.monsters[mapNum][i].worldX = gp.tileSize * 22;
+//        gp.monsters[mapNum][i].worldY = gp.tileSize * 39;
+//        i++;
+//        gp.monsters[mapNum][i] = new MON_tuyul(gp);
+//        gp.monsters[mapNum][i].direction = "up";
+//        gp.monsters[mapNum][i].worldX = gp.tileSize * 23;
+//        gp.monsters[mapNum][i].worldY = gp.tileSize * 39;
+//        i++;
+//        gp.monsters[mapNum][i] = new MON_tuyul(gp);
+//        gp.monsters[mapNum][i].direction = "down";
+//        gp.monsters[mapNum][i].worldX = gp.tileSize * 23;
+//        gp.monsters[mapNum][i].worldY = gp.tileSize * 39;
+//        totalMonsterMap7 = i;
 
 //        DUNGEON LEVEL 1
         mapNum = gp.tm.MAP_DUNGEON_LEVEL_1;

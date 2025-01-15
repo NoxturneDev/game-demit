@@ -9,8 +9,8 @@ public class MON_Kunti extends Entity {
     public MON_Kunti(GamePanel gp) {
         super(gp);
         direction = "down";
-//        speed = 2;
-        damage = new Random().nextInt(20) + 5;
+        speed = 6;
+        damage = new Random().nextInt(50) + 5;
         life = 100;
         maxLife = 100;
         boss = true;

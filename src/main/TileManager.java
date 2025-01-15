@@ -21,10 +21,11 @@ public class TileManager {
     public final int MAP_FOREST_PROLOG_3 = 2;
     public final int MAP_FOREST_PROLOG_4 = 3;
     public final int MAP_FOREST_PROLOG_5 = 4;
-    public final int MAP_HOUSE_PROLOG_1 = 5;
-    public final int MAP_HOUSE_PROLOG_2 = 6;
-    public final int MAP_HOUSE_PROLOG_3 = 7;
-    public final int MAP_HOUSE_PROLOG_4 = 8;
+    public final int MAP_FOREST_PROLOG_6 = 5;
+    public final int MAP_HOUSE_PROLOG_1 = 6;
+    public final int MAP_HOUSE_PROLOG_2 = 7;
+    public final int MAP_HOUSE_PROLOG_3 = 8;
+    public final int MAP_HOUSE_PROLOG_4 = 9;
 
     public final int MAP_FOREST_LEVEL_1 = 10;
     public final int MAP_DUNGEON_LEVEL_1 = 11;
@@ -83,7 +84,8 @@ public class TileManager {
         loadMap("/maps/forest_prolog_1.txt", MAP_FOREST_PROLOG_2);
         loadMap("/maps/forest_prolog_2.txt", MAP_FOREST_PROLOG_3);
         loadMap("/maps/forest_prolog_2.txt", MAP_FOREST_PROLOG_4); //chased by pocong
-        loadMap("/maps/forest_prolog_1.txt", MAP_FOREST_PROLOG_5); //back to first map
+        loadMap("/maps/forest_prolog_2.txt", MAP_FOREST_PROLOG_5); //
+        loadMap("/maps/forest_prolog_1.txt", MAP_FOREST_PROLOG_6); //back to first map
 
         loadMap("/maps/house_1.txt", MAP_HOUSE_PROLOG_1); // first inside to house to get the first item: keris
         loadMap("/maps/house_1.txt", MAP_HOUSE_PROLOG_2); // tuyul appears

@@ -51,9 +51,46 @@ public class UI {
         PROLOG_1_1,
         PROLOG_1_2,
         PROLOG_1_3,
-        POCONG_2_1,
-        POCONG_2_2,
-        POCONG_3_3,
+        //        POCONG
+        PROLOG_2_1,
+        PROLOG_2_2,
+        PROLOG_2_3,
+        //        FLASHBACK
+        PROLOG_3_1,
+        PROLOG_3_2,
+        //        KERIS
+        PROLOG_4_1,
+        //        RADEN WIJAYA
+        PROLOG_5_1,
+        PROLOG_5_2,
+        //        LEVEL 1 (Kunti)
+        LEVEL_1_1,
+        LEVEL_1_2,
+        //        LEVEL 2 (KUYANG)
+        LEVEL_2_1,
+        LEVEL_2_2,
+        //        LEVEL 3 (BUTO IJO)
+        LEVEL_3_1,
+        LEVEL_3_2,
+        //        LEVEL 4 (NYI BLORONG)
+        LEVEL_4_1,
+        LEVEL_4_2,
+        //        BEFORE LAST BOSS
+        EPILOG_0_1,
+        EPILOG_0_2,
+        //        LAST BOSS
+        LAST_BOSS_1_1,
+        LAST_BOSS_1_2,
+        LAST_BOSS_2_1,
+        LAST_BOSS_2_2,
+        //        reveal nyi roro kidul
+        LAST_BOSS_3_1,
+        //        ENDING
+        ENDING_1_1,
+        ENDING_1_2,
+        ENDING_1_3,
+        ENDING_2_1,
+        ENDING_2_2,
     }
 
     public UI(GamePanel gp) {
@@ -80,19 +117,19 @@ public class UI {
 
     public void getCutScenesImage() {
         try {
-//            PROLOG 1 - Lanang
-            cutscenes[Cutscenes.PROLOG_1_1.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/1_1.png"));
-            cutscenes[Cutscenes.PROLOG_1_2.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/1_2.png"));
-            cutscenes[Cutscenes.PROLOG_1_3.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/1_3.png"));
-//            PROLOG 2 - Pocong
-            cutscenes[4] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/2_1.png"));
-            cutscenes[5] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/2_2.png"));
-            cutscenes[6] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/2_3.png"));
-//            PROLOG 3 - Keris TEMPORARY
-            cutscenes[7] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/3_1.png"));
-//            PROLOG 4 - Raden
-            cutscenes[8] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/5_1.png"));
-            cutscenes[9] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/5_2.png"));
+//            PROLOG
+            cutscenes[Cutscenes.PROLOG_1_1.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_1_1.png"));
+            cutscenes[Cutscenes.PROLOG_1_2.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_1_2.png"));
+            cutscenes[Cutscenes.PROLOG_1_3.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_1_3.png"));
+            cutscenes[Cutscenes.PROLOG_2_1.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_2_1.png"));
+            cutscenes[Cutscenes.PROLOG_2_2.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_2_2.png"));
+            cutscenes[Cutscenes.PROLOG_2_3.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_2_3.png"));
+            cutscenes[Cutscenes.PROLOG_3_1.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_3_1.png"));
+            cutscenes[Cutscenes.PROLOG_3_2.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_3_2.png"));
+            cutscenes[Cutscenes.PROLOG_4_1.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_4_1.png"));
+            cutscenes[Cutscenes.PROLOG_5_1.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_5_1.png"));
+            cutscenes[Cutscenes.PROLOG_5_2.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_5_2.png"));
+//            LEVEL 1
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -136,6 +173,7 @@ public class UI {
     public boolean cutsceneSoundPlayed = false;
 
     public void animateCutscene() {
+//        PROLOG 1
         if (cutsceneIndex == Cutscenes.PROLOG_1_1.ordinal()) {
             cutsceneDuration++;
             cutsceneCounter++;
@@ -184,14 +222,12 @@ public class UI {
             fadeIn(80);
         }
 
-// end animation on 3 seconds as default animation
-        if (cutsceneIndex == 3 && cutsceneDuration > 200) {
-            gp.gameState = gp.RUNNING_TEXT;
-            currentRunningText = "TIDAAKKKKKKKK!";
-            cutsceneDuration = 0;
+        if (cutsceneIndex == Cutscenes.PROLOG_1_3.ordinal() && cutsceneDuration > 200) {
+            gp.sceneManager.playScene(SceneManager.SceneIndex.PROLOG_RUNNING_TEXT_AFTER_CUTSCENE_1.ordinal());
         }
 
-        if (cutsceneIndex == 4) {
+//        PROLOG 2 - Pocong
+        if (cutsceneIndex == Cutscenes.PROLOG_2_1.ordinal()) {
             cutsceneDuration++;
             cutsceneCounter++;
 
@@ -206,7 +242,7 @@ public class UI {
             slideRight(100);
             fadeIn(100);
         }
-        if (cutsceneIndex == 5) {
+        if (cutsceneIndex == Cutscenes.PROLOG_2_2.ordinal()) {
             cutsceneDuration++;
             cutsceneCounter++;
 
@@ -221,7 +257,7 @@ public class UI {
             slideRight(100);
             fadeIn(100);
         }
-        if (cutsceneIndex == 6) {
+        if (cutsceneIndex == Cutscenes.PROLOG_2_3.ordinal()) {
             cutsceneDuration++;
             cutsceneCounter++;
 
@@ -235,13 +271,48 @@ public class UI {
             }
             zoomIn(100);
         }
-// end animation on 3 seconds as default animation
-        if (cutsceneIndex == 6 && cutsceneDuration > 200) {
-            gp.sceneManager.playScene(5);
+        if (cutsceneIndex == Cutscenes.PROLOG_2_3.ordinal() && cutsceneDuration > 200) {
+            gp.sceneManager.playScene(SceneManager.SceneIndex.PROLOG_RUNNING_TEXT_AFTER_CUTSCENE_2.ordinal());
         }
 
-//        KERIS CUTSCENE (PROLOG 4)
-        if (cutsceneIndex == 7) {
+//        PROLOG 3 - Flashback
+        if (cutsceneIndex == Cutscenes.PROLOG_3_1.ordinal()) {
+            cutsceneDuration++;
+            cutsceneCounter++;
+
+            cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
+            cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
+
+            if (!cutsceneSoundPlayed) {
+                gp.playSE(24);
+                cutsceneSoundPlayed = true;
+            }
+            animationCutsceneType = FADE_IN;
+            slideRight(100);
+            fadeIn(100);
+        }
+
+        if (cutsceneIndex == Cutscenes.PROLOG_3_2.ordinal()) {
+            cutsceneDuration++;
+            cutsceneCounter++;
+
+            cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
+            cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
+
+            if (!cutsceneSoundPlayed) {
+                gp.playSE(24);
+                cutsceneSoundPlayed = true;
+            }
+            animationCutsceneType = FADE_IN;
+            slideRight(100);
+            fadeIn(100);
+        }
+        if (cutsceneIndex == Cutscenes.PROLOG_3_2.ordinal() && cutsceneDuration > 200) {
+            gp.sceneManager.playScene(SceneManager.SceneIndex.PROLOG_RUNNING_TEXT_AFTER_CUTSCENE_3.ordinal());
+        }
+
+//        PROLOG 4 - Keris
+        if (cutsceneIndex == Cutscenes.PROLOG_4_1.ordinal()) {
             cutsceneDuration++;
             cutsceneCounter++;
 
@@ -256,13 +327,12 @@ public class UI {
             zoomIn(100);
             fadeIn(100);
         }
-
-        if (cutsceneIndex == 7 && cutsceneDuration > 200) {
-            gp.sceneManager.playScene(8);
+        if (cutsceneIndex == Cutscenes.PROLOG_4_1.ordinal() && cutsceneDuration > 200) {
+            gp.sceneManager.playScene(SceneManager.SceneIndex.PROLOG_ITEM_DROP_KERIS.ordinal());
         }
 
-//        RADEN WIJAYA CUTSCENE
-        if (cutsceneIndex == 8) {
+//          PROLOG 5 - Raden Wijaya
+        if (cutsceneIndex == Cutscenes.PROLOG_5_1.ordinal()) {
             cutsceneDuration++;
             cutsceneCounter++;
 
@@ -278,7 +348,7 @@ public class UI {
             fadeIn(100);
         }
 
-        if (cutsceneIndex == 9) {
+        if (cutsceneIndex == Cutscenes.PROLOG_5_2.ordinal()) {
             cutsceneDuration++;
             cutsceneCounter++;
 
@@ -294,7 +364,7 @@ public class UI {
             fadeIn(200);
         }
 
-        if (cutsceneIndex == 9 && cutsceneDuration > 200) {
+        if (cutsceneIndex == Cutscenes.PROLOG_5_2.ordinal() && cutsceneDuration > 200) {
             gp.sceneManager.playScene(12);
         }
     }
@@ -453,35 +523,15 @@ public class UI {
         g2.drawString(headerLevel, column2X, y);
         g2.drawString(headerScore, column3X, y);
 
-        // DRAW LEADERBOARD LIST
-        Player firstPlace = gp.leaderboardHandler.FIRST_PLACE;
-        Player secondPlace = gp.leaderboardHandler.SECOND_PLACE;
-        Player thirdPlace = gp.leaderboardHandler.THIRD_PLACE;
-        Player fourthPlace = gp.leaderboardHandler.FOURTH_PLACE;
-        Player fifthPlace = gp.leaderboardHandler.FIFTH_PLACE;
-        String[][] leaderboard = {
-                {"Dila", "6", "1530"},
-                {"Firschanya", "6", "1410"},
-                {"Galih", "5", "1300"},
-                {"Rehan", "4", "1150"},
-                {"Fahmi", "2", "400"},
-        };
-//        String[][] leaderboard = {
-//                {firstPlace.name, String.valueOf(firstPlace.level), String.valueOf(firstPlace.totalScore)},
-//                {secondPlace.name, String.valueOf(secondPlace.level), String.valueOf(secondPlace.totalScore)},
-//                {thirdPlace.name, String.valueOf(thirdPlace.level), String.valueOf(thirdPlace.totalScore)},
-//                {fourthPlace.name, String.valueOf(fourthPlace.level), String.valueOf(fourthPlace.totalScore)},
-//                {fifthPlace.name, String.valueOf(fifthPlace.level), String.valueOf(fifthPlace.totalScore)},
-//        };
-//
+        // FETCH LEADERBOARD DATA
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 36F)); // Smaller font for list
-        for (int i = 0; i < leaderboard.length; i++) {
+        for (int i = 0; i < gp.config.leaderboard.size(); i++) {
             y += gp.tileSize; // Space between rows
 
             // Draw each column
-            g2.drawString(leaderboard[i][0], column1X, y); // Player Name
-            g2.drawString(leaderboard[i][1], column2X, y); // Level
-            g2.drawString(leaderboard[i][2], column3X, y); // Total Score
+            g2.drawString(gp.config.leaderboard.get(i)[0], column1X, y); // Player Name
+            g2.drawString(gp.config.leaderboard.get(i)[1], column2X, y); // Level
+            g2.drawString(gp.config.leaderboard.get(i)[2], column3X, y); // Total Score
         }
     }
 
@@ -596,7 +646,7 @@ public class UI {
         // Instructions
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 24F));
         g2.setColor(Color.WHITE);
-        String instructions = "Use UP/DOWN to navigate, ENTER to select, ESC to return";
+        String instructions = "Use UP/DOWN to navigate, TAB to select, ESC to return";
         int instructionsX = getXforCenteredText(instructions);
         int instructionsY = gp.screenHeight - gp.tileSize;
         g2.drawString(instructions, instructionsX, instructionsY);
@@ -618,7 +668,7 @@ public class UI {
         // Instructions
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 24F));
         g2.setColor(Color.WHITE);
-        String instructions = "Press Enter to return";
+        String instructions = "Press Space to return";
         int instructionsX = getXforCenteredText(instructions);
         int instructionsY = gp.screenHeight - gp.tileSize;
         g2.drawString(instructions, instructionsX, instructionsY);
@@ -630,12 +680,35 @@ public class UI {
     }
 
     public void drawPauseScreen() {
+        // Set font for the title
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 80F));
         String text = "GAME PAUSED";
         int x = getXforCenteredText(text);
-        int y = gp.screenHeight / 2;
+        int y = gp.screenHeight / 3; // Position it closer to the top
         g2.drawString(text, x, y);
+
+        // Set font for the command list
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 40F));
+        y += gp.tileSize * 2; // Add some space below the title
+
+        String[] commands = {
+                "F1  - Show Leaderboard",
+                "F2  - Show Levels Unlocked",
+                "F5  - Save Game",
+                "W/A/S/D - Move",
+                "SPACE - Attack",
+                "F   - Fireball",
+                "CTRL - Dodge"
+        };
+
+        // Display the commands line by line
+        for (String command : commands) {
+            x = getXforCenteredText(command); // Center each line of text
+            g2.drawString(command, x, y);
+            y += gp.tileSize; // Space between each line
+        }
     }
+
 
     public void drawInGameTextScreen() {
         int x = 0;
@@ -866,25 +939,29 @@ public class UI {
     }
 
     public void drawHP() {
-        double oneScale = (double) gp.tileSize * 4 / 100; // (bar lenght / maxlife) Ex: if monster hp = 2, tilesize = 48px. So, 1 hp = 24px
+        double oneScale = (double) gp.tileSize * 4 / 100; // Calculate HP unit length
         double hpBarValue = oneScale * gp.player.life;
-        int x = 0;
-        int y = gp.tileSize;
 
-        if (hpBarValue < 0)  //Ex: You attack 5 hp to monster which has 3 hp. Monster's hp will be -2 and bar will ofset to left. To avoid that check if hpBarValue less than 0.
-        {
-            hpBarValue = 0;
+        // Set new position for the HP bar (small gap from the top-left corner)
+        int x = 10; // Small gap from the left
+        int y = 30; // Small gap from the top
+
+        if (hpBarValue < 0) {
+            hpBarValue = 0; // Ensure HP value doesn't go below 0
         }
 
+        // Draw the HP bar background
         g2.setColor(new Color(35, 35, 35));
         g2.fillRect(x - 1, y - 1, gp.tileSize * 2 + 2, 22);
 
+        // Draw the HP bar
         g2.setColor(new Color(255, 0, 30));
         g2.fillRect(x, y, (int) hpBarValue, 20);
 
+        // Draw the username above the HP bar
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
         g2.setColor(Color.white);
-        g2.drawString(gp.player.username, x + 4, y - 10);
+        g2.drawString(gp.player.username, x + 4, y - 5);
     }
 
     public void drawMonsterLife() {
@@ -1025,7 +1102,6 @@ public class UI {
 //            g2.drawString(text, x, y);
 //        }
 
-        g2.setFont(castlefavor);
         if (gp.gameState == gp.ENTER_USERNAME) {
             return;
         }
@@ -1050,7 +1126,6 @@ public class UI {
             g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
             drawMonsterLife();
             drawStatus(g2);
-            drawHP();
         }
         if (gp.gameState == gp.DIALOGUE) {
             g2.setFont(pixeloid);
@@ -1089,10 +1164,9 @@ public class UI {
     public void drawStatus(Graphics2D g2) {
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));
         g2.setColor(Color.white);
-        g2.drawString("Username: " + gp.player.username, 20, 20);
-        g2.drawString("Health: " + gp.player.life, 20, 40);
-        g2.drawString("Level: " + gp.player.level, 20, 60);
-        g2.drawString("Total Score: " + gp.player.totalScore, 20, 80);
+        drawHP();
+        g2.drawString("Level: " + gp.player.level, 20, 75);
+        g2.drawString("Total Score: " + gp.player.totalScore, 20, 100);
     }
 
     //    DEBUG FUNCTION

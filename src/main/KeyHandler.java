@@ -2,6 +2,7 @@ package main;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.time.temporal.ChronoUnit;
 
 public class KeyHandler implements KeyListener {
     GamePanel gp;
@@ -12,7 +13,8 @@ public class KeyHandler implements KeyListener {
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {}
+    public void keyTyped(KeyEvent e) {
+    }
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -42,13 +44,24 @@ public class KeyHandler implements KeyListener {
         if (gp.gameState == gp.TITLE) handleTitleStateKeys(keyCode);
         if (gp.gameState == gp.PROFILE_SCREEN) handleProfileScreenKeys(keyCode);
         if (gp.gameState == gp.DIALOGUE && keyCode == KeyEvent.VK_ENTER) enterPressed = true;
-        if (gp.gameState == gp.ITEM_DROP && (keyCode == KeyEvent.VK_ENTER || keyCode == KeyEvent.VK_ESCAPE)) gp.gameState = gp.PLAY;
+        if (gp.gameState == gp.ITEM_DROP && (keyCode == KeyEvent.VK_ENTER || keyCode == KeyEvent.VK_ESCAPE))
+            gp.gameState = gp.PLAY;
         if (gp.gameState == gp.JUMPSCARE_SCREEN && keyCode == KeyEvent.VK_ENTER) gp.gameState = gp.PLAY;
-        if (gp.gameState == gp.PLAY && keyCode == KeyEvent.VK_ESCAPE) gp.gameState = gp.LEVEL_SCREEN;
-        if (gp.gameState == gp.PLAY && keyCode == KeyEvent.VK_F1) gp.gameState = gp.LEADERBOARD_SCREEN;
+        if (gp.gameState == gp.PLAY && keyCode == KeyEvent.VK_F1) {
+            gp.config.fetchLeaderboardData();
+            gp.gameState = gp.LEADERBOARD_SCREEN;
+        }
+        if (gp.gameState == gp.PLAY && keyCode == KeyEvent.VK_F2) gp.gameState = gp.LEVEL_SCREEN;
         if (gp.gameState == gp.PLAY && keyCode == KeyEvent.VK_F5) gp.config.saveConfigToMongoDB();
         if (gp.gameState == gp.LEVEL_SCREEN && keyCode == KeyEvent.VK_ENTER) gp.gameState = gp.PLAY;
-        if (gp.gameState == gp.LEADERBOARD_SCREEN && keyCode == KeyEvent.VK_ESCAPE) gp.gameState = gp.TITLE;
+        if (gp.gameState == gp.LEADERBOARD_SCREEN) {
+            if (keyCode == KeyEvent.VK_ESCAPE) {
+                gp.gameState = gp.TITLE;
+            }
+            if (keyCode == KeyEvent.VK_F1) {
+                gp.gameState = gp.PLAY;
+            }
+        }
 
         // Quiz keys
         if (gp.gameState == gp.QUIZ) {
@@ -66,11 +79,16 @@ public class KeyHandler implements KeyListener {
         }
 
         if (gp.gameState == gp.CUTSCENE) {
-            gp.ui.cutsceneCounter = 0;
-            gp.ui.cutsceneDuration = 0;
-            gp.ui.alpha = 0;
-            gp.ui.cutsceneSoundPlayed = false;
-            if (gp.ui.cutsceneIndex != 3 && gp.ui.cutsceneIndex != 6 && gp.ui.cutsceneIndex != 7 && gp.ui.cutsceneIndex != 9) {
+            if (gp.ui.cutsceneIndex != UI.Cutscenes.PROLOG_1_3.ordinal() &&
+                    gp.ui.cutsceneIndex != UI.Cutscenes.PROLOG_2_3.ordinal() &&
+                    gp.ui.cutsceneIndex != UI.Cutscenes.PROLOG_3_2.ordinal() &&
+                    gp.ui.cutsceneIndex != UI.Cutscenes.PROLOG_4_1.ordinal() &&
+                    gp.ui.cutsceneIndex != UI.Cutscenes.PROLOG_5_2.ordinal()
+            ) {
+                gp.ui.cutsceneCounter = 0;
+                gp.ui.cutsceneDuration = 0;
+                gp.ui.alpha = 0;
+                gp.ui.cutsceneSoundPlayed = false;
                 gp.ui.cutsceneIndex++;
             }
         }
@@ -83,10 +101,6 @@ public class KeyHandler implements KeyListener {
         if (gp.gameState == gp.RUNNING_TEXT) gp.gameState = gp.PLAY;
         if (gp.gameState == gp.OVERLAY_TEXT) {
             gp.gameState = gp.PLAY;
-        }
-        if (gp.sceneManager.currentScene == 8) {
-            gp.eHandler.teleport(7, 20, 43, 9);
-            gp.sceneManager.playScene(9);
         }
     }
 
@@ -129,10 +143,9 @@ public class KeyHandler implements KeyListener {
     private void handleProfileScreenKeys(int keyCode) {
         if (keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_UP) gp.ui.commandNum--;
         if (keyCode == KeyEvent.VK_S || keyCode == KeyEvent.VK_DOWN) gp.ui.commandNum++;
-        if (keyCode == KeyEvent.VK_SPACE) {
+        if (keyCode == KeyEvent.VK_X) {
             gp.config.loadConfigFromMongoDB(gp.ui.commandNum);
             gp.gameState = gp.PLAY;
-//            gp.startConfigThread();
         }
     }
 
