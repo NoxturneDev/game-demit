@@ -11,7 +11,7 @@ public class MON_tuyul extends Entity {
         direction = "down";
         speed = 2;
         damage = new Random().nextInt(20)+5;
-        HP = 20;
+        life = 20;
 
         solidArea = new Rectangle();
         solidArea.x = 8;
@@ -47,7 +47,7 @@ public class MON_tuyul extends Entity {
             searchPath(getGoalCol(gp.player), getGoalRow(gp.player));
 
             //Check if it shoots a projectile
-            //checkShootOrNot(200, 30); //Just added to red slimes
+//            checkShootOrNot(200, 30); //Just added to red slimes
         }
         else
         {

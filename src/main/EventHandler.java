@@ -8,13 +8,6 @@ public class EventHandler {
     EventRect eventRect[][][];
 
     int eventRectDefaultX, eventRectDefaultY;
-    public int MAP_FOREST_1 = 1;
-    public int MAP_HOUSE_1 = 2;
-    public int MAP_FOREST_2 = 3;
-    public int MAP_FOREST_3 = 4;
-    public int MAP_FOREST_4 = 5;
-    public int MAP_FOREST_5 = 6;
-    public int MAP_HOUSE_2 = 7;
 
     public EventHandler(GamePanel gp) {
         this.gp = gp;
@@ -49,15 +42,49 @@ public class EventHandler {
     }
 
     public void checkEvent() {
-//        if (hit(0, 2, 4, "left") == true) {
-//            System.out.println("Hit some event");
+//  PROLOG 1 - CUTSCENE 1
+        if ((hit(gp.tm.MAP_FOREST_PROLOG_1, 38, 29, "any") == true) || (hit(gp.tm.MAP_FOREST_PROLOG_1, 38, 28, "any") == true)) {
+            teleport(gp.tm.MAP_FOREST_PROLOG_2, 38, 29, SceneManager.SceneIndex.PROLOG_CUTSCENE_1.ordinal());
+        }
+//        PROLOG 1.1 - RUNNING TEXT AFTER CUTSCENE
+        if ((hit(gp.tm.MAP_FOREST_PROLOG_2, 13, 28, "any") == true) || (hit(gp.tm.MAP_FOREST_PROLOG_2, 13, 29, "any") == true)) {
+            teleport(gp.tm.MAP_FOREST_PROLOG_3, 47, 11, -1);
+        }
+//        PROLOG 2 - CUTSCENE 2 (Jumpscare pocong)
+        if ((hit(gp.tm.MAP_FOREST_PROLOG_3, 16, 30, "any") == true) || (hit(gp.tm.MAP_FOREST_PROLOG_2, 16, 31, "any") == true)) {
+            teleport(gp.tm.MAP_FOREST_PROLOG_4, 16, 30, SceneManager.SceneIndex.PROLOG_CUTSCENE_2.ordinal());
+        }
+
+//        PROLOG  - Chased by pocong and cutscene 3
+        if ((hit(gp.tm.MAP_FOREST_PROLOG_4, 28, 13, "any") == true) || (hit(gp.tm.MAP_FOREST_PROLOG_4, 29, 12, "any") == true)) {
+            teleport(gp.tm.MAP_FOREST_PROLOG_5, 28, 13, SceneManager.SceneIndex.PROLOG_CUTSCENE_3.ordinal());
+        }
+
+        if (hit(gp.tm.MAP_FOREST_PROLOG_5, 47, 11, "any") == true) {
+            teleport(gp.tm.MAP_HOUSE_PROLOG_1, 19, 17, -1);
+        }
+
+//        GET KERIS EVENT & TUYUL APPEARS
+        if ((hit(gp.tm.MAP_HOUSE_PROLOG_1, 21, 9, "any") == true) || (hit(gp.tm.MAP_HOUSE_PROLOG_1, 20, 9, "any") == true)) {
+            teleport(gp.tm.MAP_HOUSE_PROLOG_2, 21, 9, SceneManager.SceneIndex.PROLOG_CUTSCENE_4.ordinal());
+        }
+//        FINISHED ALL TUYUL
+        if ((hit(gp.tm.MAP_HOUSE_PROLOG_2, 19, 17, "any") == true) || (hit(gp.tm.MAP_FOREST_PROLOG_2, 38, 28, "any") == true)) {
+            teleport(gp.tm.MAP_FOREST_LEVEL_1, 4, 21, -1);
+        }
+
+//        LEVEL 1
+        if (hit(gp.tm.MAP_FOREST_LEVEL_1, 42, 5, "any") == true) {
+            teleport(gp.tm.MAP_DUNGEON_LEVEL_1, 10, 36, -1);
+        }
+
+
+//        if (hit(93, 30, 24, "any") == true) {
+////            gp.sceneManager.playScene(gp.sceneManager.BOSS_BATTLE_BUTOIJO);
+//            teleport(2, 40, 30, gp.sceneManager.BOSS_BATTLE_BUTOIJO_EPILOGUE);
 //        }
 
-//        forest 1
-        if (hit(0, 41, 30, "any") == true) {
-            gp.sceneManager.playScene(gp.sceneManager.BOSS_BATTLE_NYIBLORONG);
-            teleport(95, 18, 24, -1);
-        }
+
 ////      house 1
 //        if (hit(1, 21, 11, "any") == true) {
 //            teleport(2, 40, 30, -1);

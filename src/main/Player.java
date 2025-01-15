@@ -1,6 +1,7 @@
 package main;
 
 import entities.Entity;
+import entities.OBJ_Fireball;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -14,6 +15,7 @@ public class Player extends Entity {
     public final int screenX;
     public final int screenY;
     public boolean invincible = false;
+    public boolean transparent = false;
     public int invincibleCounter;
     public boolean dashing = false; // Is the player currently dashing
     public int dashCounter = 0; // Counter for dash duration
@@ -22,6 +24,7 @@ public class Player extends Entity {
     public final int dashDuration = 5; // Number of frames the dash lasts
     public final int dashCooldownMax = 30; // Frames required before next dash
     public String username;
+
     public boolean LEVEL_1_LOCKED = true;
     public boolean LEVEL_2_LOCKED = true;
     public boolean LEVEL_3_LOCKED = true;
@@ -31,14 +34,14 @@ public class Player extends Entity {
     public boolean LEVEL_7_LOCKED = true;
 
 
-//    in game progess
+    //    in game progess
     public int totalScore;
     public int level;
 
     public Player(GamePanel gp, KeyHandler keyH) {
         super(gp);
         this.keyH = keyH;
-        HP = 100;
+        life = 100;
 
 //        render character in the middle of the screen view
         screenX = gp.screenWidth / 2 - gp.tileSize / 2;
@@ -54,6 +57,8 @@ public class Player extends Entity {
 
         attackArea.width = 64;
         attackArea.height = 64;
+
+        projectile = new OBJ_Fireball(gp);
 
         setDefaultValues();
         loadPlayerImage();
@@ -76,7 +81,7 @@ public class Player extends Entity {
     }
 
     public void loadPlayerAttackImage() {
-        attackUp1 = loadImage("/player/mc_attack_left_1.png", gp.tileSize * 2, gp.tileSize );
+        attackUp1 = loadImage("/player/mc_attack_left_1.png", gp.tileSize * 2, gp.tileSize);
         attackUp2 = loadImage("/player/mc_attack_left_2.png", gp.tileSize * 2, gp.tileSize);
         attackUp3 = loadImage("/player/mc_attack_left_3.png", gp.tileSize * 2, gp.tileSize);
         attackDown1 = loadImage("/player/mc_attack_right_1.png", gp.tileSize * 2, gp.tileSize);
@@ -91,18 +96,21 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues() {
-        worldX = gp.tileSize * 17;
-        worldY = gp.tileSize * 23;
+        worldX = gp.tileSize * 11;
+        worldY = gp.tileSize * 29;
         speed = 5;
         direction = "down";
     }
 
     public void interactNPC(int i) {
         if (i != 999) {
+            gp.currentActiveNPC = gp.npc[gp.currentMap][i];
             if (gp.npc[gp.currentMap][i].hasQuiz) {
-                gp.gameState = gp.QUIZ;
-                gp.ui.currentQuiz = gp.npc[gp.currentMap][i].quizQuestion;
-                gp.ui.currentQuizCorrectAnswer = gp.npc[gp.currentMap][i].quizCorrectAnswer;
+                if (!gp.npc[gp.currentMap][i].quizHasDone) {
+                    gp.gameState = gp.QUIZ;
+                    gp.ui.currentQuiz = gp.npc[gp.currentMap][i].quizQuestion;
+                    gp.ui.currentQuizCorrectAnswer = gp.npc[gp.currentMap][i].quizCorrectAnswer;
+                }
             } else {
                 gp.gameState = gp.DIALOGUE;
                 gp.npc[gp.currentMap][i].speak();
@@ -113,8 +121,7 @@ public class Player extends Entity {
     public void contactMonster(int i) {
         if (i != 999) {
             if (!invincible) {
-                gp.playSE(1);
-                HP -= gp.monsters[gp.currentMap][i].damage;
+                life -= gp.monsters[gp.currentMap][i].damage;
                 invincible = true;
             }
         }
@@ -148,16 +155,24 @@ public class Player extends Entity {
             int solidAreaHeight = solidArea.height;
 
             switch (direction) {
-                case"up": worldY -= attackArea.height; break;
-                case"down": worldY += attackArea.height; break;
-                case"right": worldX += attackArea.width; break;
-                case"left": worldX -= attackArea.width; break;
+                case "up":
+                    worldY -= attackArea.height;
+                    break;
+                case "down":
+                    worldY += attackArea.height;
+                    break;
+                case "right":
+                    worldX += attackArea.width;
+                    break;
+                case "left":
+                    worldX -= attackArea.width;
+                    break;
             }
 
             solidArea.width = attackArea.width;
             solidArea.height = attackArea.height;
 
-            int monsterIndex = gp.collisionChecker.checkEntity(this, gp.monsters[gp.currentMap]);
+            int monsterIndex = gp.collisionChecker.checkEntity(this, gp.monsters);
             attackMonster(monsterIndex);
 
             worldX = currWorldX;
@@ -174,28 +189,96 @@ public class Player extends Entity {
 
     public void attackMonster(int i) {
         if (i != 999) {
-            gp.monsters[gp.currentMap][i].HP -= 5;
+            gp.monsters[gp.currentMap][i].life -= 5;
 
-            if (gp.monsters[gp.currentMap][i].HP <= 0) {
+            if (gp.monsters[gp.currentMap][i].life <= 0) {
+                if (gp.currentMap == 93 && gp.monsters[gp.currentMap][i].name == "Butoijo") {
+                    gp.sceneManager.playScene(gp.sceneManager.BOSS_BATTLE_BUTOIJO_FINISHED);
+                }
                 gp.monsters[gp.currentMap][i] = null;
-                gp.aSetter.totalMonsterMap7--;
                 totalScore += 10;
 
-                if (gp.aSetter.totalMonsterMap7 < 0) {
-                    gp.sceneManager.playScene(10);
-                }
+//                if (gp.aSetter.totalMonsterMap7 < 0) {
+//                    gp.sceneManager.playScene(10);
+//                    gp.eHandler.teleport(gp.tm.MAP_HOUSE_PROLOG_3, gp.player.worldX / gp.tileSize, gp.player.worldY / gp.tileSize, -1);
+//                }
 //                if (gp.aSetter.totalMonsterMap7 < 0) {
 //                    gp.sceneManager.playScene(10);
 //                }
 //                gp.sceneManager.playScene(11);
             }
+
         }
     }
 
+    public void levelUp() {
+        level++;
+//        gp.config.saveConfigToMongoDB();
+    }
+
+//    public void shootProjectile() {
+//        if (gp.keyH.shotPressed == true && projectile.alive == false && shotAvailableCounter == 30 && projectile.haveResource(this) == true)   //2nd Condition : You can shoot it only one at a time
+//        {                                                                                               //3rd Condition : If you close shot monster, projectile.alive will be false. So if you still pressing F key, immediately shoot another fireball.
+//            // SET DEFAULT COORDINATES, DIRECTION AND USER
+//            projectile.set(worldX, worldY, direction, true, this);
+//
+//            // SUBTRACT THE COST(MANA,AMMO ETC.)
+//            projectile.subtractResource(this);
+//
+//            // ADD IT TO THE LIST
+//            //gp.projectileList.add(projectile);
+//
+//            //CHECK VACANCY
+//            for (int i = 0; i < gp.projectile[1].length; i++) {
+//                if (gp.projectile[gp.currentMap][i] == null) {
+//                    gp.projectile[gp.currentMap][i] = projectile;
+//                    break;
+//                }
+//            }
+//
+//            shotAvailableCounter = 0; //reset
+//
+//            gp.playSE(10);
+//        }
+//
+//        //This needs to be outside of key if statement! // If player receive damage from monster, player's gonna be invincible for a second
+//        if (invincible == true) {
+//            invincibleCounter++;
+//            if (invincibleCounter > 60) {
+//                invincible = false;
+//                transparent = false;
+//                invincibleCounter = 0;
+//            }
+//        }
+//
+//        if (shotAvailableCounter < 30) {
+//            shotAvailableCounter++;
+//        }
+//        if (life > maxLife) //for using potion, heal etc.
+//        {
+//            life = maxLife;
+//        }
+////        if(mana > maxMana) //for using potion, heal etc.
+////        {
+////            mana = maxMana;
+////        }
+////        if(keyH.godModeOn == false)
+////        {
+////            if(life <= 0)
+////            {
+////                gp.gameState = gp.gameOverState;
+////                gp.ui.commandNum =- 1; //for if you die while pressing enter
+////                gp.stopMusic();
+////                gp.playSE(12);
+////            }
+////        }
+//    }
+
     public void update() {
         if (gp.gameState == gp.PLAY) {
-            if (HP <= 0) {
+            if (life <= 0) {
                 gp.gameState = gp.DIED;
+                System.out.println("You died");
             }
 
             if (dashing) {
@@ -248,10 +331,10 @@ public class Player extends Entity {
                 gp.collisionChecker.checkTileCollision(this);
 
 //                player to npc collission
-                int npxIndex = gp.collisionChecker.checkEntity(this, gp.npc[gp.currentMap]);
+                int npxIndex = gp.collisionChecker.checkEntity(this, gp.npc);
                 interactNPC(npxIndex);
 
-                int monsterIndex = gp.collisionChecker.checkEntity(this, gp.monsters[gp.currentMap]);
+                int monsterIndex = gp.collisionChecker.checkEntity(this, gp.monsters);
                 contactMonster(monsterIndex);
 
 //                player to items collision
@@ -300,6 +383,49 @@ public class Player extends Entity {
                 }
             }
         }
+
+        if (gp.keyH.shotPressed == true && projectile.alive == false && shotAvailableCounter == 30)   //2nd Condition : You can shoot it only one at a time
+        {                                                                                               //3rd Condition : If you close shot monster, projectile.alive will be false. So if you still pressing F key, immediately shoot another fireball.
+            // SET DEFAULT COORDINATES, DIRECTION AND USER
+            projectile.set(worldX, worldY, direction, true, this);
+
+//
+            // ADD IT TO THE LIST
+            gp.projectileList.add(projectile);
+
+            //CHECK VACANCY
+            for (int i = 0; i < gp.projectile[1].length; i++) {
+                if (gp.projectile[gp.currentMap][i] == null) {
+                    gp.projectile[gp.currentMap][i] = projectile;
+                    break;
+                }
+            }
+
+            shotAvailableCounter = 0; //reset
+
+            gp.playSE(10);
+        }
+
+        //This needs to be outside of key if statement! // If player receive damage from monster, player's gonna be invincible for a second
+        if (invincible == true) {
+            invincibleCounter++;
+            if (invincibleCounter > 60) {
+                invincible = false;
+                transparent = false;
+                invincibleCounter = 0;
+            }
+        }
+
+        if (shotAvailableCounter < 30) {
+            shotAvailableCounter++;
+        }
+//        if(mana > maxMana) //for using potion, heal etc.
+//        {
+//            mana = maxMana;
+//        }
+//        if(keyH.godModeOn == false)
+//        {
+//        }
     }
 
     public void draw(Graphics2D g2) {

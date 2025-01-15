@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UI {
     GamePanel gp;
@@ -29,7 +31,8 @@ public class UI {
     public String itemDescription;
     public String currentJumpscarePath;
     public BufferedImage[] cutscenes = new BufferedImage[100];
-    public String currentBossName = "Kuntilanak";
+    public String textOverlay;
+    public String[] textOverlayList = new String[100];
 
 
     public int animationCutsceneType;
@@ -42,6 +45,53 @@ public class UI {
     public int FADE_OUT = 1;
     public int SLIDE_LEFT = 2;
     public int SLIDE_RIGHT = 3;
+
+    //    CUTSCENE DICTIONARY
+    public enum Cutscenes {
+        PROLOG_1_1,
+        PROLOG_1_2,
+        PROLOG_1_3,
+        //        POCONG
+        PROLOG_2_1,
+        PROLOG_2_2,
+        PROLOG_2_3,
+        //        FLASHBACK
+        PROLOG_3_1,
+        PROLOG_3_2,
+        //        KERIS
+        PROLOG_4_1,
+        //        RADEN WIJAYA
+        PROLOG_5_1,
+        PROLOG_5_2,
+        //        LEVEL 1 (Kunti)
+        LEVEL_1_1,
+        LEVEL_1_2,
+        //        LEVEL 2 (KUYANG)
+        LEVEL_2_1,
+        LEVEL_2_2,
+        //        LEVEL 3 (BUTO IJO)
+        LEVEL_3_1,
+        LEVEL_3_2,
+        //        LEVEL 4 (NYI BLORONG)
+        LEVEL_4_1,
+        LEVEL_4_2,
+        //        BEFORE LAST BOSS
+        EPILOG_0_1,
+        EPILOG_0_2,
+        //        LAST BOSS
+        LAST_BOSS_1_1,
+        LAST_BOSS_1_2,
+        LAST_BOSS_2_1,
+        LAST_BOSS_2_2,
+        //        reveal nyi roro kidul
+        LAST_BOSS_3_1,
+        //        ENDING
+        ENDING_1_1,
+        ENDING_1_2,
+        ENDING_1_3,
+        ENDING_2_1,
+        ENDING_2_2,
+    }
 
     public UI(GamePanel gp) {
         this.gp = gp;
@@ -67,19 +117,19 @@ public class UI {
 
     public void getCutScenesImage() {
         try {
-//            PROLOG 1 - Lanang
-            cutscenes[1] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/1_1.png"));
-            cutscenes[2] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/1_2.png"));
-            cutscenes[3] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/1_3.png"));
-//            PROLOG 2 - Pocong
-            cutscenes[4] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/2_1.png"));
-            cutscenes[5] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/2_2.png"));
-            cutscenes[6] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/2_3.png"));
-//            PROLOG 3 - Keris TEMPORARY
-            cutscenes[7] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/3_1.png"));
-//            PROLOG 4 - Raden
-            cutscenes[8] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/5_1.png"));
-            cutscenes[9] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/5_2.png"));
+//            PROLOG
+            cutscenes[Cutscenes.PROLOG_1_1.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_1_1.png"));
+            cutscenes[Cutscenes.PROLOG_1_2.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_1_2.png"));
+            cutscenes[Cutscenes.PROLOG_1_3.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_1_3.png"));
+            cutscenes[Cutscenes.PROLOG_2_1.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_2_1.png"));
+            cutscenes[Cutscenes.PROLOG_2_2.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_2_2.png"));
+            cutscenes[Cutscenes.PROLOG_2_3.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_2_3.png"));
+            cutscenes[Cutscenes.PROLOG_3_1.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_3_1.png"));
+            cutscenes[Cutscenes.PROLOG_3_2.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_3_2.png"));
+            cutscenes[Cutscenes.PROLOG_4_1.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_4_1.png"));
+            cutscenes[Cutscenes.PROLOG_5_1.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_5_1.png"));
+            cutscenes[Cutscenes.PROLOG_5_2.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_5_2.png"));
+//            LEVEL 1
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -123,7 +173,8 @@ public class UI {
     public boolean cutsceneSoundPlayed = false;
 
     public void animateCutscene() {
-        if (cutsceneIndex == 1) {
+//        PROLOG 1
+        if (cutsceneIndex == Cutscenes.PROLOG_1_1.ordinal()) {
             cutsceneDuration++;
             cutsceneCounter++;
 
@@ -139,7 +190,7 @@ public class UI {
             fadeIn(100);
         }
 
-        if (cutsceneIndex == 2) {
+        if (cutsceneIndex == Cutscenes.PROLOG_1_2.ordinal()) {
             cutsceneDuration++;
             cutsceneCounter++;
 
@@ -155,7 +206,7 @@ public class UI {
             fadeIn(100);
         }
 
-        if (cutsceneIndex == 3) {
+        if (cutsceneIndex == Cutscenes.PROLOG_1_3.ordinal()) {
             cutsceneDuration++;
             cutsceneCounter++;
 
@@ -171,14 +222,12 @@ public class UI {
             fadeIn(80);
         }
 
-// end animation on 3 seconds as default animation
-        if (cutsceneIndex == 3 && cutsceneDuration > 200) {
-            gp.gameState = gp.RUNNING_TEXT;
-            currentRunningText = "TIDAAKKKKKKKK!";
-            cutsceneDuration = 0;
+        if (cutsceneIndex == Cutscenes.PROLOG_1_3.ordinal() && cutsceneDuration > 200) {
+            gp.sceneManager.playScene(SceneManager.SceneIndex.PROLOG_RUNNING_TEXT_AFTER_CUTSCENE_1.ordinal());
         }
 
-        if (cutsceneIndex == 4) {
+//        PROLOG 2 - Pocong
+        if (cutsceneIndex == Cutscenes.PROLOG_2_1.ordinal()) {
             cutsceneDuration++;
             cutsceneCounter++;
 
@@ -193,7 +242,7 @@ public class UI {
             slideRight(100);
             fadeIn(100);
         }
-        if (cutsceneIndex == 5) {
+        if (cutsceneIndex == Cutscenes.PROLOG_2_2.ordinal()) {
             cutsceneDuration++;
             cutsceneCounter++;
 
@@ -208,7 +257,7 @@ public class UI {
             slideRight(100);
             fadeIn(100);
         }
-        if (cutsceneIndex == 6) {
+        if (cutsceneIndex == Cutscenes.PROLOG_2_3.ordinal()) {
             cutsceneDuration++;
             cutsceneCounter++;
 
@@ -222,13 +271,48 @@ public class UI {
             }
             zoomIn(100);
         }
-// end animation on 3 seconds as default animation
-        if (cutsceneIndex == 6 && cutsceneDuration > 200) {
-            gp.sceneManager.playScene(5);
+        if (cutsceneIndex == Cutscenes.PROLOG_2_3.ordinal() && cutsceneDuration > 200) {
+            gp.sceneManager.playScene(SceneManager.SceneIndex.PROLOG_RUNNING_TEXT_AFTER_CUTSCENE_2.ordinal());
         }
 
-//        KERIS CUTSCENE (PROLOG 4)
-        if (cutsceneIndex == 7) {
+//        PROLOG 3 - Flashback
+        if (cutsceneIndex == Cutscenes.PROLOG_3_1.ordinal()) {
+            cutsceneDuration++;
+            cutsceneCounter++;
+
+            cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
+            cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
+
+            if (!cutsceneSoundPlayed) {
+                gp.playSE(24);
+                cutsceneSoundPlayed = true;
+            }
+            animationCutsceneType = FADE_IN;
+            slideRight(100);
+            fadeIn(100);
+        }
+
+        if (cutsceneIndex == Cutscenes.PROLOG_3_2.ordinal()) {
+            cutsceneDuration++;
+            cutsceneCounter++;
+
+            cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
+            cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
+
+            if (!cutsceneSoundPlayed) {
+                gp.playSE(24);
+                cutsceneSoundPlayed = true;
+            }
+            animationCutsceneType = FADE_IN;
+            slideRight(100);
+            fadeIn(100);
+        }
+        if (cutsceneIndex == Cutscenes.PROLOG_3_2.ordinal() && cutsceneDuration > 200) {
+            gp.sceneManager.playScene(SceneManager.SceneIndex.PROLOG_RUNNING_TEXT_AFTER_CUTSCENE_3.ordinal());
+        }
+
+//        PROLOG 4 - Keris
+        if (cutsceneIndex == Cutscenes.PROLOG_4_1.ordinal()) {
             cutsceneDuration++;
             cutsceneCounter++;
 
@@ -243,13 +327,12 @@ public class UI {
             zoomIn(100);
             fadeIn(100);
         }
-
-        if (cutsceneIndex == 7 && cutsceneDuration > 200) {
-            gp.sceneManager.playScene(8);
+        if (cutsceneIndex == Cutscenes.PROLOG_4_1.ordinal() && cutsceneDuration > 200) {
+            gp.sceneManager.playScene(SceneManager.SceneIndex.PROLOG_ITEM_DROP_KERIS.ordinal());
         }
 
-//        RADEN WIJAYA CUTSCENE
-        if (cutsceneIndex == 8) {
+//          PROLOG 5 - Raden Wijaya
+        if (cutsceneIndex == Cutscenes.PROLOG_5_1.ordinal()) {
             cutsceneDuration++;
             cutsceneCounter++;
 
@@ -265,7 +348,7 @@ public class UI {
             fadeIn(100);
         }
 
-        if (cutsceneIndex == 9) {
+        if (cutsceneIndex == Cutscenes.PROLOG_5_2.ordinal()) {
             cutsceneDuration++;
             cutsceneCounter++;
 
@@ -281,7 +364,7 @@ public class UI {
             fadeIn(200);
         }
 
-        if (cutsceneIndex == 9 && cutsceneDuration > 200) {
+        if (cutsceneIndex == Cutscenes.PROLOG_5_2.ordinal() && cutsceneDuration > 200) {
             gp.sceneManager.playScene(12);
         }
     }
@@ -371,7 +454,7 @@ public class UI {
         //MENU
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
 
-        text = "NEW ADVENTURE";
+        text = "NEW ADVENTURE PROFILE";
         x = getXforCenteredText(text);
         y += gp.tileSize * 3.5;
         g2.drawString(text, x, y);
@@ -440,35 +523,15 @@ public class UI {
         g2.drawString(headerLevel, column2X, y);
         g2.drawString(headerScore, column3X, y);
 
-        // DRAW LEADERBOARD LIST
-        Player firstPlace = gp.leaderboardHandler.FIRST_PLACE;
-        Player secondPlace = gp.leaderboardHandler.SECOND_PLACE;
-        Player thirdPlace = gp.leaderboardHandler.THIRD_PLACE;
-        Player fourthPlace = gp.leaderboardHandler.FOURTH_PLACE;
-        Player fifthPlace = gp.leaderboardHandler.FIFTH_PLACE;
-        String[][] leaderboard = {
-                {"Dila", "6", "1530"},
-                {"Firschanya", "6", "1410"},
-                {"Galih", "5", "1300"},
-                {"Rehan", "4", "1150"},
-                {"Fahmi", "2", "400"},
-        };
-//        String[][] leaderboard = {
-//                {firstPlace.name, String.valueOf(firstPlace.level), String.valueOf(firstPlace.totalScore)},
-//                {secondPlace.name, String.valueOf(secondPlace.level), String.valueOf(secondPlace.totalScore)},
-//                {thirdPlace.name, String.valueOf(thirdPlace.level), String.valueOf(thirdPlace.totalScore)},
-//                {fourthPlace.name, String.valueOf(fourthPlace.level), String.valueOf(fourthPlace.totalScore)},
-//                {fifthPlace.name, String.valueOf(fifthPlace.level), String.valueOf(fifthPlace.totalScore)},
-//        };
-//
+        // FETCH LEADERBOARD DATA
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 36F)); // Smaller font for list
-        for (int i = 0; i < leaderboard.length; i++) {
+        for (int i = 0; i < gp.config.leaderboard.size(); i++) {
             y += gp.tileSize; // Space between rows
 
             // Draw each column
-            g2.drawString(leaderboard[i][0], column1X, y); // Player Name
-            g2.drawString(leaderboard[i][1], column2X, y); // Level
-            g2.drawString(leaderboard[i][2], column3X, y); // Total Score
+            g2.drawString(gp.config.leaderboard.get(i)[0], column1X, y); // Player Name
+            g2.drawString(gp.config.leaderboard.get(i)[1], column2X, y); // Level
+            g2.drawString(gp.config.leaderboard.get(i)[2], column3X, y); // Total Score
         }
     }
 
@@ -532,6 +595,64 @@ public class UI {
         g2.drawString(instructions, instructionsX, instructionsY);
     }
 
+    private void drawProfileScreen() {
+        // Background overlay
+        Color background = new Color(0, 0, 0, 200); // Semi-transparent black
+        g2.setColor(background);
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+        // Title text
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 48F));
+        g2.setColor(Color.WHITE);
+        String title = "Profiles";
+        int titleX = getXforCenteredText(title);
+        int titleY = gp.tileSize * 2;
+        g2.drawString(title, titleX, titleY);
+
+        // Profile list
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 36F));
+        int startX = gp.tileSize * 4;
+        int startY = gp.tileSize * 3;
+        int lineHeight = gp.tileSize * 1;
+
+        // Mocked profiles for illustration (Replace with dynamic data from MongoDB)
+        // Render each profile
+        for (int i = 0; i < gp.config.profiles.size(); i++) {
+            ProfileData profile = gp.config.profiles.get(i);
+
+            // Display profile and status
+            String username = profile.username;
+            String details = "Score: " + profile.totalScore + " | Level: " + profile.level;
+            int profileX = startX;
+            int detailsX = gp.screenWidth - gp.tileSize * 8; // Adjust alignment to the right
+            int y = startY + (lineHeight * i);
+
+
+            // Draw profile name
+            g2.setColor(Color.WHITE);
+            g2.drawString(username, profileX, y);
+
+            // Draw details
+            g2.setColor(Color.YELLOW);
+            g2.drawString(details, detailsX, y);
+
+            if (commandNum == i) {
+                g2.drawString(">", profileX - gp.tileSize, y);
+            }
+            // Draw status with appropriate color
+//            g2.setColor(isCurrent ? Color.BLUE : Color.GREEN);
+        }
+
+        // Instructions
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 24F));
+        g2.setColor(Color.WHITE);
+        String instructions = "Use UP/DOWN to navigate, TAB to select, ESC to return";
+        int instructionsX = getXforCenteredText(instructions);
+        int instructionsY = gp.screenHeight - gp.tileSize;
+        g2.drawString(instructions, instructionsX, instructionsY);
+    }
+
+
     public void drawSplahScreen() {
 //        draw big title in the middle
         g2.setColor(new Color(0, 0, 0));
@@ -547,7 +668,7 @@ public class UI {
         // Instructions
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 24F));
         g2.setColor(Color.WHITE);
-        String instructions = "Press Enter to return";
+        String instructions = "Press Space to return";
         int instructionsX = getXforCenteredText(instructions);
         int instructionsY = gp.screenHeight - gp.tileSize;
         g2.drawString(instructions, instructionsX, instructionsY);
@@ -559,12 +680,35 @@ public class UI {
     }
 
     public void drawPauseScreen() {
+        // Set font for the title
         g2.setFont(g2.getFont().deriveFont(Font.BOLD, 80F));
         String text = "GAME PAUSED";
         int x = getXforCenteredText(text);
-        int y = gp.screenHeight / 2;
+        int y = gp.screenHeight / 3; // Position it closer to the top
         g2.drawString(text, x, y);
+
+        // Set font for the command list
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 40F));
+        y += gp.tileSize * 2; // Add some space below the title
+
+        String[] commands = {
+                "F1  - Show Leaderboard",
+                "F2  - Show Levels Unlocked",
+                "F5  - Save Game",
+                "W/A/S/D - Move",
+                "SPACE - Attack",
+                "F   - Fireball",
+                "CTRL - Dodge"
+        };
+
+        // Display the commands line by line
+        for (String command : commands) {
+            x = getXforCenteredText(command); // Center each line of text
+            g2.drawString(command, x, y);
+            y += gp.tileSize; // Space between each line
+        }
     }
+
 
     public void drawInGameTextScreen() {
         int x = 0;
@@ -584,6 +728,60 @@ public class UI {
             y += 40;
         }
     }
+
+//    public void drawOverlayText() {
+////        black background
+//        g2.setColor(new Color(0, 0, 0, 200));
+//        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+//
+//        int x = 0;
+//        int y = 0;
+//
+//        g2.setColor(Color.WHITE);
+//        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
+//        x += gp.tileSize;
+//        y += gp.tileSize;
+//        for (String line : textOverlay.split("\n"))   // splits dialogue until "\n" as a line
+//        {
+//            g2.drawString(line, x, y);
+//            y += gp.tileSize;
+//        }
+//    }
+
+    // Add this variable to track the scrolling offset
+    private int scrollOffset = 0;
+
+    public void drawOverlayText() {
+        // Semi-transparent black background
+        if (scrollOffset == 0 && gp != null) { // Initialize only if gp is available
+            scrollOffset = -gp.screenHeight / 2;
+        }
+
+        g2.setColor(new Color(0, 0, 0, 150)); // 150 is the alpha value for transparency
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+        int x = gp.tileSize;
+        int y = gp.tileSize - scrollOffset; // Start position adjusted by scroll offset
+
+        // White text
+        g2.setColor(Color.WHITE);
+        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
+
+        // Draw each line of text
+        for (String line : textOverlay.split("\n")) { // Splits dialogue until "\n" as a line
+            g2.drawString(line, x, y);
+            y += gp.tileSize;
+        }
+
+        // Update the scrolling offset
+        scrollOffset += 1; // Adjust this value to control the scrolling speed
+
+        // Reset the scrolling when all text is off-screen
+        if (y - gp.tileSize >= gp.screenHeight) {
+            scrollOffset = -gp.screenHeight / 2; // Start halfway down the screen
+        }
+    }
+
 
     public void drawQuiz() {
         int x = 0;
@@ -615,6 +813,7 @@ public class UI {
             if (currentQuizCorrectAnswer == 1) {
                 currentRunningText = "Benar sekali anak muda!";
                 gp.player.totalScore += 100;
+                gp.currentActiveNPC.quizHasDone = true;
             } else {
                 currentRunningText = "Kamu salah! Perbaiki lagi";
             }
@@ -740,12 +939,81 @@ public class UI {
     }
 
     public void drawHP() {
-        int x = gp.tileSize / 2;
-        int y = gp.tileSize / 2;
-        x += gp.tileSize / 4;
-        y += gp.tileSize / 4;
-        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
-        g2.drawString("HP: " + gp.player.HP, x, y);
+        double oneScale = (double) gp.tileSize * 4 / 100; // Calculate HP unit length
+        double hpBarValue = oneScale * gp.player.life;
+
+        // Set new position for the HP bar (small gap from the top-left corner)
+        int x = 10; // Small gap from the left
+        int y = 30; // Small gap from the top
+
+        if (hpBarValue < 0) {
+            hpBarValue = 0; // Ensure HP value doesn't go below 0
+        }
+
+        // Draw the HP bar background
+        g2.setColor(new Color(35, 35, 35));
+        g2.fillRect(x - 1, y - 1, gp.tileSize * 2 + 2, 22);
+
+        // Draw the HP bar
+        g2.setColor(new Color(255, 0, 30));
+        g2.fillRect(x, y, (int) hpBarValue, 20);
+
+        // Draw the username above the HP bar
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
+        g2.setColor(Color.white);
+        g2.drawString(gp.player.username, x + 4, y - 5);
+    }
+
+    public void drawMonsterLife() {
+        //Monster HP Bar
+        for (int i = 0; i < gp.monsters[1].length; i++) {
+            Entity monster = gp.monsters[gp.currentMap][i];
+
+            if (monster != null && monster.inCamera() == true) {
+                if (monster.hpBarOn == true && monster.boss == false) {
+                    double oneScale = (double) gp.tileSize / monster.maxLife; // (bar lenght / maxlife) Ex: if monster hp = 2, tilesize = 48px. So, 1 hp = 24px
+                    double hpBarValue = oneScale * monster.life;
+
+                    if (hpBarValue < 0) //Ex: You attack 5 hp to monster which has 3 hp. Monster's hp will be -2 and bar will ofset to left. To avoid that check if hpBarValue less than 0.
+                    {
+                        hpBarValue = 0;
+                    }
+
+                    g2.setColor(new Color(35, 35, 35));
+                    g2.fillRect(monster.getScreenX() - 1, monster.getScreenY() - 16, gp.tileSize + 2, 12);
+
+                    g2.setColor(new Color(255, 0, 30));
+                    g2.fillRect(monster.getScreenX(), monster.getScreenY() - 15, (int) hpBarValue, 10);
+
+                    monster.hpBarCounter++;
+                    if (monster.hpBarCounter > 600)  // 10
+                    {
+                        monster.hpBarCounter = 0;
+                        monster.hpBarOn = false;
+                    }
+                } else if (monster.boss == true) {
+                    double oneScale = (double) gp.tileSize * 8 / monster.maxLife; // (bar lenght / maxlife) Ex: if monster hp = 2, tilesize = 48px. So, 1 hp = 24px
+                    double hpBarValue = oneScale * monster.life;
+                    int x = gp.screenWidth / 2 - gp.tileSize * 4;
+                    int y = gp.tileSize * 10;
+
+                    if (hpBarValue < 0)  //Ex: You attack 5 hp to monster which has 3 hp. Monster's hp will be -2 and bar will ofset to left. To avoid that check if hpBarValue less than 0.
+                    {
+                        hpBarValue = 0;
+                    }
+
+                    g2.setColor(new Color(35, 35, 35));
+                    g2.fillRect(x - 1, y - 1, gp.tileSize * 8 + 2, 22);
+
+                    g2.setColor(new Color(255, 0, 30));
+                    g2.fillRect(x, y, (int) hpBarValue, 20);
+
+                    g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
+                    g2.setColor(Color.white);
+                    g2.drawString(monster.name, x + 4, y - 10);
+                }
+            }
+        }
     }
 
     public void drawGameOverScreen() {
@@ -824,18 +1092,19 @@ public class UI {
         g2.setColor(Color.RED);
 
         g2.setFont(pixeloid);
-//        drawDebug(g2);
-        if (gp.bossBattle) {
-            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
-            String text = currentBossName;
-            int x = getXforCenteredText(text);
-            int y = gp.tileSize * 2;
-            g2.setColor(red);
-            g2.drawString(text, x, y);
-        }
+        drawDebug(g2);
+//        if (gp.bossBattle) {
+//            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
+//            String text = ;
+//            int x = getXforCenteredText(text);
+//            int y = gp.tileSize * 2;
+//            g2.setColor(red);
+//            g2.drawString(text, x, y);
+//        }
 
-        drawStatus(g2);
-        g2.setFont(castlefavor);
+        if (gp.gameState == gp.ENTER_USERNAME) {
+            return;
+        }
         if (gp.gameState == gp.TITLE) {
             drawTitleScreen();
         }
@@ -848,11 +1117,15 @@ public class UI {
         if (gp.gameState == gp.LEVEL_SCREEN) {
             drawLevelScreen();
         }
+        if (gp.gameState == gp.PROFILE_SCREEN) {
+            drawProfileScreen();
+        }
         if (gp.gameState == gp.PLAY) {
             Color c = new Color(0, 0, 0, 90);  // R,G,B, alfa(opacity)
             g2.setColor(c);
             g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
-            drawHP();
+            drawMonsterLife();
+            drawStatus(g2);
         }
         if (gp.gameState == gp.DIALOGUE) {
             g2.setFont(pixeloid);
@@ -878,6 +1151,10 @@ public class UI {
             g2.setFont(pixeloid);
             drawInGameTextScreen();
         }
+        if (gp.gameState == gp.OVERLAY_TEXT) {
+            g2.setFont(pixeloid);
+            drawOverlayText();
+        }
         if (gp.gameState == gp.QUIZ) {
             g2.setFont(pixeloid);
             drawQuiz();
@@ -887,9 +1164,9 @@ public class UI {
     public void drawStatus(Graphics2D g2) {
         g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 20F));
         g2.setColor(Color.white);
-        g2.drawString("HP: " + gp.player.HP, 20, 20);
-        g2.drawString("Level: " + gp.player.level, 20, 40);
-        g2.drawString("Total Score: " + gp.player.totalScore, 20, 70);
+        drawHP();
+        g2.drawString("Level: " + gp.player.level, 20, 75);
+        g2.drawString("Total Score: " + gp.player.totalScore, 20, 100);
     }
 
     //    DEBUG FUNCTION

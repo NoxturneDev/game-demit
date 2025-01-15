@@ -7,7 +7,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.Objects;
 import java.util.Random;
 
 public class Entity {
@@ -17,17 +16,28 @@ public class Entity {
     public int worldX;
     public int worldY;
     public int speed;
+    public int life;
+    public int maxLife;
+    public int attack;
+    public boolean collision = false;
+    public boolean alive = true;
+    public boolean hpBarOn = false;
+    public boolean onPath = false;
+    public boolean boss = false;
     public String[][] dialogues = new String[20][20];
     public int dialogueSet;
     public int dialogueIndex = 0;
     public String quizQuestion = "";
     public boolean hasQuiz = false;
+    public boolean quizHasDone = false;
     public int quizCorrectAnswer = 0;
-
     public int damage;
-    public int HP;
 
-    public boolean onPath = false;
+    public Projectile projectile;
+
+    public int hpBarCounter = 0;
+    public int shotAvailableCounter = 0;
+
 
     //    entitty assets attributes
     public BufferedImage up1, up2, up3, up4, down1, down2, down3, down4, left1, left2, left3, left4, right1, right2, right3, right4;
@@ -37,7 +47,6 @@ public class Entity {
     public Rectangle solidArea = new Rectangle(0, 0, 48, 48); // default value
     public Rectangle attackArea = new Rectangle(0, 0, 0, 0); // default value
     public int defaultSolidAreaX, defaultSolidAreaY;
-    public boolean collision = false;
 
     //    entity state
     public String direction;
@@ -121,6 +130,19 @@ public class Entity {
         return tileDistance;
     }
 
+    public boolean inCamera()
+    {
+        boolean inCamera = false;
+        if(     worldX + gp.tileSize*5 > gp.player.worldX - gp.player.screenX && //*5 because skeleton lord disappears when the top left corner isn't on the screen
+                worldX - gp.tileSize < gp.player.worldX + gp.player.screenX &&
+                worldY + gp.tileSize*5 > gp.player.worldY - gp.player.screenY &&
+                worldY - gp.tileSize < gp.player.worldY + gp.player.screenY)
+        {
+            inCamera = true;
+        }
+        return inCamera;
+    }
+
     public void checkAttackOrNot(int rate, int straight, int horizontal) {
         boolean tartgetInRange = false;
         int xDis = getXdistance(gp.player);
@@ -152,14 +174,83 @@ public class Entity {
         if (tartgetInRange == true) {
             //Check if it initiates an attack
             int i = new Random().nextInt(rate);
-//            if (i == 0) {
-//                attacking = true;
-//                spriteNum = 1;
-//                spriteCounter = 0;
-//                shotAvailableCounter = 0;
-//            }
+            if (i == 0) {
+                attacking = true;
+                spriteNum = 1;
+                spriteCounter = 0;
+                shotAvailableCounter = 0;
+
+            }
         }
 
+    }
+
+    public void checkShootOrNot(int rate, int shotInterval) {
+        int i = new Random().nextInt(rate);
+        System.out.println("i: " + i);
+        System.out.println("shotAvailableCounter: " + shotAvailableCounter);
+        System.out.println("shotInterval: " + shotInterval);
+        System.out.println("projectile.alive: " + projectile.alive);
+        if (i == 0 && projectile.alive == false && shotAvailableCounter == shotInterval) {
+            projectile.set(getCenterX(), getCenterY(), direction, true, this);
+            gp.projectileList.add(projectile);
+//            gp.projectile[gp.currentMap][i] = projectile;
+            //CHECK VACANCY
+            System.out.println("Projectile shot");
+            for (int ii = 0; ii < gp.projectile[1].length; ii++) {
+                if (gp.projectile[gp.currentMap][ii] == null) {
+                    gp.projectile[gp.currentMap][ii] = projectile;
+                    break;
+                }
+            }
+            shotAvailableCounter = 0;
+        }
+    }
+
+    public void damagePlayer(int attack) {
+        if (gp.player.invincible == false) {
+//            int damage = attack - gp.player.defense;
+            int damage = attack;
+            //Get an opposite direction of this attacker
+            String canGuardDirection = getOppositeDirection(direction);
+
+//            if(gp.player.guarding == true && gp.player.direction.equals(canGuardDirection))
+//            {
+//                //Parry //If you press guard key less then 10 frames before the attack you receive 0 damage, and you get critical chance
+//                if(gp.player.guardCounter < 10)
+//                {
+//                    damage = 0;
+//                    gp.playSE(16);
+//                    setKnockBack(this, gp.player, knockBackPower); //Knockback attacker //You can use shield's knockBackPower!
+//                    offBalance = true;
+//                    spriteCounter =- 60; //Attacker's sprites returns to motion1//like a stun effect
+//                }
+//                else
+//                {
+//                    //Normal Guard
+//                    damage /= 2;
+//                    gp.playSE(15);
+//                }
+//            }
+//            else
+//            {
+            //Not guarding
+//            gp.playSE(6);   //receivedamage.wav
+            if (damage < 1) {
+                damage = 1;
+            }
+
+            if (damage != 0) {
+                gp.player.transparent = true;
+//                setKnockBack(gp.player, this, knockBackPower);
+            }
+
+            //We can give damage
+            gp.player.life -= damage;
+            gp.player.invincible = true;
+            System.out.println("Attacked");
+            System.out.println("Player life: " + gp.player.life);
+        }
     }
 
     public void checkStartChasingOrNot(Entity target, int distance, int rate) {
@@ -410,6 +501,11 @@ public class Entity {
                         break;
                 }
             }
+
+            if(shotAvailableCounter < 30)
+            {
+                shotAvailableCounter++;
+            }
         }
     }
 
@@ -431,6 +527,8 @@ public class Entity {
                         img = up2;
                     } else if (spriteNum == 3) {
                         img = up3;
+                    } else if (spriteNum == 4) {
+                        img = up4;
                     }
                     break;
                 case "down":
@@ -440,6 +538,8 @@ public class Entity {
                         img = down2;
                     } else if (spriteNum == 3) {
                         img = down3;
+                    } else if (spriteNum == 4) {
+                        img = down4;
                     }
                     break;
                 case "left":
@@ -449,6 +549,8 @@ public class Entity {
                         img = left2;
                     } else if (spriteNum == 3) {
                         img = left3;
+                    } else if (spriteNum == 4) {
+                        img = left4;
                     }
                     break;
                 case "right":
@@ -458,13 +560,15 @@ public class Entity {
                         img = right2;
                     } else if (spriteNum == 3) {
                         img = right3;
+                    } else if (spriteNum == 4) {
+                        img = right4;
                     }
                     break;
             }
-            g2.drawImage(img, screenX, screenY, gp.tileSize, gp.tileSize, null);
+            g2.drawImage(img, screenX, screenY, null);
 ////            DEBUG
-//            g2.setColor(Color.RED);
-//            g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
+            g2.setColor(Color.RED);
+            g2.drawRect(screenX + solidArea.x, screenY + solidArea.y, solidArea.width, solidArea.height);
         }
     }
 

@@ -9,9 +9,9 @@ public class MON_Pocong extends Entity {
     public MON_Pocong(GamePanel gp) {
         super(gp);
         direction = "down";
-        speed = 2;
+        speed = 3;
         damage = new Random().nextInt(20)+5;
-        HP = 20;
+        life = 20;
 
         solidArea = new Rectangle();
         solidArea.x = 8;
@@ -41,32 +41,25 @@ public class MON_Pocong extends Entity {
     }
 
     public void setAction() {
-//        if(onPath == true)
-//        {
-//            int goalCol = (gp.player.worldX + gp.player.solidArea.x) / gp.tileSize;
-//            int goalRow = (gp.player.worldY + gp.player.solidArea.y) / gp.tileSize;
-//        }
-//        else
-//        {
-        actionLockCounter++;
+        if(onPath == true)
+        {
 
-        if (actionLockCounter == 120) {
-            Random random = new Random();
-            int i = random.nextInt(100) + 1;  // pick up  a number from 1 to 100
-            if (i <= 25) {
-                direction = "up";
-            }
-            if (i > 25 && i <= 50) {
-                direction = "down";
-            }
-            if (i > 50 && i <= 75) {
-                direction = "left";
-            }
-            if (i > 75 && i <= 100) {
-                direction = "right";
-            }
-            actionLockCounter = 0; // reset
+            //Check if it stops chasing
+            checkStopChasingOrNot(gp.player,15,100);
+
+            //Search the direction to go
+            searchPath(getGoalCol(gp.player), getGoalRow(gp.player));
+
+            //Check if it shoots a projectile
+//            checkShootOrNot(200, 30); //Just added to red slimes
         }
-//        }
+        else
+        {
+            //Check if it starts chasing
+            checkStartChasingOrNot(gp.player, 5, 100);
+
+            //Get a random direction
+            getRandomDirection(120);
+        }
     }
 }

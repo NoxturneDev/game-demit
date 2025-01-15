@@ -60,7 +60,7 @@ public class CollisionChecker {
 
     }
 
-    public int checkEntity(Entity entity, Entity[] target) {
+    public int checkEntity(Entity entity, Entity[][] target) {
         int index = 999;   // no collision returns 999;
         //Use aetemporal direction when it's being knockbacked
         String direction = entity.direction;
@@ -69,15 +69,15 @@ public class CollisionChecker {
 //            direction = entity.knockBackDirection;
 //        }
 
-        for (int i = 0; i < target.length; i++) {
-            if (target[i] != null) {
+        for (int i = 0; i < target[gp.currentMap].length; i++) {
+            if (target[gp.currentMap][i] != null) {
                 // get entity's solid area position
                 entity.solidArea.x = entity.worldX + entity.solidArea.x;
                 entity.solidArea.y = entity.worldY + entity.solidArea.y;
 
                 // get the object's solid area position
-                target[i].solidArea.x = target[i].worldX + target[i].solidArea.x;       //entity's solid area and obj's solid area is different.
-                target[i].solidArea.y = target[i].worldY + target[i].solidArea.y;
+                target[gp.currentMap][i].solidArea.x = target[gp.currentMap][i].worldX + target[gp.currentMap][i].solidArea.x;       //entity's solid area and obj's solid area is different.
+                target[gp.currentMap][i].solidArea.y = target[gp.currentMap][i].worldY + target[gp.currentMap][i].solidArea.y;
 
                 switch (direction) {
                     case "up":
@@ -94,8 +94,8 @@ public class CollisionChecker {
                         break;
                 }
 
-                if (entity.solidArea.intersects(target[i].solidArea)) {
-                    if (target[i] != entity) // avoid entity includes itself as a collision target
+                if (entity.solidArea.intersects(target[gp.currentMap][i].solidArea)) {
+                    if (target[gp.currentMap][i] != entity) // avoid entity includes itself as a collision target
                     {
                         entity.collision = true;
                         index = i;   // Non-player characters cannot pickup objects.
@@ -104,8 +104,8 @@ public class CollisionChecker {
                 entity.solidArea.x = entity.defaultSolidAreaX; //Reset
                 entity.solidArea.y = entity.defaultSolidAreaY;
 
-                target[i].solidArea.x = target[i].defaultSolidAreaX;     //Reset
-                target[i].solidArea.y = target[i].defaultSolidAreaY;
+                target[gp.currentMap][i].solidArea.x = target[gp.currentMap][i].defaultSolidAreaX;     //Reset
+                target[gp.currentMap][i].solidArea.y = target[gp.currentMap][i].defaultSolidAreaY;
             }
         }
         return index;

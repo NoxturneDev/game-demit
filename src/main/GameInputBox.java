@@ -8,14 +8,12 @@ import java.awt.event.KeyListener;
 public class GameInputBox extends JPanel implements KeyListener {
     private StringBuilder username = new StringBuilder();
     private boolean isInputActive = true;
+    private GamePanel gp; // Reference to the GamePanel or game manager
 
-    public GameInputBox() {
-        JFrame frame = new JFrame("Game Username Input");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
-        frame.add(this);
-        frame.addKeyListener(this);
-        frame.setVisible(true);
+    public GameInputBox(GamePanel gp) {
+        this.gp = gp;
+        setFocusable(true);
+        addKeyListener(this);
     }
 
     @Override
@@ -60,14 +58,21 @@ public class GameInputBox extends JPanel implements KeyListener {
         if (e.getKeyCode() == KeyEvent.VK_ENTER && isInputActive) {
             System.out.println("Username entered: " + username);
             JOptionPane.showMessageDialog(this, "Welcome, " + username + "!");
+            gp.player.username = username.toString(); // Store the username in GamePanel or elsewhere
             isInputActive = false; // Disable input after submission
+
+            // Return to the previous game state
+//            gp.ui.textOverlay = "Aku harus segera pulang ke rumah!";
+//            gp.gameState = gp.OVERLAY_TEXT;
+            gp.sceneManager.playScene(SceneManager.SceneIndex.PROLOG_OVERLAY_BEGINNING.ordinal());
+            gp.config.saveNewProfile(username.toString());
+            gp.remove(this); // Remove the input box panel
+            gp.requestFocus(); // Refocus on the main game panel
+            gp.repaint();
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {}
-
-    public static void main(String[] args) {
-        new GameInputBox();
-    }
 }
+
