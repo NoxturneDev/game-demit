@@ -27,7 +27,7 @@ public class GamePanel extends JPanel implements Runnable {
     public int maxWorldCol = 50;
     public int maxWorldRow = 50;
     public int maxMap = 99;
-    public int currentMap = 0;
+    public int currentMap = 7;
     public int currentLevel = 0;
     final int FPS = 60;
 
@@ -36,6 +36,7 @@ public class GamePanel extends JPanel implements Runnable {
     public Entity currentActiveNPC;
 
     //    SYSTEM
+
     public TileManager tm = new TileManager(this);
     //    public CutsceneManager cutsceneManager = new CutsceneManager(this);
     KeyHandler keyH = new KeyHandler(this);

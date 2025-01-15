@@ -8,13 +8,6 @@ public class EventHandler {
     EventRect eventRect[][][];
 
     int eventRectDefaultX, eventRectDefaultY;
-    public int MAP_FOREST_1 = 1;
-    public int MAP_HOUSE_1 = 2;
-    public int MAP_FOREST_2 = 3;
-    public int MAP_FOREST_3 = 4;
-    public int MAP_FOREST_4 = 5;
-    public int MAP_FOREST_5 = 6;
-    public int MAP_HOUSE_2 = 7;
 
     public EventHandler(GamePanel gp) {
         this.gp = gp;
@@ -49,19 +42,44 @@ public class EventHandler {
     }
 
     public void checkEvent() {
-//        if (hit(0, 2, 4, "left") == true) {
-//            System.out.println("Hit some event");
-//        }
+//  PROLOGUE
+        if ((hit(gp.tm.MAP_FOREST_PROLOG_1, 38, 29, "any") == true) || (hit(gp.tm.MAP_FOREST_PROLOG_1, 38, 28, "any") == true)) {
+            teleport(gp.tm.MAP_FOREST_PROLOG_2, 38, 29, -1);
+        }
+        if ((hit(gp.tm.MAP_FOREST_PROLOG_2, 13, 28, "any") == true) || (hit(gp.tm.MAP_FOREST_PROLOG_2, 13, 29, "any") == true)) {
+            teleport(gp.tm.MAP_FOREST_PROLOG_3, 47, 11, -1);
+        }
+        if ((hit(gp.tm.MAP_FOREST_PROLOG_3, 16, 29, "any") == true) || (hit(gp.tm.MAP_FOREST_PROLOG_3, 16, 30, "any") == true)) {
+            teleport(gp.tm.MAP_FOREST_PROLOG_4, 16, 29, -1);
+        }
+        if (hit(gp.tm.MAP_FOREST_PROLOG_4, 47, 11, "any") == true) {
+            teleport(gp.tm.MAP_FOREST_PROLOG_5, 11, 29, -1);
+        }
 
-//        LEVEL 3
-        if (hit(0, 41, 30, "any") == true) {
-//            gp.sceneManager.playScene(gp.sceneManager.BOSS_BATTLE_BUTOIJO);
-            teleport(93, 18, 24, gp.sceneManager.BOSS_BATTLE_BUTOIJO);
+//        PROLOGUE HOUSE
+        if ((hit(gp.tm.MAP_FOREST_PROLOG_5, 38, 29, "any") == true) || (hit(gp.tm.MAP_FOREST_PROLOG_1, 38, 28, "any") == true)) {
+            teleport(gp.tm.MAP_HOUSE_PROLOG_1, 19, 17, -1);
         }
-        if (hit(93, 30, 24, "any") == true) {
-//            gp.sceneManager.playScene(gp.sceneManager.BOSS_BATTLE_BUTOIJO);
-            teleport(2, 40, 30, gp.sceneManager.BOSS_BATTLE_BUTOIJO_EPILOGUE);
+//        GET KERIS EVENT & TUYUL APPEARS
+        if ((hit(gp.tm.MAP_HOUSE_PROLOG_1, 21, 9, "any") == true) || (hit(gp.tm.MAP_FOREST_PROLOG_1, 38, 28, "any") == true)) {
+            teleport(gp.tm.MAP_HOUSE_PROLOG_2, 21, 9, -1);
         }
+//        TODO: Make event to teelport to map house_3
+//        FINISHED ALL TUYUL
+        if ((hit(gp.tm.MAP_HOUSE_PROLOG_3, 19, 17, "any") == true) || (hit(gp.tm.MAP_FOREST_PROLOG_1, 38, 28, "any") == true)) {
+            teleport(gp.tm.MAP_FOREST_LEVEL_1, 4, 21, -1);
+        }
+
+//        LEVEL 1
+        if (hit(gp.tm.MAP_FOREST_LEVEL_1, 42, 5, "any") == true) {
+            teleport(gp.tm.MAP_DUNGEON_LEVEL_1, 10, 36, -1);
+        }
+
+
+//        if (hit(93, 30, 24, "any") == true) {
+////            gp.sceneManager.playScene(gp.sceneManager.BOSS_BATTLE_BUTOIJO);
+//            teleport(2, 40, 30, gp.sceneManager.BOSS_BATTLE_BUTOIJO_EPILOGUE);
+//        }
 
 
 ////      house 1

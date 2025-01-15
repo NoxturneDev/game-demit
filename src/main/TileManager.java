@@ -16,11 +16,32 @@ public class TileManager {
     ArrayList<String> fileNames = new ArrayList<>();
     ArrayList<String> collisionStatus = new ArrayList<>();
 
+    public final int MAP_FOREST_PROLOG_1 = 0;
+    public final int MAP_FOREST_PROLOG_2 = 1;
+    public final int MAP_FOREST_PROLOG_3 = 2;
+    public final int MAP_FOREST_PROLOG_4 = 3;
+    public final int MAP_FOREST_PROLOG_5 = 4;
+    public final int MAP_HOUSE_PROLOG_1 = 5;
+    public final int MAP_HOUSE_PROLOG_2 = 6;
+    public final int MAP_HOUSE_PROLOG_3 = 7;
+    public final int MAP_HOUSE_PROLOG_4 = 8;
+
+    public final int MAP_FOREST_LEVEL_1 = 10;
+    public final int MAP_DUNGEON_LEVEL_1 = 11;
+    public final int MAP_FOREST_LEVEL_2 = 20;
+    public final int MAP_DUNGEON_LEVEL_2 = 21;
+    public final int MAP_FOREST_LEVEL_3 = 30;
+    public final int MAP_DUNGEON_LEVEL_3 = 31;
+    public final int MAP_FOREST_LEVEL_4 = 30;
+    public final int MAP_DUNGEON_LEVEL_4 = 31;
+    public final int MAP_FINAL_BOSS_1 = 30;
+    public final int MAP_FINAL_BOSS_2 = 31;
+
     public TileManager(GamePanel gp) {
         this.gp = gp;
 
         //READ TILE DATA FILE
-        InputStream is = getClass().getResourceAsStream("/maps/tileData.txt");
+        InputStream is = getClass().getResourceAsStream("/maps/tileData2.txt");
         BufferedReader br = new BufferedReader(new InputStreamReader(is));
 
         //GETTING TILE NAMES AND COLLISION INFO FROM THE FILE
@@ -40,7 +61,7 @@ public class TileManager {
         getTileImage();
 
         //GET THE maxWorldCol & Row
-        is = getClass().getResourceAsStream("/maps/forest_1.txt");
+        is = getClass().getResourceAsStream("/maps/map_1.txt");
         br = new BufferedReader(new InputStreamReader(is));
 
         try {
@@ -57,19 +78,31 @@ public class TileManager {
             System.out.println("Exception!");
         }
 
-        loadMap("/maps/forest_1.txt", 0);
-        loadMap("/maps/house_1.txt", 1);
-        loadMap("/maps/forest_2.txt", 2);
-        loadMap("/maps/forest_3.txt", 3);
-        loadMap("/maps/forest_4.txt", 4);
-        loadMap("/maps/forest_5.txt", 5);
-        loadMap("/maps/house_2.txt", 6);
-        loadMap("/maps/house_3.txt", 7);
-        loadMap("/maps/dungeon_0.txt", 91);
-        loadMap("/maps/dungeon_0.txt", 92);
-        loadMap("/maps/dungeon_0.txt", 93);
-        loadMap("/maps/dungeon_0.txt", 94);
-        loadMap("/maps/dungeon_0.txt", 95);
+//        prolog map
+        loadMap("/maps/forest_prolog_1.txt", MAP_FOREST_PROLOG_1);
+        loadMap("/maps/forest_prolog_1.txt", MAP_FOREST_PROLOG_2);
+        loadMap("/maps/forest_prolog_2.txt", MAP_FOREST_PROLOG_3);
+        loadMap("/maps/forest_prolog_2.txt", MAP_FOREST_PROLOG_4); //chased by pocong
+        loadMap("/maps/forest_prolog_1.txt", MAP_FOREST_PROLOG_5); //back to first map
+
+        loadMap("/maps/house_1.txt", MAP_HOUSE_PROLOG_1); // first inside to house to get the first item: keris
+        loadMap("/maps/house_1.txt", MAP_HOUSE_PROLOG_2); // tuyul appears
+        loadMap("/maps/house_1.txt", MAP_HOUSE_PROLOG_3); // tutorial finished
+
+        loadMap("/maps/map_2.txt", MAP_FOREST_LEVEL_1);
+        loadMap("/maps/dungeon_1.txt", MAP_DUNGEON_LEVEL_1);
+//        loadMap("/maps/house_1.txt", 1);
+//        loadMap("/maps/forest_2.txt", 2);
+//        loadMap("/maps/forest_3.txt", 3);
+//        loadMap("/maps/forest_4.txt", 4);
+//        loadMap("/maps/forest_5.txt", 5);
+//        loadMap("/maps/house_2.txt", 6);
+//        loadMap("/maps/house_3.txt", 7);
+//        loadMap("/maps/dungeon_0.txt", 91);
+//        loadMap("/maps/dungeon_0.txt", 92);
+//        loadMap("/maps/dungeon_0.txt", 93);
+//        loadMap("/maps/dungeon_0.txt", 94);
+//        loadMap("/maps/dungeon_0.txt", 95);
 //        loadMap("/maps/world_map.txt", 1);
     }
 
