@@ -25,6 +25,12 @@ public class SceneManager {
     public int BOSS_BATTLE_KUYANG = 80;
     public int BOSS_BATTLE_NYIBLORONG = 90;
 
+    public enum SceneIndex {
+        PROLOG_CUTSCENE_1,
+        PROLOG_CUTSCENE_2,
+        PROLOG_CUTSCENE_3,
+    }
+
     public SceneManager(GamePanel gp) {
         this.gp = gp;
     }
@@ -51,9 +57,9 @@ public class SceneManager {
             gp.playMusic(2);
         }
 
-        if (i == PROLOGUE_CUTSCENE_1) {
+        if (i == SceneIndex.PROLOG_CUTSCENE_1.ordinal()) {
             gp.stopMusic();
-            gp.ui.cutsceneIndex = 1;
+            gp.ui.cutsceneIndex = UI.Cutscenes.PROLOG_1_1.ordinal();
             gp.gameState = gp.CUTSCENE;
         }
 

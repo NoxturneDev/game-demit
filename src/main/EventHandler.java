@@ -44,7 +44,7 @@ public class EventHandler {
     public void checkEvent() {
 //  PROLOGUE
         if ((hit(gp.tm.MAP_FOREST_PROLOG_1, 38, 29, "any") == true) || (hit(gp.tm.MAP_FOREST_PROLOG_1, 38, 28, "any") == true)) {
-            teleport(gp.tm.MAP_FOREST_PROLOG_2, 38, 29, -1);
+            teleport(gp.tm.MAP_FOREST_PROLOG_2, 38, 29, SceneManager.SceneIndex.PROLOG_CUTSCENE_1.ordinal());
         }
         if ((hit(gp.tm.MAP_FOREST_PROLOG_2, 13, 28, "any") == true) || (hit(gp.tm.MAP_FOREST_PROLOG_2, 13, 29, "any") == true)) {
             teleport(gp.tm.MAP_FOREST_PROLOG_3, 47, 11, -1);
@@ -72,7 +72,7 @@ public class EventHandler {
 
 //        LEVEL 1
         if (hit(gp.tm.MAP_FOREST_LEVEL_1, 42, 5, "any") == true) {
-            teleport(gp.tm.MAP_DUNGEON_LEVEL_1, 10, 36, -1);
+//            teleport(gp.tm.MAP_DUNGEON_LEVEL_1, 10, , -1);
         }
 
 

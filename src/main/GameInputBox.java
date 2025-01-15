@@ -65,7 +65,7 @@ public class GameInputBox extends JPanel implements KeyListener {
 //            gp.ui.textOverlay = "Aku harus segera pulang ke rumah!";
 //            gp.gameState = gp.OVERLAY_TEXT;
             gp.sceneManager.playScene(gp.sceneManager.PROLOGUE);
-            gp.startConfigThread();
+            gp.config.saveNewProfile(username.toString());
             gp.remove(this); // Remove the input box panel
             gp.requestFocus(); // Refocus on the main game panel
             gp.repaint();

@@ -27,7 +27,7 @@ public class GamePanel extends JPanel implements Runnable {
     public int maxWorldCol = 50;
     public int maxWorldRow = 50;
     public int maxMap = 99;
-    public int currentMap = 7;
+    public int currentMap = 0;
     public int currentLevel = 0;
     final int FPS = 60;
 
@@ -104,7 +104,7 @@ public class GamePanel extends JPanel implements Runnable {
 
 //        ui.cutsceneIndex = 1;
         sceneManager.playScene(sceneManager.SPLASH_SCREEN);
-        config.saveConfigToMongoDB();
+//        config.saveConfigToMongoDB();
 //        playMusic(0);
     }
 

@@ -46,6 +46,7 @@ public class KeyHandler implements KeyListener {
         if (gp.gameState == gp.JUMPSCARE_SCREEN && keyCode == KeyEvent.VK_ENTER) gp.gameState = gp.PLAY;
         if (gp.gameState == gp.PLAY && keyCode == KeyEvent.VK_ESCAPE) gp.gameState = gp.LEVEL_SCREEN;
         if (gp.gameState == gp.PLAY && keyCode == KeyEvent.VK_F1) gp.gameState = gp.LEADERBOARD_SCREEN;
+        if (gp.gameState == gp.PLAY && keyCode == KeyEvent.VK_F5) gp.config.saveConfigToMongoDB();
         if (gp.gameState == gp.LEVEL_SCREEN && keyCode == KeyEvent.VK_ENTER) gp.gameState = gp.PLAY;
         if (gp.gameState == gp.LEADERBOARD_SCREEN && keyCode == KeyEvent.VK_ESCAPE) gp.gameState = gp.TITLE;
 
@@ -59,7 +60,7 @@ public class KeyHandler implements KeyListener {
     private void handleSpaceKey() {
         spacePressed = true;
 
-        if (gp.gameState == gp.PLAY && gp.currentMap >= 7) {
+        if (gp.gameState == gp.PLAY && gp.currentMap >= gp.tm.MAP_HOUSE_PROLOG_1) {
             gp.player.attacking = true;
             gp.playSE(5);
         }
@@ -131,7 +132,7 @@ public class KeyHandler implements KeyListener {
         if (keyCode == KeyEvent.VK_SPACE) {
             gp.config.loadConfigFromMongoDB(gp.ui.commandNum);
             gp.gameState = gp.PLAY;
-            gp.startConfigThread();
+//            gp.startConfigThread();
         }
     }
 

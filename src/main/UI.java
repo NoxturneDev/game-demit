@@ -46,6 +46,16 @@ public class UI {
     public int SLIDE_LEFT = 2;
     public int SLIDE_RIGHT = 3;
 
+    //    CUTSCENE DICTIONARY
+    public enum Cutscenes {
+        PROLOG_1_1,
+        PROLOG_1_2,
+        PROLOG_1_3,
+        POCONG_2_1,
+        POCONG_2_2,
+        POCONG_3_3,
+    }
+
     public UI(GamePanel gp) {
         this.gp = gp;
         try {
@@ -71,9 +81,9 @@ public class UI {
     public void getCutScenesImage() {
         try {
 //            PROLOG 1 - Lanang
-            cutscenes[1] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/1_1.png"));
-            cutscenes[2] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/1_2.png"));
-            cutscenes[3] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/1_3.png"));
+            cutscenes[Cutscenes.PROLOG_1_1.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/1_1.png"));
+            cutscenes[Cutscenes.PROLOG_1_2.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/1_2.png"));
+            cutscenes[Cutscenes.PROLOG_1_3.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/1_3.png"));
 //            PROLOG 2 - Pocong
             cutscenes[4] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/2_1.png"));
             cutscenes[5] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/2_2.png"));
@@ -126,7 +136,7 @@ public class UI {
     public boolean cutsceneSoundPlayed = false;
 
     public void animateCutscene() {
-        if (cutsceneIndex == 1) {
+        if (cutsceneIndex == Cutscenes.PROLOG_1_1.ordinal()) {
             cutsceneDuration++;
             cutsceneCounter++;
 
@@ -142,7 +152,7 @@ public class UI {
             fadeIn(100);
         }
 
-        if (cutsceneIndex == 2) {
+        if (cutsceneIndex == Cutscenes.PROLOG_1_2.ordinal()) {
             cutsceneDuration++;
             cutsceneCounter++;
 
@@ -158,7 +168,7 @@ public class UI {
             fadeIn(100);
         }
 
-        if (cutsceneIndex == 3) {
+        if (cutsceneIndex == Cutscenes.PROLOG_1_3.ordinal()) {
             cutsceneDuration++;
             cutsceneCounter++;
 

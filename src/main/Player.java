@@ -96,8 +96,8 @@ public class Player extends Entity {
     }
 
     public void setDefaultValues() {
-        worldX = gp.tileSize * 21;
-        worldY = gp.tileSize * 9;
+        worldX = gp.tileSize * 11;
+        worldY = gp.tileSize * 29;
         speed = 5;
         direction = "down";
     }
@@ -201,6 +201,7 @@ public class Player extends Entity {
 
                 if (gp.aSetter.totalMonsterMap7 < 0) {
                     gp.sceneManager.playScene(10);
+                    gp.eHandler.teleport(gp.tm.MAP_HOUSE_PROLOG_3, gp.player.worldX / gp.tileSize, gp.player.worldY / gp.tileSize, -1);
                 }
 //                if (gp.aSetter.totalMonsterMap7 < 0) {
 //                    gp.sceneManager.playScene(10);
@@ -209,6 +210,11 @@ public class Player extends Entity {
             }
 
         }
+    }
+
+    public void levelUp() {
+        level++;
+//        gp.config.saveConfigToMongoDB();
     }
 
 //    public void shootProjectile() {

@@ -32,6 +32,27 @@ public class Config implements Runnable {
     // Save configuration to MongoDB
     private String currentProfile; // Tracks the currently selected profile
 
+    public void saveNewProfile(String username) {
+        try (MongoClient mongoClient = MongoClients.create(MONGO_URI)) {
+            MongoCollection<Document> collection = mongoClient
+                    .getDatabase(DATABASE_NAME)
+                    .getCollection(COLLECTION_NAME);
+
+            // Create a new document for the profile
+            Document doc = new Document("_id", username)
+                    .append("username", username)
+                    .append("totalScore", 0)
+                    .append("currentLevel", 1);
+
+            // Insert the document into the collection
+            collection.insertOne(doc);
+
+            System.out.println("New profile '" + username + "' created successfully.");
+            setCurrentProfile(username);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     // Save configuration for the current profile
     public void saveConfigToMongoDB() {
         if (currentProfile == null || currentProfile.isEmpty()) {

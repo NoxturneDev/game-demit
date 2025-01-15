@@ -35,22 +35,25 @@ public class AssetSetter {
         int mapNum = 0;
         int i = 0;
 
-//        gp.monsters[mapNum][i] = new MON_tuyul(gp);
-//        gp.monsters[mapNum][i].worldX = gp.tileSize * 16;
-//        gp.monsters[mapNum][i].worldY = gp.tileSize * 10;
-//        i++;
+//        PROLOG MONSTER
+        mapNum = gp.tm.MAP_HOUSE_PROLOG_2;
+        i = 0;
+        gp.monsters[mapNum][i] = new MON_tuyul(gp);
+        gp.monsters[mapNum][i].worldX = gp.tileSize * 24;
+        gp.monsters[mapNum][i].worldY = gp.tileSize * 10;
+        i++;
 
-//        gp.monsters[mapNum][i] = new MON_tuyul(gp);
-//        gp.monsters[mapNum][i].direction = "up";
-//        gp.monsters[mapNum][i].worldX = gp.tileSize * 16;
-//        gp.monsters[mapNum][i].worldY = gp.tileSize * 10;
-//        i++;
+        gp.monsters[mapNum][i] = new MON_tuyul(gp);
+        gp.monsters[mapNum][i].direction = "up";
+        gp.monsters[mapNum][i].worldX = gp.tileSize * 24;
+        gp.monsters[mapNum][i].worldY = gp.tileSize * 13;
+        i++;
 
-//        gp.monsters[mapNum][i] = new MON_tuyul(gp);
-//        gp.monsters[mapNum][i].direction = "left";
-//        gp.monsters[mapNum][i].worldX = gp.tileSize * 16;
-//        gp.monsters[mapNum][i].worldY = gp.tileSize * 10;
-//        i++;
+        gp.monsters[mapNum][i] = new MON_tuyul(gp);
+        gp.monsters[mapNum][i].direction = "left";
+        gp.monsters[mapNum][i].worldX = gp.tileSize * 24;
+        gp.monsters[mapNum][i].worldY = gp.tileSize * 15;
+        i++;
 
         mapNum = 3;
         i = 0;
@@ -83,12 +86,12 @@ public class AssetSetter {
         totalMonsterMap7 = i;
 
 //        DUNGEON LEVEL 1
-        mapNum = 91;
+        mapNum = gp.tm.MAP_DUNGEON_LEVEL_1;
         i = 0;
         gp.monsters[mapNum][i] = new MON_Kunti(gp);
         gp.monsters[mapNum][i].direction = "up";
-        gp.monsters[mapNum][i].worldX = gp.tileSize * 29;
-        gp.monsters[mapNum][i].worldY = gp.tileSize * 24;
+        gp.monsters[mapNum][i].worldX = gp.tileSize * 24;
+        gp.monsters[mapNum][i].worldY = gp.tileSize * 33;
 
 //        DUNGEON LEVEL 2
         mapNum = 92;
