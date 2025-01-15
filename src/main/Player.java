@@ -188,11 +188,13 @@ public class Player extends Entity {
     }
 
     public void attackMonster(int i) {
-        System.out.println("attackMonster");
         if (i != 999) {
             gp.monsters[gp.currentMap][i].life -= 5;
 
             if (gp.monsters[gp.currentMap][i].life <= 0) {
+                if (gp.currentMap == 93 && gp.monsters[gp.currentMap][i].name == "Butoijo") {
+                    gp.sceneManager.playScene(gp.sceneManager.BOSS_BATTLE_BUTOIJO_FINISHED);
+                }
                 gp.monsters[gp.currentMap][i] = null;
                 gp.aSetter.totalMonsterMap7--;
                 totalScore += 10;
@@ -205,6 +207,7 @@ public class Player extends Entity {
 //                }
 //                gp.sceneManager.playScene(11);
             }
+
         }
     }
 

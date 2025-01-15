@@ -856,11 +856,25 @@ public class UI {
     }
 
     public void drawHP() {
-        int x = gp.tileSize / 2;
-        int y = gp.tileSize / 2;
-        x += gp.tileSize / 4;
-        y += gp.tileSize / 4;
-        g2.setFont(g2.getFont().deriveFont(Font.PLAIN, 28F));
+        double oneScale = (double) gp.tileSize * 4 / 100; // (bar lenght / maxlife) Ex: if monster hp = 2, tilesize = 48px. So, 1 hp = 24px
+        double hpBarValue = oneScale * gp.player.life;
+        int x = 0;
+        int y = gp.tileSize;
+
+        if (hpBarValue < 0)  //Ex: You attack 5 hp to monster which has 3 hp. Monster's hp will be -2 and bar will ofset to left. To avoid that check if hpBarValue less than 0.
+        {
+            hpBarValue = 0;
+        }
+
+        g2.setColor(new Color(35, 35, 35));
+        g2.fillRect(x - 1, y - 1, gp.tileSize * 2 + 2, 22);
+
+        g2.setColor(new Color(255, 0, 30));
+        g2.fillRect(x, y, (int) hpBarValue, 20);
+
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 24f));
+        g2.setColor(Color.white);
+        g2.drawString(gp.player.username, x + 4, y - 10);
     }
 
     public void drawMonsterLife() {
@@ -991,7 +1005,7 @@ public class UI {
         g2.setColor(Color.RED);
 
         g2.setFont(pixeloid);
-//        drawDebug(g2);
+        drawDebug(g2);
 //        if (gp.bossBattle) {
 //            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
 //            String text = ;
@@ -1026,6 +1040,7 @@ public class UI {
             g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
             drawMonsterLife();
             drawStatus(g2);
+            drawHP();
         }
         if (gp.gameState == gp.DIALOGUE) {
             g2.setFont(pixeloid);

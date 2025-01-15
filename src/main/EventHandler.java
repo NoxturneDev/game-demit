@@ -53,11 +53,17 @@ public class EventHandler {
 //            System.out.println("Hit some event");
 //        }
 
-//        forest 1
+//        LEVEL 3
         if (hit(0, 41, 30, "any") == true) {
 //            gp.sceneManager.playScene(gp.sceneManager.BOSS_BATTLE_BUTOIJO);
-            teleport(93, 18, 24, -1);
+            teleport(93, 18, 24, gp.sceneManager.BOSS_BATTLE_BUTOIJO);
         }
+        if (hit(93, 30, 24, "any") == true) {
+//            gp.sceneManager.playScene(gp.sceneManager.BOSS_BATTLE_BUTOIJO);
+            teleport(2, 40, 30, gp.sceneManager.BOSS_BATTLE_BUTOIJO_EPILOGUE);
+        }
+
+
 ////      house 1
 //        if (hit(1, 21, 11, "any") == true) {
 //            teleport(2, 40, 30, -1);

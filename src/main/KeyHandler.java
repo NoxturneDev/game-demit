@@ -80,7 +80,9 @@ public class KeyHandler implements KeyListener {
         enterPressed = true;
 
         if (gp.gameState == gp.RUNNING_TEXT) gp.gameState = gp.PLAY;
-        if (gp.gameState == gp.OVERLAY_TEXT) gp.gameState = gp.PLAY;
+        if (gp.gameState == gp.OVERLAY_TEXT) {
+            gp.gameState = gp.PLAY;
+        }
         if (gp.sceneManager.currentScene == 8) {
             gp.eHandler.teleport(7, 20, 43, 9);
             gp.sceneManager.playScene(9);

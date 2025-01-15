@@ -14,12 +14,16 @@ public class SceneManager {
     public int JUMPSCARE_POCONG = 50;
 
     public int PROLOGUE = 20;
+    public int PROLOGUE_CUTSCENE_1 = 21;
+    public int PROLOGUE_CUTSCENE_2 = 22;
 
-    public int BOSS_BATTLE_KUNTI = 91;
-    public int BOSS_BATTLE_POCONG = 92;
-    public int BOSS_BATTLE_BUTOIJO = 93;
-    public int BOSS_BATTLE_KUYANG = 94;
-    public int BOSS_BATTLE_NYIBLORONG = 95;
+    public int BOSS_BATTLE_KUNTI = 50;
+    public int BOSS_BATTLE_POCONG = 60;
+    public int BOSS_BATTLE_BUTOIJO = 70;
+    public int BOSS_BATTLE_BUTOIJO_FINISHED = 71;
+    public int BOSS_BATTLE_BUTOIJO_EPILOGUE = 72;
+    public int BOSS_BATTLE_KUYANG = 80;
+    public int BOSS_BATTLE_NYIBLORONG = 90;
 
     public SceneManager(GamePanel gp) {
         this.gp = gp;
@@ -47,13 +51,13 @@ public class SceneManager {
             gp.playMusic(2);
         }
 
-        if (i == 3) {
+        if (i == PROLOGUE_CUTSCENE_1) {
             gp.stopMusic();
             gp.ui.cutsceneIndex = 1;
             gp.gameState = gp.CUTSCENE;
         }
 
-        if (i == 4) {
+        if (i == PROLOGUE_CUTSCENE_2) {
 //            POCONG CUTSCENE
             gp.stopMusic();
             gp.ui.cutsceneIndex = 4;
@@ -117,15 +121,35 @@ public class SceneManager {
             gp.gameState = gp.JUMPSCARE_SCREEN;
         }
 
+//        LEVEL 1 BOSS = KUNTILANAK SCENES
         if (i == BOSS_BATTLE_KUNTI) {
             gp.bossBattle = true;
         }
+
+//        LEVEL 2 BOSS = KUNTILANAK SCENES
         if (i == BOSS_BATTLE_POCONG) {
             gp.bossBattle = true;
         }
+
+//        LEVEL 3 BOSS = BUTO IJO SCENES
         if (i == BOSS_BATTLE_BUTOIJO) {
+            gp.ui.cutsceneIndex = 4;
+            gp.gameState = gp.CUTSCENE;
             gp.bossBattle = true;
         }
+        if (i == BOSS_BATTLE_BUTOIJO_FINISHED) {
+            I_Keris item = new I_Keris(gp);
+            gp.ui.itemName = item.itemName ;
+            gp.ui.itemDescription = item.itemDescription;
+            gp.ui.itemIcon = item.down1;
+            gp.gameState = gp.ITEM_DROP;
+        }
+        if (i == BOSS_BATTLE_BUTOIJO_EPILOGUE) {
+            gp.ui.textOverlay = "Butoijo telah dikalahkan! dia meninggalkan\n keris yang dijatuhkan oleh bapak.";
+            gp.gameState = gp.OVERLAY_TEXT;
+            gp.player.LEVEL_3_LOCKED = false;
+        }
+
         if (i == BOSS_BATTLE_KUYANG) {
             gp.bossBattle = true;
         }
