@@ -193,8 +193,8 @@ public class Player extends Entity {
             gp.monsters[gp.currentMap][i].life -= 5;
 
             if (gp.monsters[gp.currentMap][i].life <= 0) {
-                if (gp.currentMap == 93 && gp.monsters[gp.currentMap][i].name == "Butoijo") {
-                    gp.sceneManager.playScene(gp.sceneManager.BOSS_BATTLE_BUTOIJO_FINISHED);
+                if (gp.currentMap == gp.tm.MAP_DUNGEON_LEVEL_1 && gp.monsters[gp.currentMap][i].name == "Kuntilanak") {
+                    gp.sceneManager.playScene(SceneManager.SceneIndex.LEVEL_1_BOSS_FINISHED.ordinal());
                 }
                 gp.monsters[gp.currentMap][i] = null;
                 totalScore += 10;

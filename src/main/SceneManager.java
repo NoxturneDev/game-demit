@@ -45,6 +45,7 @@ public class SceneManager {
         LEVEL_1_JUMPSCARE,
         LEVEL_1_ITEM_DROP,
         LEVEL_1_OVERLAY_RUNNING_TEXT,
+        LEVEL_1_BOSS_FINISHED,
     }
 
     public SceneManager(GamePanel gp) {
@@ -135,6 +136,13 @@ public class SceneManager {
         if (i == SceneIndex.PROLOG_CUTSCENE_5.ordinal()) {
             gp.ui.cutsceneIndex = UI.Cutscenes.PROLOG_5_1.ordinal();
             gp.gameState = gp.CUTSCENE;
+        }
+
+        if (i == SceneIndex.LEVEL_1_BOSS_FINISHED.ordinal()) {
+            gp.ui.textOverlay = "Kuntilanak telah dikalahkan!.";
+            gp.gameState = gp.OVERLAY_TEXT;
+            gp.player.LEVEL_1_LOCKED = false;
+            gp.eHandler.teleport(gp.tm.MAP_FOREST_LEVEL_2, 42, 5, -1);
         }
 
 //        LEVEL 1 BOSS = KUNTILANAK SCENES

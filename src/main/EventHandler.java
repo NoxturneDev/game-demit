@@ -26,7 +26,6 @@ public class EventHandler {
             eventRect[map][col][row].height = 8;
             eventRect[map][col][row].eventRectDefaultX = eventRect[map][col][row].x;
             eventRect[map][col][row].eventRectDefaultY = eventRect[map][col][row].y;
-
             col++;
 
             if (col == gp.maxWorldCol) {
@@ -77,6 +76,11 @@ public class EventHandler {
         if (hit(gp.tm.MAP_FOREST_LEVEL_1, 42, 5, "any") == true) {
             teleport(gp.tm.MAP_DUNGEON_LEVEL_1, 10, 36, -1);
         }
+
+        if (hit(gp.tm.MAP_FOREST_LEVEL_1, 42, 5, "any") == true) {
+            teleport(gp.tm.MAP_DUNGEON_LEVEL_1, 10, 36, -1);
+        }
+
 
 
 //        if (hit(93, 30, 24, "any") == true) {

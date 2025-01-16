@@ -72,6 +72,11 @@ public class KeyHandler implements KeyListener {
             if (keyCode == KeyEvent.VK_1) onePressed = true;
             if (keyCode == KeyEvent.VK_2) twoPressed = true;
         }
+
+        if (gp.gameState == gp.DIED && keyCode == KeyEvent.VK_ENTER) {
+            gp.ui.commandNum = 1;
+            gp.gameState = gp.TITLE;
+        }
     }
 
     private void handleSpaceKey() {
