@@ -5,14 +5,11 @@ import main.GamePanel;
 import java.awt.*;
 import java.util.Random;
 
-public class NPC_Dukun extends Entity{
-    public NPC_Dukun(GamePanel gp) {
+public class NPC_Dukun_2 extends Entity{
+    public NPC_Dukun_2(GamePanel gp) {
         super(gp);
         direction = "up";
         speed = 1;
-        hasQuiz = true;
-        quizQuestion = "Keris merupakan sebuah Senjata Tradisional asal Papua?";
-        quizCorrectAnswer = 1;
 
         solidArea = new Rectangle();
         solidArea.x = 8;

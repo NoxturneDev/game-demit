@@ -63,6 +63,10 @@ public class KeyHandler implements KeyListener {
             }
         }
 
+        if (gp.gameState == gp.ENTER_USERNAME && keyCode == KeyEvent.VK_ESCAPE) {
+            gp.gameState = gp.TITLE;
+            gp.remove(gp.gameInputBox);
+        }
         // Quiz keys
         if (gp.gameState == gp.QUIZ) {
             if (keyCode == KeyEvent.VK_1) onePressed = true;

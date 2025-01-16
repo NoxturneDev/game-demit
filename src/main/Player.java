@@ -112,6 +112,7 @@ public class Player extends Entity {
                     gp.ui.currentQuizCorrectAnswer = gp.npc[gp.currentMap][i].quizCorrectAnswer;
                 }
             } else {
+                gp.ui.currentNPC = gp.npc[gp.currentMap][i];
                 gp.gameState = gp.DIALOGUE;
                 gp.npc[gp.currentMap][i].speak();
             }

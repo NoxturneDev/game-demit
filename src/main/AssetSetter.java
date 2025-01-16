@@ -16,10 +16,23 @@ public class AssetSetter {
 //       set each npc and store into gamepanels' npc[] array
         int mapNum = 0;
         int i = 0;
-        gp.npc[mapNum][i] = new NPC_Dukun(gp);
-        gp.npc[mapNum][i].worldX = gp.tileSize * 24;
-        gp.npc[mapNum][i].worldY = gp.tileSize * 29;
         i++;
+
+        mapNum = gp.tm.MAP_FOREST_LEVEL_1;
+        i = 0;
+        gp.npc[mapNum][i] = new NPC_Dukun(gp);
+        gp.npc[mapNum][i].worldX = gp.tileSize * 23;
+        gp.npc[mapNum][i].worldY = gp.tileSize * 19;
+        i++;
+
+        gp.npc[mapNum][i] = new NPC_Dukun_2(gp);
+        gp.npc[mapNum][i].worldX = gp.tileSize * 18;
+        gp.npc[mapNum][i].worldY = gp.tileSize * 19;
+        i++;
+
+        gp.npc[mapNum][i] = new NPC_Raden(gp);
+        gp.npc[mapNum][i].worldX = gp.tileSize * 14;
+        gp.npc[mapNum][i].worldY = gp.tileSize * 19;
     }
 
     public void setItem() {
