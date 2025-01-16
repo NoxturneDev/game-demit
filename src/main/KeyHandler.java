@@ -58,7 +58,7 @@ public class KeyHandler implements KeyListener {
             if (keyCode == KeyEvent.VK_ESCAPE) {
                 gp.gameState = gp.TITLE;
             }
-            if (keyCode == KeyEvent.VK_F1) {
+            if (keyCode == KeyEvent.VK_ENTER) {
                 gp.gameState = gp.PLAY;
             }
         }
@@ -74,7 +74,12 @@ public class KeyHandler implements KeyListener {
         }
 
         if (gp.gameState == gp.DIED && keyCode == KeyEvent.VK_ENTER) {
-            gp.ui.commandNum = 1;
+            gp.ui.commandNum = 0;
+            gp.gameState = gp.TITLE;
+        }
+
+        if (gp.gameState == gp.ENDING_SCREEN && keyCode == KeyEvent.VK_ENTER) {
+            gp.ui.commandNum = 0;
             gp.gameState = gp.TITLE;
         }
     }
@@ -92,7 +97,8 @@ public class KeyHandler implements KeyListener {
                     gp.ui.cutsceneIndex != UI.Cutscenes.PROLOG_2_3.ordinal() &&
                     gp.ui.cutsceneIndex != UI.Cutscenes.PROLOG_3_2.ordinal() &&
                     gp.ui.cutsceneIndex != UI.Cutscenes.PROLOG_4_1.ordinal() &&
-                    gp.ui.cutsceneIndex != UI.Cutscenes.PROLOG_5_2.ordinal()
+                    gp.ui.cutsceneIndex != UI.Cutscenes.PROLOG_5_2.ordinal() &&
+                    gp.ui.cutsceneIndex != UI.Cutscenes.EPILOG_2_1.ordinal()
             ) {
                 gp.ui.cutsceneCounter = 0;
                 gp.ui.cutsceneDuration = 0;
@@ -111,6 +117,9 @@ public class KeyHandler implements KeyListener {
         if (gp.gameState == gp.OVERLAY_TEXT) {
             gp.gameState = gp.PLAY;
         }
+//        if (gp.gameState == gp.OVERLAY_ENDING_TEXT) {
+//            gp.sceneManager.playScene(SceneManager.SceneIndex.ENDING.ordinal());
+//        }
     }
 
     private void handlePauseKey() {
@@ -156,6 +165,7 @@ public class KeyHandler implements KeyListener {
             gp.config.loadConfigFromMongoDB(gp.ui.commandNum);
             gp.gameState = gp.PLAY;
         }
+        if (keyCode == KeyEvent.VK_ESCAPE) gp.gameState = gp.TITLE;
     }
 
     @Override

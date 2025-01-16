@@ -77,8 +77,12 @@ public class AssetSetter {
         gp.monsters[mapNum][i].direction = "left";
         gp.monsters[mapNum][i].worldX = gp.tileSize * 24;
         gp.monsters[mapNum][i].worldY = gp.tileSize * 15;
-        i++;
 
+        mapNum = gp.tm.MAP_FINAL_BOSS_1;
+        i = 0;
+        gp.monsters[mapNum][i] = new MON_Nyirorokidul(gp);
+        gp.monsters[mapNum][i].worldX = gp.tileSize * 24;
+        gp.monsters[mapNum][i].worldY = gp.tileSize * 24;
 
 
 //        mapNum = 3;

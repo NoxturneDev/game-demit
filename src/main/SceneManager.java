@@ -46,6 +46,14 @@ public class SceneManager {
         LEVEL_1_ITEM_DROP,
         LEVEL_1_OVERLAY_RUNNING_TEXT,
         LEVEL_1_BOSS_FINISHED,
+        LEVEL_FINAL_BOSS_CUTSCENE_1,
+        LEVEL_FINAL_BOSS_CUTSCENE_2,
+        LEVEL_FINAL_BOSS_CUTSCENE_3,
+        LEVEL_FINAL_BOSS_FINISHED,
+        LEVEL_FINAL_BOSS_BEGINNING,
+        OVERLAY_ENDING_TEXT,
+        ENDING,
+        ENDING_SCREEN,
     }
 
     public SceneManager(GamePanel gp) {
@@ -120,6 +128,8 @@ public class SceneManager {
             gp.ui.itemDescription = keris.itemDescription;
             gp.ui.itemIcon = keris.itemIcon;
             gp.gameState = gp.ITEM_DROP;
+            gp.player.LEVEL_1_LOCKED = false;
+            gp.player.level++;
         }
 
         if (i == SceneIndex.PROLOG_RUNNING_TEXT_AFTER_GET_KERIS.ordinal()) {
@@ -144,6 +154,27 @@ public class SceneManager {
             gp.player.LEVEL_1_LOCKED = false;
             gp.eHandler.teleport(gp.tm.MAP_FOREST_LEVEL_2, 42, 5, -1);
         }
+
+        if (i == SceneIndex.LEVEL_FINAL_BOSS_BEGINNING.ordinal()) {
+            gp.ui.cutsceneIndex = UI.Cutscenes.EPILOG_1_1.ordinal();
+            gp.gameState = gp.CUTSCENE;
+        }
+
+//        if (i == SceneIndex.OVERLAY_ENDING_TEXT.ordinal()) {
+//            gp.ui.textOverlay = "Selamat! Kamu telah menyelesaikan game ini! Lanang akhirnyna telah \nMendapatkan kedamaian. Sayonara~~.";
+//            gp.gameState = gp.OVERLAY_ENDING_TEXT;
+//        }
+
+//        if (i == SceneIndex.ENDING.ordinal()) {
+//            gp.ui.cutsceneIndex = UI.Cutscenes.ENDING.ordinal();
+//            gp.gameState = gp.CUTSCENE;
+//        }
+
+        if (i == SceneIndex.ENDING_SCREEN.ordinal()) {
+            gp.stopMusic();
+            gp.gameState = gp.ENDING_SCREEN;
+        }
+
 
 //        LEVEL 1 BOSS = KUNTILANAK SCENES
         if (i == BOSS_BATTLE_KUNTI) {

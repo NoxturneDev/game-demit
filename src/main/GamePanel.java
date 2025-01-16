@@ -83,6 +83,8 @@ public class GamePanel extends JPanel implements Runnable {
     public final int PROFILE_SCREEN = 13;
     public final int OVERLAY_TEXT = 14;
     public final int SPLASH_SCREEN = 99;
+    public final int OVERLAY_ENDING_TEXT = 100;
+    public final int ENDING_SCREEN = 101;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));

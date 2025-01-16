@@ -42,6 +42,7 @@ public class Player extends Entity {
         super(gp);
         this.keyH = keyH;
         life = 100;
+        damage = 10000000;
 
 //        render character in the middle of the screen view
         screenX = gp.screenWidth / 2 - gp.tileSize / 2;
@@ -195,6 +196,9 @@ public class Player extends Entity {
             if (gp.monsters[gp.currentMap][i].life <= 0) {
                 if (gp.currentMap == gp.tm.MAP_DUNGEON_LEVEL_1 && gp.monsters[gp.currentMap][i].name == "Kuntilanak") {
                     gp.sceneManager.playScene(SceneManager.SceneIndex.LEVEL_1_BOSS_FINISHED.ordinal());
+                }
+                if (gp.currentMap == gp.tm.MAP_FINAL_BOSS_1 && gp.monsters[gp.currentMap][i].name == "Nyirorokidul") {
+                    gp.sceneManager.playScene(SceneManager.SceneIndex.ENDING_SCREEN.ordinal());
                 }
                 gp.monsters[gp.currentMap][i] = null;
                 totalScore += 10;

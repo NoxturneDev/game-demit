@@ -77,10 +77,10 @@ public class EventHandler {
             teleport(gp.tm.MAP_DUNGEON_LEVEL_1, 10, 36, -1);
         }
 
-        if (hit(gp.tm.MAP_FOREST_LEVEL_1, 42, 5, "any") == true) {
-            teleport(gp.tm.MAP_DUNGEON_LEVEL_1, 10, 36, -1);
+//        LEVEL 2
+        if (hit(gp.tm.MAP_FOREST_LEVEL_2, 11, 40, "any") == true) {
+            teleport(gp.tm.MAP_FINAL_BOSS_1, 4, 34, SceneManager.SceneIndex.LEVEL_FINAL_BOSS_BEGINNING.ordinal());
         }
-
 
 
 //        if (hit(93, 30, 24, "any") == true) {

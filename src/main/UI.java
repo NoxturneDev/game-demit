@@ -76,9 +76,12 @@ public class UI {
         LEVEL_4_1,
         LEVEL_4_2,
         //        BEFORE LAST BOSS
-        EPILOG_0_1,
-        EPILOG_0_2,
+
+        EPILOG_1_1,
+        EPILOG_1_2,
         //        LAST BOSS
+        BOSS_REVEAL,
+        EPILOG_2_1,
         LAST_BOSS_1_1,
         LAST_BOSS_1_2,
         LAST_BOSS_2_1,
@@ -86,6 +89,7 @@ public class UI {
         //        reveal nyi roro kidul
         LAST_BOSS_3_1,
         //        ENDING
+        ENDING,
         ENDING_1_1,
         ENDING_1_2,
         ENDING_1_3,
@@ -130,6 +134,14 @@ public class UI {
             cutscenes[Cutscenes.PROLOG_5_1.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_5_1.png"));
             cutscenes[Cutscenes.PROLOG_5_2.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/PROLOG_5_2.png"));
 //            LEVEL 1
+//            BOSS
+
+            cutscenes[Cutscenes.EPILOG_1_1.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/EPILOG_1_1.png"));
+            cutscenes[Cutscenes.EPILOG_1_2.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/EPILOG_1_2.png"));
+            cutscenes[Cutscenes.BOSS_REVEAL.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/BOSS_REVEAL.jpg"));
+            cutscenes[Cutscenes.EPILOG_2_1.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/EPILOG_2_1.jpg"));
+
+            cutscenes[Cutscenes.ENDING.ordinal()] = ImageIO.read(getClass().getResourceAsStream("/cutscenes/ENDING.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -367,6 +379,110 @@ public class UI {
         if (cutsceneIndex == Cutscenes.PROLOG_5_2.ordinal() && cutsceneDuration > 200) {
             gp.sceneManager.playScene(12);
         }
+
+        if (cutsceneIndex == Cutscenes.EPILOG_2_1.ordinal()) {
+            cutsceneDuration++;
+            cutsceneCounter++;
+
+            cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
+            cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
+
+            if (!cutsceneSoundPlayed) {
+//                gp.playSE(30);
+                cutsceneSoundPlayed = true;
+            }
+            animationCutsceneType = FADE_IN;
+            slideRight(200);
+            fadeIn(200);
+        }
+
+        if (cutsceneIndex == Cutscenes.EPILOG_1_1.ordinal()) {
+            cutsceneDuration++;
+            cutsceneCounter++;
+
+            cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
+            cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
+
+            if (!cutsceneSoundPlayed) {
+//                gp.playSE(30);
+                cutsceneSoundPlayed = true;
+            }
+            animationCutsceneType = FADE_IN;
+            slideRight(200);
+            fadeIn(200);
+        }
+
+        if (cutsceneIndex == Cutscenes.EPILOG_1_2.ordinal()) {
+            cutsceneDuration++;
+            cutsceneCounter++;
+
+            cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
+            cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
+
+            if (!cutsceneSoundPlayed) {
+//                gp.playSE(30);
+                cutsceneSoundPlayed = true;
+            }
+            animationCutsceneType = FADE_IN;
+            slideRight(200);
+            fadeIn(200);
+        }
+
+        if (cutsceneIndex == Cutscenes.BOSS_REVEAL.ordinal()) {
+            cutsceneDuration++;
+            cutsceneCounter++;
+
+            cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
+            cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
+
+            if (!cutsceneSoundPlayed) {
+//                gp.playSE(30);
+                cutsceneSoundPlayed = true;
+            }
+            animationCutsceneType = FADE_IN;
+            slideRight(200);
+            fadeIn(200);
+        }
+
+        if (cutsceneIndex == Cutscenes.EPILOG_2_1.ordinal()) {
+            cutsceneDuration++;
+            cutsceneCounter++;
+
+            cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
+            cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
+
+            if (!cutsceneSoundPlayed) {
+//                gp.playSE(30);
+                cutsceneSoundPlayed = true;
+            }
+            animationCutsceneType = FADE_IN;
+            slideRight(300);
+            fadeIn(300);
+        }
+
+        if (cutsceneIndex == Cutscenes.EPILOG_2_1.ordinal() && cutsceneDuration > 400) {
+            gp.gameState = gp.PLAY;
+        }
+
+//        if (cutsceneIndex == Cutscenes.ENDING.ordinal()) {
+//            cutsceneDuration++;
+//            cutsceneCounter++;
+//
+//            cutsceneHeight = cutscenes[cutsceneIndex].getHeight();
+//            cutsceneWidth = cutscenes[cutsceneIndex].getWidth();
+//
+//            if (!cutsceneSoundPlayed) {
+////                gp.playSE(30);
+//                cutsceneSoundPlayed = true;
+//            }
+//            animationCutsceneType = FADE_IN;
+//            slideRight(200);
+//            fadeIn(200);
+//        }
+//
+//        if (cutsceneIndex == Cutscenes.ENDING.ordinal() && cutsceneDuration > 1000) {
+//            gp.gameState = gp.TITLE;
+//        }
     }
 
     public void slideRight(int duration) {
@@ -485,6 +601,27 @@ public class UI {
         if (commandNum == 3) {
             g2.drawString(">", x - gp.tileSize, y);
         }
+    }
+
+    public void drawEndingScreen() {
+        g2.setColor(new Color(0, 0, 0));
+        g2.fillRect(0, 0, gp.screenWidth, gp.screenHeight);
+
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 25F));
+        g2.setColor(red);
+        g2.drawString("ESC to back", 20, 40);
+
+        // TITLE
+        g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
+        String title = "THE END...?";
+        int x = getXforCenteredText(title);
+        int y = gp.tileSize * 5;
+        // SHADOW
+        g2.setColor(shadowRed);
+        g2.drawString(title, x + 5, y + 5);
+        // MAIN COLOR
+        g2.setColor(red);
+        g2.drawString(title, x, y);
     }
 
     public void drawLeaderboardScreen() {
@@ -1091,7 +1228,7 @@ public class UI {
         g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);  // Anti Aliasing // Smoothes the text
         g2.setColor(Color.RED);
 
-        g2.setFont(pixeloid);
+        g2.setFont(maruMonica);
         drawDebug(g2);
 //        if (gp.bossBattle) {
 //            g2.setFont(g2.getFont().deriveFont(Font.BOLD, 96F));
@@ -1151,13 +1288,16 @@ public class UI {
             g2.setFont(pixeloid);
             drawInGameTextScreen();
         }
-        if (gp.gameState == gp.OVERLAY_TEXT) {
+        if (gp.gameState == gp.OVERLAY_TEXT || gp.gameState == gp.OVERLAY_ENDING_TEXT) {
             g2.setFont(pixeloid);
             drawOverlayText();
         }
         if (gp.gameState == gp.QUIZ) {
             g2.setFont(pixeloid);
             drawQuiz();
+        }
+        if (gp.gameState == gp.ENDING_SCREEN) {
+            drawEndingScreen();
         }
     }
 

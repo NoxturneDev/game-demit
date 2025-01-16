@@ -92,7 +92,9 @@ public class TileManager {
         loadMap("/maps/house_1.txt", MAP_HOUSE_PROLOG_3); // tutorial finished
 
         loadMap("/maps/map_2.txt", MAP_FOREST_LEVEL_1);
+        loadMap("/maps/map_2.txt", MAP_FOREST_LEVEL_2);
         loadMap("/maps/dungeon_1.txt", MAP_DUNGEON_LEVEL_1);
+        loadMap("/maps/ocean.txt", MAP_FINAL_BOSS_1);
 //        loadMap("/maps/house_1.txt", 1);
 //        loadMap("/maps/forest_2.txt", 2);
 //        loadMap("/maps/forest_3.txt", 3);
